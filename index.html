@@ -112,6 +112,28 @@ td small{display:block;font-size:10px;color:var(--muted);font-style:italic}
 .unit{font-size:10px;color:var(--muted);text-align:right;margin-top:6px;font-style:italic}
 .quote{font-style:italic;color:var(--muted);text-align:center;margin-top:14px}
 .svc{padding:0;overflow:hidden}
+.svchead{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:18px 20px;text-transform:none;letter-spacing:.02em;font-weight:300;font-size:14px}
+.svchead:after{content:none!important}
+.svchead .short{text-align:left!important;letter-spacing:.02em}
+.svchead::-webkit-details-marker{display:none}
+.svchead>div{flex:1;text-align:left}
+.svchead h4{text-align:left!important}
+.svchead .for{text-align:left!important}
+.svchead .short{font-size:12px;color:var(--muted);margin-top:6px}
+.svchead .plus{font-size:20px;font-weight:300}
+details.svc[open] .plus{transform:rotate(45deg)}
+.intro{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px 20px;margin-top:22px;text-align:left}
+.intro ul{list-style:none;margin:12px 0 16px}
+.intro li{padding:6px 0 6px 26px;position:relative;font-size:13px}
+.intro li span{position:absolute;left:0}
+.intro li b{font-weight:400}
+.chatpost{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px;background:var(--white)}
+.bubble{border-radius:14px;padding:10px 12px;font-size:13px;margin-top:8px;position:relative}
+.bubble.me{background:var(--soft);margin-left:28px}
+.bubble.them{background:var(--cream);border:1px solid var(--line);margin-right:28px}
+.bubble small{display:block;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-bottom:3px}
+.heart{background:none;border:0;cursor:pointer;font-size:13px;color:var(--muted);padding:2px 0;margin-top:4px}
+.heart.on{color:#b0566a}
 .svc img{width:100%;display:block}
 .svc .in{padding:20px}
 .svc h4{font-weight:400;font-size:15px;letter-spacing:.3em;text-transform:uppercase;text-align:center}
@@ -199,6 +221,9 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
       <p style="margin-top:6px;white-space:pre-wrap" id="annText"></p>
     </div>
     <div class="rulebanner" data-go="rules"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><div><b data-t="noFoodTitle"></b><span data-t="noFoodSub"></span></div></div>
+    <div class="intro" id="introCard"><div class="tag" data-t="introTitle"></div><p style="margin-top:8px" data-t="introLead"></p><ul>
+      <li><span>✦</span><b data-t="introA"></b></li><li><span>✦</span><b data-t="introB"></b></li><li><span>✦</span><b data-t="introC"></b></li><li><span>✦</span><b data-t="introD"></b></li><li><span>✦</span><b data-t="introE"></b></li></ul>
+      <button class="btn" style="width:100%;padding:12px" data-go="login" data-t="introBtn"></button></div>
   </section>
 
   <section id="rules">
@@ -343,7 +368,7 @@ designSame:{id:'Harga sama untuk semua nail artist',en:'Same price for every nai
 designLevel:{id:'Harga sesuai level nail artist',en:'Price by nail artist level'},
 perNail:{id:'per kuku',en:'per nail'},
 omakaseText:{id:'Omakase berasal dari bahasa Jepang, artinya "saya serahkan kepadamu". Di restoran sushi, tamu membiarkan chef memilih dan menyajikan yang terbaik. Di NG Nailart, kamu menentukan budget dan boleh memberi gambaran atau request (warna, mood, tema), lalu nail artist bebas berekspresi dan memutuskan desain akhirnya. Nilai desain yang kamu dapat biasanya lebih tinggi daripada harga omakase-nya.',en:'Omakase is Japanese for "I\'ll leave it to you." At a sushi bar, guests trust the chef to choose and serve their best. At NG Nailart, you set the budget and may share a reference or request (colors, mood, theme); your nail artist then has creative freedom and decides the final design. The actual value of the design is usually higher than the omakase price.'},
-svcTitle:{id:'Layanan',en:'Services'},svcSub:{id:'Apa saja yang kamu dapatkan',en:'What each service includes'},
+svcTitle:{id:'Layanan',en:'Services'},svcTap:{id:'Ketuk layanan untuk melihat foto, isi, dan durasinya.',en:'Tap a service to see photos, what is included and how long it takes.'},juniorNote:{id:'Catatan: junior nail artist kami masih baru, jadi pengerjaan bisa sedikit lebih lama dari estimasi. Terima kasih atas pengertianmu.',en:'Note: our junior nail artists are still new, so your appointment may take a little longer than listed. Thank you for your patience.'},introTitle:{id:'Halaman pribadimu di NG Nailart',en:'Your own NG Nailart page'},introLead:{id:'Minta nail artist kami membuatkan akunmu. Setelah itu kamu bisa:',en:'Ask your nail artist to create your account. Then you can:'},introA:{id:'Mengumpulkan stamp loyalty card dan melihat riwayat treatment beserta rincian harganya',en:'Collect loyalty stamps and see your treatment history with price details'},introB:{id:'Mengisi tanggal ulang tahun dan mendapat hadiah atau kupon ulang tahun',en:'Add your birthday and receive a birthday gift or coupon'},introC:{id:'Menyimpan warna favorit dan preferensimu',en:'Save your favorite colors and preferences'},introD:{id:'Ngobrol langsung dengan nail artist dan owner',en:'Chat directly with your nail artist and the owner'},introE:{id:'Memberi masukan, bahkan secara anonim',en:'Share feedback, even anonymously'},introBtn:{id:'Sudah punya akun? Login',en:'Already have an account? Log in'},svcSub:{id:'Apa saja yang kamu dapatkan',en:'What each service includes'},
 loyaltySub:{id:'Semakin sering datang, semakin banyak bonusnya',en:'The more you visit, the more you get'},
 loyaltyNote:{id:'Stamp dicatat otomatis oleh nail artist setiap kunjungan. Login untuk melihat kartumu.',en:'Your nail artist records a stamp at every visit. Log in to see your card.'},
 askTitle:{id:'Boleh Diminta',en:'Just Ask'},askSub:{id:'Hal yang bisa kamu minta ke nail artist',en:'Things you can ask your nail artist for'},
@@ -472,7 +497,7 @@ function render(){
  $('#omakase').innerHTML=[['owner','Owner'],['senior','Senior Team'],['junior','Junior Team']].map(([k,l])=>`<h3 style="margin-top:18px">${l}</h3>`+OMA[k].map(([n,p])=>`<div class="row"><span class="n">${n}</span><span class="p">${p}</span></div>`).join('')).join('');
  $('#addon').innerHTML=ADDON.map(([n,p])=>`<div class="row"><span class="n">${tx(n)}</span><span class="p">${p.replace('{nail}',L==='id'?'kuku':'nail')}</span></div>`).join('');
  const lab=L==='id'?['menit','Retouch terbaik','minggu','per kuku','Cocok untuk']:['min','Best retouch','weeks','per nail','Best for'];
- $('#svcList').innerHTML=SVC.map(s=>`<div class="card svc"><img src="${IMG[s.img]}" alt="${s.name}" loading="lazy"><div class="in"><h4>${s.name}</h4><div class="for">${s.for}</div><p>${tx(s.d)}</p>${s.ex?`<p class="ex">${tx(s.ex)}</p>`:''}<div class="inc">${s.inc}</div><p class="meta"><b style="font-weight:500;color:var(--ink)">${lab[4]}:</b> ${tx(s.best)}</p><div class="dur">${['Owner','Senior','Junior'].map((x,i)=>`<div><b>${s.t[i]}${s.t[i]==='—'?'':' '+lab[0]}</b><span>${x}</span></div>`).join('')}</div>${s.per?`<p class="meta">${lab[3]}</p>`:''}${s.re?`<p class="meta">${lab[1]}: ${s.re} ${lab[2]}</p>`:''}${s.note?`<p class="meta"><i>${tx(s.note)}</i></p>`:''}</div></div>`).join('');
+ $('#svcList').innerHTML=`<p class="note" style="text-align:center;margin-top:14px">${T.svcTap[L]}</p>`+SVC.map((s,i)=>`<details class="card svc"${i===0?'':''}><summary class="svchead"><div><h4>${s.name}</h4><div class="for">${s.for}</div><p class="short">${tx(s.d)}</p></div><span class="plus">+</span></summary><img src="${IMG[s.img]}" alt="${s.name}" loading="lazy"><div class="in">${s.ex?`<p class="ex">${tx(s.ex)}</p>`:''}<div class="inc">${s.inc}</div><p class="meta"><b style="font-weight:500;color:var(--ink)">${lab[4]}:</b> ${tx(s.best)}</p><div class="dur">${['Owner','Senior','Junior'].map((x,i)=>`<div><b>${s.t[i]}${s.t[i]==='—'?'':' '+lab[0]}</b><span>${x}</span></div>`).join('')}</div>${s.t[2]!=='—'?`<p class="meta" style="font-style:italic">${T.juniorNote[L]}</p>`:''}${s.per?`<p class="meta">${lab[3]}</p>`:''}${s.re?`<p class="meta">${lab[1]}: ${s.re} ${lab[2]}</p>`:''}${s.note?`<p class="meta"><i>${tx(s.note)}</i></p>`:''}</div></details>`).join('');
  $('#stamps').innerHTML=Array.from({length:10},(_,i)=>{const n=i+1,g=TIERS.some(t=>t[0]===n);return `<div class="st${g?' gift':''}">${n}</div>`}).join('');
  $('#tiers').innerHTML=TIERS.map(([n,d])=>`<div class="row"><span class="n"><b>${L==='id'?'Kunjungan':'Visit'} ${n}</b></span><span class="p" style="white-space:normal;max-width:60%">${d[L]}</span></div>`).join('');
  $('#askList').innerHTML=ASK.map(a=>`<li>${a[L]}</li>`).join('');
@@ -493,7 +518,7 @@ document.addEventListener('click',e=>{
 });
 const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc');
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
-let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[];
+let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[], POSTS=[];
 const SECTIONS=['wifi','rules','prices','services','loyalty','ask','dos','book','colors','contact','login','account'];
 const rp = n => 'Rp ' + (Math.round(+n||0)).toLocaleString('id-ID');
 const fmtDate = d => { try { return new Date(d+'T00:00:00').toLocaleDateString(L==='id'?'id-ID':'en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(_){ return d; } };
@@ -558,14 +583,15 @@ async function loadAccount(){
  if(me.error){ await sb.auth.signOut(); LOGGED=false; toast(L==='id'?'Akun ini bukan akun klien.':'This is not a client account.'); show('login'); return false; }
  ME=me.data; LOGGED=true;
  if(!ME.must_set_pin){
-  const [h,c,m]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages')]);
-  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[];
+  const [h,c,m,p]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts')]);
+  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[];
  }
  return true;
 }
-const SUBS=[['card',{id:'Kartu',en:'Card'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Pesan',en:'Messages'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
+const SUBS=[['card',{id:'Kartu',en:'Card'}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
 function renderAcct(){
+ const ic=$('#introCard'); if(ic)ic.style.display=LOGGED?'none':'';
  const el=$('#acct'); if(!el||!LOGGED||!ME){if(el)el.innerHTML='';return}
  const id=L==='id';
  if(ME.must_set_pin){
@@ -587,7 +613,20 @@ function renderAcct(){
   <div class="stamps">${Array.from({length:10},(_,i)=>{const n=i+1,g=TIERS.some(t=>t[0]===n),d=n<=v10;return `<div class="st${g?' gift':''}${d?' done':''}">${d?'✓':n}</div>`}).join('')}</div>
   <p class="progress">${id?'Total kunjungan: ':'Total visits: '}<b style="font-weight:500">${visits}</b></p>
   ${next?`<div class="info" style="text-align:center">${id?`${next[0]-v10} kunjungan lagi menuju <b>Kunjungan ${next[0]}</b>: ${next[1].id}`:`${next[0]-v10} more visit(s) to <b>Visit ${next[0]}</b>: ${next[1].en}`}</div>`:''}
+  ${ME.birthday?'':`<div class="info" style="margin-top:14px">🎂 ${id?'Isi tanggal ulang tahunmu untuk mendapat hadiah ulang tahun dari kami:':'Add your birthday to receive a birthday gift from us:'}<div class="row" style="gap:8px;margin-top:8px;border:0;padding:0"><input type="date" id="bdayIn" style="flex:1;font:400 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--white)"><button class="btn" id="bdaySave">${id?'Simpan':'Save'}</button></div><p class="note" style="margin-top:6px">${id?'Hanya bisa diisi sekali.':'This can only be set once.'}</p></div>`}
   <div class="tiers">${TIERS.map(([n,d])=>`<div class="row"><span class="n"><b>${id?'Kunjungan':'Visit'} ${n}</b>${n<=v10?`<br><i style="font-size:10px;color:var(--muted)">${id?'sudah tercapai':'reached'}</i>`:''}</span><span class="p" style="white-space:normal;max-width:58%">${d[L]}</span></div>`).join('')}</div></div>`;
+ }
+ if(SUB==='chat'){
+  const tos=['Studio',...ARTISTS.map(a=>a.name).filter(n=>n!=='Studio')];
+  h+=`<div class="card"><div class="tag">${id?'Kirim pesan ke studio':'Say something to the studio'}</div>
+   <p class="note">${id?'Pesanmu dibaca owner, admin, dan nail artist yang kamu pilih. Mereka bisa membalas dan memberi ♡.':'Your message is read by the owner, admin and the nail artist you choose. They can reply and ♡ it.'}</p>
+   <label class="field">${id?'Untuk':'To'}</label><select id="postTo">${tos.map(n=>`<option value="${esc(n)}">${esc(n==='Studio'?(id?'Studio (owner & admin)':'Studio (owner & admin)'):n)}</option>`).join('')}</select>
+   <textarea id="postBody" style="margin-top:10px" placeholder="${id?'Tulis sesuatu…':'Write something…'}" maxlength="1000"></textarea>
+   <button class="btn" style="width:100%;margin-top:12px" id="postSend">${id?'Kirim':'Send'}</button></div>`+
+  (POSTS.length?POSTS.map(p=>`<div class="chatpost"><div class="tag">${id?'Untuk':'To'} ${esc(p.to)} · ${fmtDate(String(p.created_at).slice(0,10))}</div>
+   <div class="bubble me">${esc(p.body)}${p.liked_by?`<div class="heart on" style="cursor:default">♥ ${esc(p.liked_by)}</div>`:''}</div>
+   ${(p.replies||[]).map(r=>r.from_client?`<div class="bubble me"><small>${id?'Kamu':'You'}</small>${esc(r.body)}</div>`:`<div class="bubble them"><small>${esc(r.author)}</small>${esc(r.body)}<br><button class="heart${r.liked?' on':''}" data-likereply="${r.id}">${r.liked?'♥':'♡'}</button></div>`).join('')}
+   ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
  }
  if(SUB==='history'){
   h+=HIST.length?`<div class="card">${HIST.map(a=>`<div class="appt"><div class="hd"><span>${fmtDate(a.date)}</span><span>${id?'Kunjungan':'Visit'} ${a.visit}</span></div><div class="tag" style="margin:4px 0 8px">${esc(a.artist||'')}${a.artist_role?' · '+esc(a.artist_role.replace(' artist','')):''}</div>
@@ -652,6 +691,27 @@ document.addEventListener('click',async e=>{
   await sb.auth.signInWithPassword({email:CLIENT_EMAIL(ME.username),password:a});
   toast(L==='id'?'PIN tersimpan':'PIN saved');
   await loadAccount();renderAcct();return;
+ }
+ if(e.target.id==='bdaySave'){
+  const v=$('#bdayIn').value; if(!v)return;
+  const r=await sb.rpc('ngd_client_set_birthday',{p_date:v});
+  if(r.error)return toast(r.error.message);
+  ME.birthday=v;toast(L==='id'?'Ulang tahun tersimpan 🎂':'Birthday saved 🎂');renderAcct();return;
+ }
+ if(e.target.id==='postSend'){
+  const body=$('#postBody').value.trim(); if(!body)return;
+  const r=await sb.rpc('ngd_client_post',{p_to:$('#postTo').value,p_body:body});
+  if(r.error)return toast(r.error.message);
+  const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; toast(L==='id'?'Terkirim':'Sent'); renderAcct(); return;
+ }
+ if(e.target.dataset&&e.target.dataset.replypost){
+  const id=e.target.dataset.replypost, inp=$('#rep-'+id), body=inp.value.trim(); if(!body)return;
+  const r=await sb.rpc('ngd_client_reply',{p_post_id:id,p_body:body}); if(r.error)return toast(r.error.message);
+  const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; renderAcct(); return;
+ }
+ if(e.target.dataset&&e.target.dataset.likereply){
+  const r=await sb.rpc('ngd_client_like_reply',{p_reply_id:e.target.dataset.likereply}); if(r.error)return toast(r.error.message);
+  const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; renderAcct(); return;
  }
  if(e.target.id==='saveNote'){
   const r=await sb.rpc('ngd_client_save_note',{p_note:$('#myNote').value});
