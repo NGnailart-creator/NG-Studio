@@ -246,6 +246,12 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .swx{display:flex;gap:10px;flex-wrap:wrap}
 .cropov{position:fixed;inset:0;background:rgba(20,18,17,.55);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px}.cropbox{background:var(--white);border-radius:18px;padding:18px;width:100%;max-width:380px}.cropfr{width:100%;overflow:hidden;border-radius:8px;margin:10px auto 0;touch-action:none;cursor:grab;background:#eee;position:relative}.cropfr img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-select:none}.cropz{width:100%;accent-color:var(--ink)}
 .achst{display:block;text-transform:none;letter-spacing:.02em;font-size:10.5px;color:var(--muted);margin-top:3px}.achst u{cursor:pointer}.achf{display:flex;gap:6px;margin-top:8px;text-transform:none;letter-spacing:0}.achf input{flex:1;min-width:0;font:400 12px Montserrat,sans-serif;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.achf .btn{padding:8px 14px}
+.bkpick{display:flex;flex-direction:column;gap:8px;margin-top:10px}.bkopt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:13px 15px;font:400 13px Montserrat,sans-serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:3px}.bkopt b{font-weight:500;letter-spacing:.1em;text-transform:uppercase;font-size:12px}.bkopt small{font-size:11px;color:var(--muted)}.bkopt.sm{padding:10px 13px;font-size:12.5px}.bkopt.on{border-color:var(--ink);background:var(--ink);color:var(--cream)}.bkopt.on small{color:#d9d2cb}
+.bkdays{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}.bkday{flex:none;border:1px solid var(--line);background:var(--white);border-radius:12px;padding:9px 12px;font:400 11px Montserrat,sans-serif;letter-spacing:.06em;cursor:pointer;color:var(--ink)}.bkday.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}.bkday.full{opacity:.45}
+.bkslots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.bkslot{border:1px solid var(--ink);background:var(--white);border-radius:12px;padding:10px 4px;font:500 14px Montserrat,sans-serif;letter-spacing:.08em;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}.bkslot small{font-size:8.5px;letter-spacing:.06em;font-weight:400;color:var(--muted)}.bkslot.on{background:var(--ink);color:var(--cream)}.bkslot.on small{color:#d9d2cb}.bkslot:disabled{border-color:var(--line);color:#bdb5ae;cursor:default}
+.chip{font:500 8.5px Montserrat,sans-serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);border-radius:20px;padding:5px 9px;white-space:nowrap}.chip.confirmed{background:var(--ink);color:var(--cream)}.chip.rejected,.chip.expired,.chip.cancelled{border-color:var(--line);color:var(--muted)}.chip.awaiting_dp{border-color:#b0566a;color:#b0566a}
+.paper .kv{padding:9px 0}.paper .kv .k{font-size:10px}
+.bkcard.dim{opacity:.6}.agree{display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:14px;text-transform:none;letter-spacing:0}.agree input{margin-top:3px;accent-color:var(--ink)}
 .ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
@@ -543,7 +549,7 @@ const DOS=[
 
 const BOOK=[
 {id:'Jadwal nail art dibuka setiap <b>Selasa terakhir tiap bulan</b> dan diumumkan lewat Instagram Story.',en:'Our schedule opens on the <b>last Tuesday of every month</b> and is announced via Instagram Story.'},
-{id:'Untuk booking atau konsultasi, kirim DM ke Instagram kami.',en:'To book or consult, send us a DM on Instagram.'},
+{id:'Sudah punya akun? Booking langsung di <b>My Account → Book</b>: pilih nail artist, treatment dan jam. Belum punya akun atau mau konsultasi dulu? Kirim DM ke Instagram kami.',en:'Have an account? Book directly under <b>My Account → Book</b>: choose your nail artist, treatment and time. No account yet, or want to consult first? Send us a DM on Instagram.'},
 {id:'Tersedia <b>Selasa–Jumat</b> pukul 08.00 / 09.00 / 12.00 / 13.00 / 16.00. Tidak ada appointment malam.',en:'Available <b>Tuesday–Friday</b> at 08.00 / 09.00 / 12.00 / 13.00 / 16.00. No evening appointments.'},
 {id:'Bayar deposit maksimal <b>12 jam</b> setelah menerima detail booking.',en:'Please pay the deposit within <b>12 hours</b> after receiving your booking details.'},
 {id:'BANK',en:'BANK'},
@@ -656,13 +662,14 @@ async function loadAccount(){
  if(me.error){ await sb.auth.signOut(); LOGGED=false; toast(L==='id'?'Akun ini bukan akun klien.':'This is not a client account.'); show('login'); return false; }
  ME=me.data; LOGGED=true;
  if(!ME.must_set_pin){
-  const [h,c,m,p,st]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets')]);
-  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[];
+  const [h,c,m,p,st,bk]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings')]);
+  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[];
   loadSetImages();
  }
  return true;
 }
-const SUBS=[['card',{id:'Kartu',en:'Card'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
+let BOOKINGS=[], BK={step:0,setup:null,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};
+const SUBS=[['card',{id:'Kartu',en:'Card'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
 const RTHEMES=[['Ivory','#faf8f4','#e7e3de','#e2a6ad','#1b1b1b','#8a8580'],['Blush','#fdf5f4','#efdedb','#c98b93','#3a2a2c','#9b8285'],['Sage','#f7f8f3','#dde3d6','#a3b496','#27302a','#7f8a80'],['Latte','#fbf6ee','#e7dacb','#b8936f','#3b2e24','#8f7d6c'],['Lavender','#faf8fd','#e4dfee','#b4a5d3','#2e2838','#857d94'],['Mist','#f6f8fa','#dbe3ea','#9cb3c6','#24303a','#7b8893'],['Noir','#1f1d1c','#d9d4ce','#e2a6ad','#f4efe9','#a8a19a']];
 const themeVars=i=>{const t=RTHEMES[i];return `--paper:${t[1]};--wall:${t[2]};--pin:${t[3]};--ink2:${t[4]};--faint:${t[5]}`};
@@ -758,6 +765,112 @@ function renderLove(){
  el.innerHTML=LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
   :`<p class="note" style="text-align:center;margin-top:20px">${L==='id'?'Segera hadir.':'Coming soon.'}</p>`;
 }
+const BST={awaiting_dp:{en:'Waiting for DP',id:'Menunggu DP'},awaiting_approval:{en:'Checking your DP',id:'DP sedang dicek'},confirmed:{en:'Confirmed',id:'Terkonfirmasi'},rejected:{en:'Not approved',id:'Tidak disetujui'},cancelled:{en:'Cancelled',id:'Dibatalkan'},expired:{en:'Expired',id:'Kedaluwarsa'}};
+const durTxt=(m,id)=>{const h=Math.floor(m/60),r=m%60;return (h?h+(id?' jam ':'h '):'')+(r?r+(id?' menit':'m'):'')};
+const dLong=(d,id)=>new Date(d+'T00:00:00').toLocaleDateString(id?'id-ID':'en-GB',{weekday:'short',day:'numeric',month:'short'});
+const svcName=(s,id)=>id?s.id:s.en;
+function bkTier(){return BK.artist?BK.artist.tier:null}
+function bkDuration(){const S=BK.setup;if(!S||!BK.artist)return 0;return BK.svc.reduce((t,k)=>{const s=S.services.find(x=>x.key===k);return t+((s&&s.min[bkTier()])||0)},0)}
+function bookingCard(b,id){
+ const st=BST[b.status]||{en:b.status,id:b.status}, active=b.status==='awaiting_dp'||b.status==='awaiting_approval';
+ let body='';
+ if(b.status==='awaiting_dp') body=`<div class="info" style="margin-top:10px">${id?`Transfer DP <b>${rp(b.dp)}</b> sebelum <b>${new Date(b.hold_until).toLocaleString('id-ID',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</b>, lalu upload buktinya. Kalau lewat, jadwal ini dilepas otomatis.`:`Transfer the <b>${rp(b.dp)}</b> DP before <b>${new Date(b.hold_until).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</b>, then upload the proof. After that, this slot is released automatically.`}
+   <div class="bank" style="margin-top:10px"><div class="kv"><span class="k">BCA</span><span style="display:flex;gap:10px;align-items:center"><span class="v">7771906234</span><button class="copy" data-copy="7771906234">${T.copy[L]}</button></span></div><div class="kv"><span class="k">a.n.</span><span class="v" style="font-size:12px">Natasya Gishelle Jusuf</span></div></div></div>
+   <button class="btn" style="width:100%;margin-top:12px" data-bkproof="${b.id}">${id?'Upload bukti DP':'Upload DP proof'}</button>`;
+ if(b.status==='awaiting_approval') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP sudah diterima. Tim kami akan mengecek dan mengonfirmasi bookingmu.':'We received your DP proof. Our team will check it and confirm your booking.'} <u data-bkproof="${b.id}" style="cursor:pointer">${id?'Upload ulang':'Re-upload'}</u></p>`;
+ if(b.status==='confirmed') body=`<p class="note" style="margin-top:10px">${id?'Sampai jumpa di studio ♡ Untuk reschedule, DM Instagram kami (DP hangus sebagai cancellation fee).':'See you at the studio ♡ To reschedule, DM us on Instagram (the DP is kept as a cancellation fee).'}</p>`;
+ if((b.status==='rejected'||b.status==='cancelled')&&b.reason) body=`<p class="note" style="margin-top:10px">${esc(b.reason)}</p>`;
+ if(b.status==='expired') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP tidak masuk dalam batas waktu, jadi jadwal ini dilepas.':'The DP proof did not arrive in time, so this slot was released.'}</p>`;
+ return `<div class="card bkcard${active||b.status==='confirmed'?'':' dim'}"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><div class="tag">${esc(b.artist||'')}</div>
+  <div style="font-size:15px;letter-spacing:.06em;margin-top:4px">${dLong(b.date,id)} · ${b.time}</div>
+  <div class="note" style="margin-top:2px">${esc(b.summary||'')} · ±${durTxt(b.duration,id)}</div></div><span class="chip ${b.status}">${st[L]}</span></div>
+  ${b.note?`<p class="note" style="margin-top:6px">“${esc(b.note)}”</p>`:''}${body}
+  ${active?`<button class="link" style="margin-top:10px" data-bkcancel="${b.id}">${id?'Batalkan booking':'Cancel booking'}</button>`:''}</div>`;
+}
+function bookHtml(id){
+ let h='';
+ const mine=BOOKINGS.filter(b=>['awaiting_dp','awaiting_approval','confirmed'].includes(b.status)||!b.seen);
+ if(BK.step===0){
+  h+=mine.map(b=>bookingCard(b,id)).join('');
+  h+=`<div class="card" style="text-align:center"><div class="tag">${id?'Booking baru':'New booking'}</div>
+   <p class="note" style="margin:10px 0 14px">${id?'Pilih nail artist, treatment dan jam. Setelah itu transfer DP dan upload buktinya dalam 12 jam.':'Choose your nail artist, treatment and time. Then transfer the DP and upload the proof within 12 hours.'}</p>
+   <button class="btn" data-bkstart>${id?'Buat booking':'Book now'}</button></div>`;
+  const past=BOOKINGS.filter(b=>!mine.includes(b));
+  if(past.length) h+=`<div class="tag" style="margin:18px 0 8px;text-align:center">${id?'Sebelumnya':'Earlier'}</div>`+past.map(b=>bookingCard(b,id)).join('');
+  return h;
+ }
+ const S=BK.setup; if(!S) return `<div class="card"><p class="note" style="text-align:center">${id?'Memuat…':'Loading…'}</p></div>`;
+ h+=`<button class="link" data-bkback>← ${id?'Kembali':'Back'}</button>`;
+ if(BK.step===1){
+  h+=`<div class="card"><div class="tag" style="text-align:center">${id?'1 · Pilih nail artist':'1 · Choose your nail artist'}</div><div class="bkpick">`+
+   S.artists.map(a=>`<button class="bkopt" data-bkartist="${a.id}"><b>${esc(a.tier==='owner'?'Gisel (Owner)':a.name)}</b><small>${a.tier==='owner'?'By NG':a.tier==='senior'?'Senior team':'Junior team'} · DP ${rp(S.dp[a.tier])}</small></button>`).join('')+`</div></div>`;
+ }
+ if(BK.step===2){
+  const tier=bkTier(), off=S.services.filter(s=>s.min[tier]!=null);
+  const grp=(g,type,title,hint)=>{const list=off.filter(s=>s.group===g);if(!list.length)return '';
+   return `<label class="field">${title}</label>${hint?`<p class="note" style="margin:-2px 0 6px">${hint}</p>`:''}<div class="bkpick">`+
+    (type==='radio'?`<button class="bkopt sm${!BK.svc.some(k=>list.some(s=>s.key===k))?' on':''}" data-bkradio="${g}" data-key="">${id?'Tidak':'None'}</button>`:'')+
+    list.map(s=>`<button class="bkopt sm${BK.svc.includes(s.key)?' on':''}" ${type==='radio'?`data-bkradio="${g}"`:'data-bkcheck'} data-key="${s.key}">${esc(svcName(s,id))}<small>±${durTxt(s.min[tier],id)}</small></button>`).join('')+`</div>`};
+  const dur=bkDuration(), hasBase=BK.svc.some(k=>(S.services.find(s=>s.key===k)||{}).group==='base');
+  h+=`<div class="card"><div class="tag" style="text-align:center">${id?'2 · Pilih treatment':'2 · Choose your treatment'}</div>
+   ${grp('base','check',id?'Treatment (maks. 2)':'Treatment (max 2)','')}
+   ${grp('removal','radio',id?'Remove kuku lama':'Remove old nails',id?'Hanya bisa bersama treatment di atas.':'Only together with a treatment above.')}
+   ${grp('design','radio',id?'Desain':'Design',id?'Pilih yang paling mendekati, supaya waktunya cukup.':'Pick the closest one so we reserve enough time.')}
+   ${grp('extra','check',id?'Tambahan':'Extra','')}
+   <label class="field">${id?'Catatan untuk nail artist (opsional)':'Note for your nail artist (optional)'}</label>
+   <textarea id="bkNote" maxlength="500" placeholder="${id?'Misal warna, bentuk, ide desain. Referensi foto bisa dikirim lewat DM.':'E.g. color, shape, design idea. You can send reference photos via DM.'}">${esc(BK.note)}</textarea>
+   <div class="kv" style="margin-top:14px"><span class="k">${id?'Perkiraan durasi':'Estimated time'}</span><span class="v">${dur?'±'+durTxt(dur,id):'—'}</span></div>
+   <div class="kv"><span class="k">DP</span><span class="v">${rp(S.dp[tier])}</span></div>
+   <button class="btn" style="width:100%;margin-top:14px" data-bkfind ${hasBase?'':'disabled'}>${id?'Lihat jadwal kosong':'See available times'}</button>
+   ${hasBase?'':`<p class="note" style="text-align:center;margin-top:8px">${id?'Pilih minimal satu treatment.':'Choose at least one treatment.'}</p>`}</div>`;
+ }
+ if(BK.step===3){
+  const A=BK.avail;
+  if(!A){h+=`<div class="card"><p class="note" style="text-align:center">${id?'Mencari jadwal…':'Finding times…'}</p></div>`;return h}
+  const days=A.days, okDay=d=>d.slots.some(x=>x.state==='ok');
+  if(!BK.date){const f=days.find(okDay); BK.date=f?f.date:(days[0]||{}).date||null}
+  const day=days.find(d=>d.date===BK.date);
+  h+=`<div class="card"><div class="tag" style="text-align:center">${id?'3 · Pilih tanggal & jam':'3 · Choose date & time'}</div>
+   <p class="note" style="text-align:center;margin:8px 0 12px">${esc(A.summary)} · ±${durTxt(A.duration,id)}</p>
+   ${days.length?`<div class="bkdays">${days.map(d=>`<button class="bkday${d.date===BK.date?' on':''}${okDay(d)?'':' full'}" data-bkdate="${d.date}">${dLong(d.date,id).replace(',','')}</button>`).join('')}</div>`:`<p class="note" style="text-align:center">${id?'Belum ada jadwal yang dibuka. Jadwal baru dibuka setiap Selasa terakhir tiap bulan.':'No dates are open yet. New dates open on the last Tuesday of each month.'}</p>`}`;
+  if(day){
+   const ok=day.slots.filter(x=>x.state==='ok'), tl=day.slots.filter(x=>x.state==='too_long');
+   h+=`<div class="bkslots">${day.slots.map(x=>`<button class="bkslot${x.time===BK.time?' on':''}" ${x.state==='ok'?`data-bktime="${x.time}"`:'disabled'}>${x.time}<small>${x.state==='ok'?(id?'Tersedia':'Available'):x.state==='taken'?(id?'Terisi':'Booked'):(id?'Tidak cukup waktu':'Not enough time')}</small></button>`).join('')}</div>`;
+   if(tl.length) h+=`<div class="info" style="margin-top:12px">⏱ ${id?`Treatment pilihanmu butuh sekitar <b>${durTxt(A.duration,id)}</b>, jadi tidak cukup di jam ${tl.map(x=>x.time).join(', ')} karena sudah ada klien sesudahnya.${ok.length?` Di hari ini hanya bisa jam <b>${ok.map(x=>x.time).join(', ')}</b>.`:' Coba pilih hari lain atau kurangi desainnya.'}`:`Your treatment needs about <b>${durTxt(A.duration,id)}</b>, so it doesn't fit at ${tl.map(x=>x.time).join(', ')} because another client comes after.${ok.length?` On this day it only fits at <b>${ok.map(x=>x.time).join(', ')}</b>.`:' Try another day or a simpler design.'}`}</div>`;
+  }
+  if(BK.time){
+   h+=`<div class="paper" style="margin-top:16px;padding:18px"><div class="tag">${id?'Ringkasan':'Summary'}</div>
+    <div class="kv"><span class="k">${id?'Nail artist':'Nail artist'}</span><span class="v">${esc(BK.artist.tier==='owner'?'Gisel':BK.artist.name)}</span></div>
+    <div class="kv"><span class="k">${id?'Jadwal':'When'}</span><span class="v">${dLong(BK.date,id)} · ${BK.time}</span></div>
+    <div class="kv"><span class="k">${id?'Durasi':'Duration'}</span><span class="v">±${durTxt(A.duration,id)}</span></div>
+    <div class="kv"><span class="k">DP</span><span class="v">${rp(A.dp)}</span></div>
+    <label class="agree"><input type="checkbox" id="bkAgree" ${BK.agree?'checked':''}> <span>${id?'Saya mengerti DP tidak bisa dikembalikan, dan reschedule/cancel membuat DP hangus sebagai cancellation fee.':'I understand the DP is non-refundable, and rescheduling or cancelling keeps the DP as a cancellation fee.'}</span></label>
+    <button class="btn" style="width:100%;margin-top:12px" data-bkconfirm ${BK.busy?'disabled':''}>${id?'Booking sekarang':'Book now'}</button></div>`;
+  }
+  h+=`</div>`;
+ }
+ return h;
+}
+async function bkLoadAvail(){
+ BK.avail=null;BK.date=null;BK.time=null;renderAcct();
+ const r=await sb.rpc('ngd_client_availability',{p_artist:BK.artist.id,p_services:BK.svc});
+ if(r.error){toast(r.error.message);BK.step=2;renderAcct();return}
+ BK.avail=r.data;renderAcct();
+}
+async function bkUploadProof(bid){
+ const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+ inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;const id=L==='id';
+  try{toast(id?'Mengupload…':'Uploading…');
+   const d=await shrinkLocal(f); const blob=await (await fetch(d)).blob();
+   const path=`${ME.id}/${bid}/${Date.now()}.jpg`;
+   const up=await sb.storage.from('ngd-dp').upload(path,blob,{contentType:'image/jpeg'});
+   if(up.error)throw up.error;
+   const r=await sb.rpc('ngd_client_booking_proof',{p_id:bid,p_path:path}); if(r.error)throw r.error;
+   const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||BOOKINGS;
+   toast(id?'Bukti DP terkirim ♡':'DP proof sent ♡'); renderAcct();
+  }catch(err){toast((id?'Gagal upload: ':'Upload failed: ')+(err.message||err))}};
+ inp.click();
+}
 function renderAcct(){
  renderLove();
  const ic=$('#introCard'); if(ic)ic.style.display=LOGGED?'none':'';
@@ -775,7 +888,7 @@ function renderAcct(){
  const visits=ME.visits||0;
  let h=`<div class="hello"><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
- <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
+ <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
   const v10=visits%10===0&&visits>0?10:visits%10;
   const next=TIERS.find(t=>t[0]>v10);
@@ -826,6 +939,7 @@ function renderAcct(){
    <label class="chk" style="font-size:11px"><input type="checkbox" data-pubtoggle="${p.id}" ${p.allow_public?'checked':''}> <span>${id?'Boleh ditampilkan di Love Notes wall':'Allowed on the Love Notes wall'}</span></label>
    ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
  }
+ if(SUB==='book') h+=bookHtml(id);
  if(SUB==='history'){
   h+=HIST.length?`<div class="card">${HIST.map(a=>`<div class="appt"><div class="hd"><span>${fmtDate(a.date)}</span><span>${id?'Kunjungan':'Visit'} ${a.visit}</span></div><div class="tag" style="margin:4px 0 8px">${esc(a.artist||'')}${a.artist_role?' · '+esc(a.artist_role.replace(' artist','')):''}</div>
   ${(a.items||[]).map(i=>`<div class="row"><span class="n">${esc(i.label)}${i.qty>1?' × '+i.qty:''}</span><span class="p">${rp(i.amount)}</span></div>`).join('')}
@@ -877,7 +991,33 @@ function confirmSheet(title,body,yes,no,onYes,onNo){
 
 document.addEventListener('click',async e=>{
  const g=e.target.closest('[data-go]'); if(g){show(g.dataset.go);return}
- const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;renderAcct();return}
+ const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;
+  if(SUB==='book'&&BOOKINGS.some(x=>!x.seen)){sb.rpc('ngd_client_seen_bookings').then(()=>{});setTimeout(()=>{BOOKINGS.forEach(x=>x.seen=true)},1500)}
+  renderAcct();return}
+ if(e.target.closest('[data-bkstart]')){BK={step:1,setup:BK.setup,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};renderAcct();
+  if(!BK.setup){const r=await sb.rpc('ngd_client_booking_setup');if(r.error){toast(r.error.message);BK.step=0}else BK.setup=r.data;renderAcct()} return}
+ if(e.target.closest('[data-bkback]')){const n=$('#bkNote');if(n)BK.note=n.value;BK.step=Math.max(0,BK.step-1);if(BK.step<3)BK.time=null;renderAcct();window.scrollTo(0,0);return}
+ const ba=e.target.closest('[data-bkartist]'); if(ba){BK.artist=BK.setup.artists.find(a=>a.id===ba.dataset.bkartist);BK.svc=[];BK.step=2;renderAcct();return}
+ const bc=e.target.closest('[data-bkcheck]'); if(bc){const n=$('#bkNote');if(n)BK.note=n.value;const k=bc.dataset.key, s=BK.setup.services.find(x=>x.key===k);
+  if(BK.svc.includes(k))BK.svc=BK.svc.filter(x=>x!==k); else { if(s.group==='base'&&BK.svc.filter(x=>(BK.setup.services.find(y=>y.key===x)||{}).group==='base').length>=2) return toast(L==='id'?'Maksimal 2 treatment':'Maximum 2 treatments'); BK.svc.push(k);} renderAcct();return}
+ const br=e.target.closest('[data-bkradio]'); if(br){const n=$('#bkNote');if(n)BK.note=n.value;const g=br.dataset.bkradio;BK.svc=BK.svc.filter(k=>(BK.setup.services.find(s=>s.key===k)||{}).group!==g);if(br.dataset.key)BK.svc.push(br.dataset.key);renderAcct();return}
+ if(e.target.closest('[data-bkfind]')){const n=$('#bkNote');if(n)BK.note=n.value;BK.step=3;bkLoadAvail();return}
+ const bd=e.target.closest('[data-bkdate]'); if(bd){BK.date=bd.dataset.bkdate;BK.time=null;renderAcct();return}
+ const bt=e.target.closest('[data-bktime]'); if(bt){BK.time=bt.dataset.bktime;renderAcct();setTimeout(()=>{const p=document.querySelector('.paper');if(p)p.scrollIntoView({behavior:'smooth',block:'center'})},50);return}
+ if(e.target.id==='bkAgree'){BK.agree=e.target.checked;return}
+ if(e.target.closest('[data-bkconfirm]')){const id=L==='id';
+  if(!BK.agree)return toast(id?'Centang dulu persetujuan DP':'Please tick the DP agreement first');
+  BK.busy=true;renderAcct();
+  const r=await sb.rpc('ngd_client_book',{p_artist:BK.artist.id,p_date:BK.date,p_time:BK.time,p_services:BK.svc,p_note:BK.note||null});
+  BK.busy=false;
+  if(r.error){toast(r.error.message);bkLoadAvail();return}
+  const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[]; BK.step=0; renderAcct(); window.scrollTo(0,0);
+  toast(id?'Booking dibuat ♡ Transfer DP & upload buktinya ya':'Booking created ♡ Please transfer the DP and upload the proof');return}
+ const bp=e.target.closest('[data-bkproof]'); if(bp){bkUploadProof(bp.dataset.bkproof);return}
+ const bx=e.target.closest('[data-bkcancel]'); if(bx){const id=L==='id';
+  if(!confirm(id?'Batalkan booking ini? Kalau DP sudah ditransfer, DP tidak bisa dikembalikan.':'Cancel this booking? If you already paid the DP, it is non-refundable.'))return;
+  const r=await sb.rpc('ngd_client_cancel_booking',{p_id:bx.dataset.bkcancel}); if(r.error)return toast(r.error.message);
+  const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[]; renderAcct(); return}
  const lt=e.target.closest('[data-letter]'); if(lt){OPEN=lt.dataset.letter;const [mid,occ]=OPEN.split('|');const m=MSG.find(x=>x.id===mid&&x.occurrence===occ);if(m&&!m.read){m.read=true;sb.rpc('ngd_client_read_message',{p_message_id:mid,p_occurrence:occ});}renderAcct();return}
  if(e.target.closest('[data-close-letter]')){OPEN=null;renderAcct();return}
  if(e.target.id==='logout'){await sb.auth.signOut();LOGGED=false;ME=null;SUB='card';show('wifi');return}
