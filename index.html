@@ -584,7 +584,7 @@ document.addEventListener('click',e=>{
  const l=e.target.closest('[data-l]'); if(l){L=l.dataset.l;try{localStorage.setItem('ng-lang',L)}catch(_){}render()}
  const tb=e.target.closest('[data-tab]'); if(tb){TAB=tb.dataset.tab;render()}
 });
-const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc');
+const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc',{auth:{storageKey:'ngd-client-auth',persistSession:true}});
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
 let LOVE=[];
 let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[], POSTS=[], SETS=[], SETIMG={}, SETOPT={};
