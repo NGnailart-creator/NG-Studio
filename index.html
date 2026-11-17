@@ -996,9 +996,15 @@ function renderAcct(){
   <label class="chk" id="anonRow"><input type="checkbox" id="anon"> <span>${id?'Kirim sebagai anonim':'Send anonymously'}</span></label>
   <button class="btn" style="width:100%;margin-top:18px" id="sendFb">${id?'Kirim':'Send'}</button></div>`;
  }
- const segX=(el.querySelector('.seg')||{}).scrollLeft||0;
+ const oldSeg=el.querySelector('.seg');
  el.innerHTML=h;
- {const sg=el.querySelector('.seg');if(sg){sg.scrollLeft=segX;const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(l<sg.scrollLeft)sg.scrollLeft=l-12;else if(r>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=r-sg.clientWidth+12;}}}
+ {const nw=el.querySelector('.seg');
+  if(oldSeg&&nw&&oldSeg.children.length===nw.children.length){
+   [...nw.children].forEach((b,k)=>{const o=oldSeg.children[k];o.className=b.className;o.dataset.sub=b.dataset.sub;if(o.innerHTML!==b.innerHTML)o.innerHTML=b.innerHTML;});
+   nw.replaceWith(oldSeg);
+  }
+  const sg=el.querySelector('.seg');
+  if(sg){const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(l<sg.scrollLeft)sg.scrollLeft=Math.max(0,l-12);else if(r>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=r-sg.clientWidth+12;}}}
  if(SUB==='sets'){fitStories(); el.querySelectorAll('.story img').forEach(i=>i.addEventListener('load',fitStories));}
  const fa=$('#fbArtist'); if(fa){ $('#anonRow').style.display=fa.value==='Owner'?'flex':'none'; }
 }
