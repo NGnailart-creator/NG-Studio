@@ -158,6 +158,18 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .sheet label{display:block;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
 .sheet input{width:100%;font:400 15px Montserrat,sans-serif;letter-spacing:.1em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
 .sheet .btn{width:100%;margin-top:22px;padding:13px}
+.rulebanner{display:flex;align-items:center;gap:16px;background:var(--ink);color:var(--cream);border-radius:18px;padding:20px;margin-top:22px;text-align:left;cursor:pointer}
+.rulebanner .nofood{width:58px;height:58px;flex:none}
+.rulebanner b{display:block;font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;line-height:1.5}
+.rulebanner span{display:block;font-size:12px;opacity:.85;margin-top:4px}
+.bigrule{text-align:center;border:1.5px solid var(--ink);border-radius:20px;padding:26px 20px;margin-top:22px;background:var(--white)}
+.bigrule .nofood{width:84px;height:84px}
+.bigrule h3{font-size:15px;letter-spacing:.28em;margin:14px 0 6px}
+.rlist li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px dotted var(--line);list-style:none}
+.rlist li:last-child{border:0}
+.rlist .ic{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:15px}
+.rlist .no{border:1px solid var(--ink)}
+.rlist .yes{background:var(--soft)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.15em;padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
 .toast.on{opacity:1}
 </style>
@@ -186,6 +198,21 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
       <div class="tag" data-t="announceTag"></div>
       <p style="margin-top:6px;white-space:pre-wrap" id="annText"></p>
     </div>
+    <div class="rulebanner" data-go="rules"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><div><b data-t="noFoodTitle"></b><span data-t="noFoodSub"></span></div></div>
+  </section>
+
+  <section id="rules">
+    <h2 data-t="rulesTitle"></h2>
+    <div class="sub" data-t="rulesSub"></div>
+    <div class="bigrule"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><h3 data-t="noFoodTitle"></h3><p class="note" style="margin:0" data-t="noFoodWhy"></p></div>
+    <div class="card"><div class="tag" data-t="notAllowed"></div><ul class="rlist" style="margin-top:6px">
+      <li><span class="ic no">✕</span><span data-t="ruleFood"></span></li>
+      <li><span class="ic no" style="border:0"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><ellipse cx="32" cy="40" rx="8" ry="6.5"/><circle cx="21" cy="29" r="3.5"/><circle cx="27.5" cy="22" r="3.5"/><circle cx="36.5" cy="22" r="3.5"/><circle cx="43" cy="29" r="3.5"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg></span><span data-t="rulePets"></span></li>
+    </ul></div>
+    <div class="card"><div class="tag" data-t="allowed"></div><ul class="rlist" style="margin-top:6px">
+      <li><span class="ic yes">☕</span><span data-t="ruleDrinks"></span></li>
+      <li><span class="ic yes">✓</span><span data-t="ruleSnacks"></span></li>
+    </ul></div>
   </section>
 
   <section id="prices">
@@ -298,6 +325,15 @@ welcome:{id:'Selamat datang',en:'Welcome'},
 loginHint:{id:'Pertama kali login? Masukkan kode 6 angka dari nail artist sebagai PIN, lalu buat PIN-mu sendiri.',en:'First time? Enter the 6-digit code from your nail artist as your PIN, then create your own PIN.'},
 forgot:{id:'Lupa PIN? Hubungi kami lewat DM Instagram, owner akan me-reset PIN-mu.',en:'Forgot your PIN? DM us on Instagram and the owner will reset it.'},
 contactTitle:{id:'Kontak',en:'Contact'},contactSub:{id:'Temukan kami',en:'Find us'},igNote:{id:'Booking, konsultasi, dan jadwal terbaru',en:'Bookings, consultations and latest schedule'},mapName:{id:'Lokasi Studio',en:'Studio Location'},mapNote:{id:'Buka petunjuk arah',en:'Open directions'},
+noFoodTitle:{id:'Dilarang makan di dalam studio',en:'No food inside the studio'},
+noFoodSub:{id:'Minuman boleh dibawa. Ketuk untuk aturan studio.',en:'Drinks are welcome. Tap for studio rules.'},
+noFoodWhy:{id:'Supaya semua klien nyaman, tanpa campuran aroma makanan.',en:'So every guest can enjoy a fresh, scent-free space.'},
+rulesTitle:{id:'Aturan Studio',en:'Studio Rules'},rulesSub:{id:'Supaya semua klien nyaman',en:'For everyone\'s comfort'},
+notAllowed:{id:'Tidak diperbolehkan',en:'Not allowed'},allowed:{id:'Diperbolehkan',en:'Allowed'},
+ruleFood:{id:'<b>Makan atau membawa makanan</b> ke dalam studio, termasuk barang yang berbau menyengat, supaya klien lain tetap nyaman tanpa campuran aroma.',en:'<b>Eating or bringing food</b> into the studio, including anything with a strong smell, so other guests can enjoy a fresh, scent-free space.'},
+rulePets:{id:'<b>Membawa hewan peliharaan</b>, baik ke dalam studio maupun di area luar studio.',en:'<b>Bringing pets</b>, inside the studio or in the area outside it.'},
+ruleDrinks:{id:'<b>Minuman</b> apa pun, seperti kopi atau teh.',en:'<b>Drinks</b> of any kind, such as coffee or tea.'},
+ruleSnacks:{id:'<b>Snack ringan</b>, asal tidak berbau dan tidak mudah remah/berceceran, supaya studio tetap bersih dan tidak bersemut.',en:'<b>Light snacks</b>, as long as they have no strong smell and don\'t crumble, to keep the studio clean and free of ants.'},
 logout:{id:'Keluar',en:'Log out'},
 announceTag:{id:'Pengumuman',en:'Announcement'},
 announceText:{id:'Contoh pengumuman: jadwal Desember dibuka Selasa, 24 November via Instagram Story.',en:'Sample announcement: December slots open on Tuesday, 24 November via Instagram Story.'},
@@ -319,7 +355,7 @@ loginLead:{id:'Masuk untuk melihat loyalty card, riwayat treatment, kupon, dan p
 copied:{id:'Disalin',en:'Copied'},
 previewOnly:{id:'Login belum aktif di preview',en:'Login is not active in this preview'}
 };
-const NAV=[['wifi',{id:'WiFi',en:'WiFi'}],['prices',{id:'Harga',en:'Prices'}],['services',{id:'Layanan',en:'Services'}],['loyalty',{id:'Loyalty',en:'Loyalty'}],['ask',{id:'Boleh Diminta',en:'Just Ask'}],['dos',{id:"Do's & Don'ts",en:"Do's & Don'ts"}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['contact',{id:'Kontak',en:'Contact'}]];
+const NAV=[['wifi',{id:'WiFi',en:'WiFi'}],['rules',{id:'Aturan',en:'Rules'}],['prices',{id:'Harga',en:'Prices'}],['services',{id:'Layanan',en:'Services'}],['loyalty',{id:'Loyalty',en:'Loyalty'}],['ask',{id:'Boleh Diminta',en:'Just Ask'}],['dos',{id:"Do's & Don'ts",en:"Do's & Don'ts"}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['contact',{id:'Kontak',en:'Contact'}]];
 
 const F='FAV';
 let PRICE={
@@ -458,7 +494,7 @@ document.addEventListener('click',e=>{
 const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc');
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
 let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[];
-const SECTIONS=['wifi','prices','services','loyalty','ask','dos','book','colors','contact','login','account'];
+const SECTIONS=['wifi','rules','prices','services','loyalty','ask','dos','book','colors','contact','login','account'];
 const rp = n => 'Rp ' + (Math.round(+n||0)).toLocaleString('id-ID');
 const fmtDate = d => { try { return new Date(d+'T00:00:00').toLocaleDateString(L==='id'?'id-ID':'en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(_){ return d; } };
 
