@@ -827,14 +827,16 @@ function bookingCard(b,id){
    <button class="btn" style="width:100%;margin-top:12px" data-bkproof="${b.id}">${id?'Upload bukti DP':'Upload DP proof'}</button>`;
  if(b.status==='awaiting_approval') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP sudah diterima. Tim kami akan mengecek dan mengonfirmasi bookingmu.':'We received your DP proof. Our team will check it and confirm your booking.'} <u data-bkproof="${b.id}" style="cursor:pointer">${id?'Upload ulang':'Re-upload'}</u></p>`;
  if(b.status==='confirmed') body=`<p class="note" style="margin-top:10px">${id?'Sampai jumpa di studio ♡ Untuk reschedule, DM Instagram kami (DP hangus sebagai cancellation fee).':'See you at the studio ♡ To reschedule, DM us on Instagram (the DP is kept as a cancellation fee).'}</p>`;
- if((b.status==='rejected'||b.status==='cancelled')&&b.reason) body=`<p class="note" style="margin-top:10px">${esc(b.reason)}</p>`;
+ if(b.status==='cancelled'&&b.cancelled_at){const when=new Date(b.cancelled_at).toLocaleString(id?'id-ID':'en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+   body=`<p class="note" style="margin-top:10px">${b.cancel_kind==='reschedule'?(id?'Dibatalkan untuk reschedule':'Cancelled to reschedule'):(id?'Dibatalkan':'Cancelled')} ${b.cancelled_by==='team'?(id?'oleh studio':'by the studio'):(id?'olehmu':'by you')} · ${when}${b.reason?'<br>'+esc(b.reason):''}</p>`;}
+ else if((b.status==='rejected'||b.status==='cancelled')&&b.reason) body=`<p class="note" style="margin-top:10px">${esc(b.reason)}</p>`;
  if(b.status==='expired') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP tidak masuk dalam batas waktu, jadi jadwal ini dilepas.':'The DP proof did not arrive in time, so this slot was released.'}</p>`;
  return `<div class="card bkcard${active||b.status==='confirmed'?'':' dim'}"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><div class="tag" style="display:flex;align-items:center;gap:8px">${avatar(teamPhoto(b.artist_photo),b.artist,26)}${esc(b.artist||'')}</div>
   <div style="font-size:15px;letter-spacing:.06em;margin-top:4px">${dLong(b.date,id)} · ${b.time}</div>
   <div class="note" style="margin-top:2px">${esc(b.summary||'')} · ±${durTxt(b.duration,id)}${b.est_min!=null?' · '+(id?'perkiraan ':'est. ')+rangeK(b.est_min,b.est_max):''}</div></div><span class="chip ${b.status}">${st[L]}</span></div>
   ${b.note?`<p class="note" style="margin-top:6px">“${esc(b.note)}”</p>`:''}${body}
   ${active||b.status==='confirmed'?`<a class="igref" href="${IG_DM}" target="_blank" rel="noopener" style="margin-top:12px">📷 ${id?'Kirim foto referensi lewat DM Instagram':'Send reference photos via Instagram DM'}</a>`:''}
-  ${active?`<button class="link" style="margin-top:10px" data-bkcancel="${b.id}">${id?'Batalkan booking':'Cancel booking'}</button>`:''}</div>`;
+  ${active||b.status==='confirmed'?`<button class="btn ghost" style="width:100%;margin-top:12px" data-bkcx="${b.id}">${id?'Cancel / Reschedule':'Cancel / Reschedule'}</button>`:''}</div>`;
 }
 function bookHtml(id){
  let h='';
@@ -917,6 +919,32 @@ async function bkLoadAvail(){
  const r=await sb.rpc('ngd_client_availability',{p_artist:BK.artist.id,p_services:BK.svc});
  if(r.error){toast(r.error.message);BK.step=2;renderAcct();return}
  BK.avail=r.data;renderAcct();
+}
+function openCancel(bid){
+ const b=BOOKINGS.find(x=>x.id===bid); if(!b)return; const id=L==='id';
+ const paid=b.status==='confirmed'||b.has_proof, when=`${dLong(b.date,id)} · ${b.time} · ${esc(b.artist||'')}`;
+ const ov=document.createElement('div'); ov.className='cropov';
+ const step1=()=>`<div class="cropbox"><div class="tag" style="text-align:center">Cancel / Reschedule</div>
+   <p style="text-align:center;font-size:14px;margin:10px 0 4px;letter-spacing:.04em">${when}</p>
+   <div class="info" style="margin-top:12px;text-align:left;line-height:1.7">${id?'Yakin mau membatalkan atau reschedule booking ini?':'Are you sure you want to cancel or reschedule this booking?'}<br>
+    • ${paid?(id?`DP <b>${rp(b.dp)}</b> hangus dan tidak bisa dikembalikan (cancellation fee).`:`Your <b>${rp(b.dp)}</b> DP is forfeited and non-refundable (cancellation fee).`):(id?'DP belum dibayar, jadi tidak ada DP yang hangus.':'No DP has been paid yet, so nothing is forfeited.')}<br>
+    • ${id?'Reschedule = booking baru dengan DP baru.':'Rescheduling means a new booking with a new DP.'}<br>
+    • ${id?'Tidak bisa dibatalkan (undo). Jadwalmu langsung dilepas untuk klien lain.':'This can\'t be undone. Your slot is released to other clients right away.'}</div>
+   <div style="display:grid;gap:8px;margin-top:14px"><button class="btn" data-k="cancel">${id?'Ya, batalkan booking':'Yes, cancel my booking'}</button><button class="btn" data-k="reschedule">${id?'Ya, saya mau reschedule':'Yes, I want to reschedule'}</button><button class="btn ghost" data-k="close">${id?'Kembali':'Go back'}</button></div></div>`;
+ const step2=k=>`<div class="cropbox"><div class="tag" style="text-align:center">${k==='reschedule'?(id?'Konfirmasi reschedule':'Confirm reschedule'):(id?'Konfirmasi pembatalan':'Confirm cancellation')}</div>
+   <p style="text-align:center;font-size:14px;margin:10px 0 4px;letter-spacing:.04em">${when}</p>
+   <p class="note" style="text-align:center;margin-top:10px">${k==='reschedule'?(id?'Booking ini akan dibatalkan, lalu kamu bisa memilih jadwal baru dan membayar DP baru.':'This booking will be cancelled, then you can choose a new date and pay a new DP.'):(id?'Booking ini akan dibatalkan.':'This booking will be cancelled.')}${paid?(id?` DP ${rp(b.dp)} hangus.`:` The ${rp(b.dp)} DP is forfeited.`):''} ${id?'Langkah ini final.':'This is final.'}</p>
+   <div style="display:grid;gap:8px;margin-top:14px"><button class="btn" data-k="send" data-kind="${k}">${k==='reschedule'?(id?'Kirim & pilih jadwal baru':'Send & choose a new date'):(id?'Kirim pembatalan':'Send cancellation')}</button><button class="btn ghost" data-k="close">${id?'Jangan batalkan':'Keep my booking'}</button></div></div>`;
+ ov.innerHTML=step1(); document.body.appendChild(ov);
+ ov.addEventListener('click',async ev=>{ const btn=ev.target.closest('[data-k]'); if(ev.target===ov||(btn&&btn.dataset.k==='close')){ov.remove();return} if(!btn)return;
+  if(btn.dataset.k==='cancel'||btn.dataset.k==='reschedule'){ov.innerHTML=step2(btn.dataset.k);return}
+  if(btn.dataset.k==='send'){ btn.disabled=true; const kind=btn.dataset.kind;
+   const r=await sb.rpc('ngd_client_cancel_booking2',{p_id:bid,p_kind:kind}); if(r.error){btn.disabled=false;return toast(r.error.message)}
+   ov.remove(); const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[];
+   if(kind==='reschedule'){ toast(id?'Booking dibatalkan. Silakan pilih jadwal baru ♡':'Booking cancelled. Please choose your new date ♡');
+     BK={step:1,setup:BK.setup,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false}; renderAcct();
+     if(!BK.setup){const s2=await sb.rpc('ngd_client_booking_setup'); if(!s2.error)BK.setup=s2.data; renderAcct();} window.scrollTo(0,0);
+   } else { toast(id?'Booking sudah dibatalkan':'Your booking has been cancelled'); renderAcct(); } } });
 }
 async function bkUploadProof(bid){
  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
@@ -1124,6 +1152,7 @@ document.addEventListener('click',async e=>{
   const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[]; BK.step=0; renderAcct(); window.scrollTo(0,0);
   toast(id?'Booking dibuat ♡ Transfer DP & upload buktinya ya':'Booking created ♡ Please transfer the DP and upload the proof');return}
  const bp=e.target.closest('[data-bkproof]'); if(bp){bkUploadProof(bp.dataset.bkproof);return}
+ const cx=e.target.closest('[data-bkcx]'); if(cx){openCancel(cx.dataset.bkcx);return}
  const bx=e.target.closest('[data-bkcancel]'); if(bx){const id=L==='id';
   if(!confirm(id?'Batalkan booking ini? Kalau DP sudah ditransfer, DP tidak bisa dikembalikan.':'Cancel this booking? If you already paid the DP, it is non-refundable.'))return;
   const r=await sb.rpc('ngd_client_cancel_booking',{p_id:bx.dataset.bkcancel}); if(r.error)return toast(r.error.message);
