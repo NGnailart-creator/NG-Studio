@@ -243,6 +243,7 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .rcp [contenteditable]{outline:none}
 .rcp [contenteditable]:focus{background:rgba(0,0,0,.05)}
 .swx{display:flex;gap:10px;flex-wrap:wrap}
+.ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
 .swx i:after{content:"";position:absolute;right:3px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--p)}
@@ -664,20 +665,43 @@ const RTHEMES=[['Ivory','#faf8f4','#e7e3de','#e2a6ad','#1b1b1b','#8a8580'],['Blu
 const themeVars=i=>{const t=RTHEMES[i];return `--paper:${t[1]};--wall:${t[2]};--pin:${t[3]};--ink2:${t[4]};--faint:${t[5]}`};
 const kfmt=n=>{n=+n||0;if(n>=1000){const k=n/1000;return (Number.isInteger(k)?k:k.toFixed(1))+'K'}return String(n)};
 function receiptHtml(x,o){
- const rc=x.receipt||{}, ph=(x.photos||[]).slice(0,3), imgs=ph.map(p=>SETIMG[p]||'');
+ const rc=x.receipt||{}, imgs=setImgs(x,o);
  const pr=v=>`<span class="pv" data-v="${kfmt(v)}">${o.hide?'XXX':kfmt(v)}</span>`;
  const D='============================', d='----------------------------';
  const items=(rc.items||[]).map(i=>`<div class="it"><span contenteditable>${esc(String(i.label||'').toUpperCase())}${i.qty>1?' × '+i.qty:''}</span><span>${pr(i.amount)}</span></div>`).join('');
  const disc=rc.discount_amount?`<div class="it"><span contenteditable>${esc(String(rc.discount_label||'DISCOUNT').toUpperCase())}</span><span class="pv" data-v="-${kfmt(rc.discount_amount)}">${o.hide?'XXX':'-'+kfmt(rc.discount_amount)}</span></div>`:'';
  return `<div class="rcp ${o.font}"><div class="pinx"></div><div class="br">NG NAILART</div><div class="ds">${D}</div><div class="tt" contenteditable>TODAY'S SET</div><div class="ds">${D}</div>
- <div class="ph g${imgs.length||1}">${imgs.map(u=>u?`<img src="${u}">`:'<div style="background:#eee"></div>').join('')}</div>
- <div class="ds">${d}</div>${x.title?`<div class="it"><span contenteditable>${esc(x.title.toUpperCase())}</span><span></span></div>`:''}${items}${disc}
+ <div class="ph g${imgs.length||1}">${phInner(imgs)}</div>
+ <div class="ds">${d}</div>${x.title&&!(rc.items||[]).some(i=>String(i.label||'').trim().toUpperCase()===x.title.trim().toUpperCase())?`<div class="it"><span contenteditable>${esc(x.title.toUpperCase())}</span><span></span></div>`:''}${items}${disc}
  <div class="ds">${d}</div><div class="it bg"><span>TOTAL</span><span>${pr(rc.total)}</span></div><div class="ds">${d}</div>
  <div class="it"><span>NAIL ARTIST: ${esc(String(rc.artist||'').toUpperCase())}</span><span></span></div>
  <div class="it"><span>${esc(fmtDate(rc.date).toUpperCase())}</span><span>VISIT ${rc.visit||''}</span></div>
  <div class="it"><span>LOYALTY STAMP</span><span>${rc.stamp||''} / 10 ♡</span></div>
  <div class="ds">${d}</div><div class="sm" contenteditable>THANK YOU FOR VISITING<br>NG NAILART</div><div class="bar"></div><div class="sm fx">@NATASYAGISHELLE.NAILART</div></div>`;
 }
+function setImgs(x,o){ return o.imgs?o.imgs.slice(0,3):(x.photos||[]).slice(0,3).map(p=>SETIMG[p]||''); }
+const phInner=imgs=>imgs.length?imgs.map(u=>u?`<img src="${u}">`:'<div style="background:#eee"></div>').join(''):'<div style="background:#eee"></div>';
+function phCtl(x,o){ const id=L==='id', imgs=setImgs(x,o);
+ return imgs.map((u,i)=>`<div class="pt"><button class="pti" data-setph="${x.id}" data-i="${i}" style="${u?`background-image:url('${u}')`:''}"><span>${id?'Ganti':'Change'}</span></button>${imgs.length>1?`<button class="ptx" data-setphdel="${x.id}" data-i="${i}" aria-label="remove">×</button>`:''}</div>`).join('')
+  +(imgs.length<3?`<div class="pt"><button class="pti add" data-setph="${x.id}" data-i="${imgs.length}"><span>+ ${id?'Foto':'Photo'}</span></button></div>`:''); }
+function refreshPh(sid){ const x=SETS.find(y=>String(y.id)===String(sid)), o=SETOPT[sid]; if(!x||!o)return;
+ const st=document.getElementById('story-'+sid); if(st){const ph=st.querySelector('.ph'); const imgs=setImgs(x,o); ph.className='ph g'+(imgs.length||1); ph.innerHTML=phInner(imgs);}
+ const c=document.getElementById('phctl-'+sid); if(c)c.innerHTML=phCtl(x,o); fitStories(); }
+async function shrinkLocal(file){
+ const url=URL.createObjectURL(file);
+ try{ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
+  const k=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight)); const cv=document.createElement('canvas');
+  cv.width=Math.round(img.naturalWidth*k); cv.height=Math.round(img.naturalHeight*k);
+  const g=cv.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,cv.width,cv.height); g.drawImage(img,0,0,cv.width,cv.height);
+  return cv.toDataURL('image/jpeg',0.88);
+ } finally { URL.revokeObjectURL(url); } }
+function pickSetPhoto(sid,i){
+ const x=SETS.find(y=>String(y.id)===String(sid)), o=SETOPT[sid]; if(!x||!o)return;
+ const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+ inp.onchange=async()=>{ const f=inp.files&&inp.files[0]; if(!f)return;
+  try{ const d=await shrinkLocal(f); if(!o.imgs)o.imgs=setImgs(x,o).slice(); o.imgs[i]=d; o.imgs=o.imgs.filter(Boolean).slice(0,3); refreshPh(sid); }
+  catch(_){ toast(L==='id'?'Foto tidak bisa dibuka, coba foto lain':'Could not open this photo, please try another'); } };
+ inp.click(); }
 function fitStories(){ requestAnimationFrame(()=>document.querySelectorAll('.story').forEach(st=>{const r=st.querySelector('.rcp'); if(!r)return; r.style.transform='rotate(-1deg)'; const k=Math.min(1,(st.clientHeight*0.93)/r.offsetHeight); r.style.transform=`scale(${k}) rotate(-1deg)`;})); }
 async function loadSetImages(){
  const paths=[...new Set(SETS.flatMap(x=>x.photos||[]))].filter(p=>!SETIMG[p]); if(!paths.length)return;
@@ -689,7 +713,10 @@ async function downloadSet(id){
  const el=document.getElementById('story-'+id); if(!el||!window.htmlToImage)return toast('Download not available');
  try{
   el.style.borderRadius='0';
-  const url=await htmlToImage.toPng(el,{pixelRatio:1080/el.offsetWidth,cacheBust:true});
+  await Promise.all([...el.querySelectorAll('img')].map(im=>im.decode?im.decode().catch(()=>{}):null));
+  const opt={pixelRatio:1080/el.offsetWidth};
+  let url=await htmlToImage.toPng(el,opt);
+  for(let k=0;k<2;k++){ await new Promise(r=>setTimeout(r,150)); url=await htmlToImage.toPng(el,opt); }
   el.style.borderRadius='';
   const blob=await (await fetch(url)).blob(); const file=new File([blob],'ng-nailart-todays-set.png',{type:'image/png'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:"Today's Set"}); return; }
@@ -741,7 +768,8 @@ function renderAcct(){
    const o=SETOPT[x.id]||(SETOPT[x.id]={font:'mono',hide:false,theme:0});
    h+=`<div class="card"><div class="tag" style="text-align:center">${id?'Dari':'From'} ${esc(x.from||'')} · ${fmtDate(String(x.sent_at).slice(0,10))}</div>
    <div class="story" id="story-${x.id}" style="${themeVars(o.theme)}">${receiptHtml(x,o)}</div>
-   <p class="note" style="text-align:center">${id?'Ketuk teks di struk untuk mengedit.':'Tap any text on the receipt to edit it.'}</p>
+   <label class="field">${id?'Foto':'Photos'}</label><div class="ptrow" id="phctl-${x.id}">${phCtl(x,o)}</div>
+   <p class="note" style="margin-top:4px">${id?'Bisa ganti atau tambah foto sendiri (maks. 3). Foto ini hanya dipakai di gambarmu, tidak dikirim ke studio.':'You can change or add your own photos (max 3). They are only used in your image and are not sent to the studio.'}</p>
    <label class="field">${id?'Gaya teks':'Text style'}</label><div class="seg" style="margin-top:0">${[['mono','Typewriter'],['sans',id?'Font website':'Website font']].map(([k,n])=>`<button data-setfont="${x.id}" data-v="${k}" class="${o.font===k?'on':''}">${n}</button>`).join('')}</div>
    <label class="field">${id?'Harga':'Prices'}</label><div class="seg" style="margin-top:0"><button data-sethide="${x.id}" data-v="0" class="${o.hide?'':'on'}">${id?'Tampilkan':'Show'}</button><button data-sethide="${x.id}" data-v="1" class="${o.hide?'on':''}">${id?'Sembunyikan (XXX)':'Hide (XXX)'}</button></div>
    <label class="field">${id?'Warna':'Colour'}</label><div class="swx">${RTHEMES.map((t,i)=>`<button data-settheme="${x.id}" data-v="${i}" class="${o.theme===i?'on':''}"><i style="background:linear-gradient(135deg,${t[2]} 50%,${t[1]} 50%);--p:${t[3]}"></i>${t[0]}</button>`).join('')}</div>
@@ -830,6 +858,8 @@ document.addEventListener('click',async e=>{
   toast(L==='id'?'PIN tersimpan':'PIN saved');
   await loadAccount();renderAcct();return;
  }
+ const sp=e.target.closest('[data-setph]'); if(sp){pickSetPhoto(sp.dataset.setph,+sp.dataset.i);return}
+ const sd=e.target.closest('[data-setphdel]'); if(sd){const sid=sd.dataset.setphdel, x=SETS.find(y=>String(y.id)===String(sid)), o=SETOPT[sid]; if(x&&o){ if(!o.imgs)o.imgs=setImgs(x,o).slice(); o.imgs.splice(+sd.dataset.i,1); refreshPh(sid);} return}
  const sf=e.target.closest('[data-setfont],[data-sethide],[data-settheme]');
  if(sf){const id=sf.dataset.setfont||sf.dataset.sethide||sf.dataset.settheme, o=SETOPT[id];
   const st=document.getElementById('story-'+id), rcp=st.querySelector('.rcp');
