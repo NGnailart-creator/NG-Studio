@@ -192,6 +192,12 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .rlist .ic{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:15px}
 .rlist .no{border:1px solid var(--ink)}
 .rlist .yes{background:var(--soft)}
+.lovenote{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:26px 22px 20px;margin-top:18px;position:relative}
+.lovenote:before{content:"\201C";position:absolute;top:-6px;left:18px;font-size:64px;line-height:1;color:var(--line);font-family:Georgia,serif}
+.lovenote .body{font-style:italic;font-size:15px;line-height:1.75;position:relative}
+.lovenote .who{margin-top:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+.lovenote .rep{margin-top:12px;border-top:1px dotted var(--line);padding-top:10px;font-size:12px;color:var(--muted)}
+.lovenote .rep b{font-weight:500;color:var(--ink)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.15em;padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
 .toast.on{opacity:1}
 </style>
@@ -308,6 +314,11 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
     <div class="gallery" id="gallery"></div>
     <p class="note" style="text-align:center" data-t="colorNote"></p>
   </section>
+  <section id="love">
+    <h2>Love Notes</h2>
+    <div class="sub" data-t="loveSub"></div>
+    <div id="loveWall"></div>
+  </section>
   <section id="contact">
     <h2 data-t="contactTitle"></h2>
     <div class="sub" data-t="contactSub"></div>
@@ -359,6 +370,7 @@ ruleFood:{id:'<b>Makan atau membawa makanan</b> ke dalam studio, termasuk barang
 rulePets:{id:'<b>Membawa hewan peliharaan</b>, baik ke dalam studio maupun di area luar studio.',en:'<b>Bringing pets</b>, inside the studio or in the area outside it.'},
 ruleDrinks:{id:'<b>Minuman</b> apa pun, seperti kopi atau teh.',en:'<b>Drinks</b> of any kind, such as coffee or tea.'},
 ruleSnacks:{id:'<b>Snack ringan</b>, asal tidak berbau dan tidak mudah remah/berceceran, supaya studio tetap bersih dan tidak bersemut.',en:'<b>Light snacks</b>, as long as they have no strong smell and don\'t crumble, to keep the studio clean and free of ants.'},
+loveSub:{id:'Pesan manis dari klien kami',en:'Sweet words from our clients'},
 logout:{id:'Keluar',en:'Log out'},
 announceTag:{id:'Pengumuman',en:'Announcement'},
 announceText:{id:'Contoh pengumuman: jadwal Desember dibuka Selasa, 24 November via Instagram Story.',en:'Sample announcement: December slots open on Tuesday, 24 November via Instagram Story.'},
@@ -380,7 +392,7 @@ loginLead:{id:'Masuk untuk melihat loyalty card, riwayat treatment, kupon, dan p
 copied:{id:'Disalin',en:'Copied'},
 previewOnly:{id:'Login belum aktif di preview',en:'Login is not active in this preview'}
 };
-const NAV=[['wifi',{id:'WiFi',en:'WiFi'}],['rules',{id:'Aturan',en:'Rules'}],['prices',{id:'Harga',en:'Prices'}],['services',{id:'Layanan',en:'Services'}],['loyalty',{id:'Loyalty',en:'Loyalty'}],['ask',{id:'Boleh Diminta',en:'Just Ask'}],['dos',{id:"Do's & Don'ts",en:"Do's & Don'ts"}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['contact',{id:'Kontak',en:'Contact'}]];
+const NAV=[['wifi',{id:'WiFi',en:'WiFi'}],['rules',{id:'Aturan',en:'Rules'}],['prices',{id:'Harga',en:'Prices'}],['services',{id:'Layanan',en:'Services'}],['loyalty',{id:'Loyalty',en:'Loyalty'}],['ask',{id:'Boleh Diminta',en:'Just Ask'}],['dos',{id:"Do's & Don'ts",en:"Do's & Don'ts"}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['love',{id:'Love Notes',en:'Love Notes'}],['contact',{id:'Kontak',en:'Contact'}]];
 
 const F='FAV';
 let PRICE={
@@ -518,8 +530,9 @@ document.addEventListener('click',e=>{
 });
 const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc');
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
+let LOVE=[];
 let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[], POSTS=[];
-const SECTIONS=['wifi','rules','prices','services','loyalty','ask','dos','book','colors','contact','login','account'];
+const SECTIONS=['wifi','rules','prices','services','loyalty','ask','dos','book','colors','love','contact','login','account'];
 const rp = n => 'Rp ' + (Math.round(+n||0)).toLocaleString('id-ID');
 const fmtDate = d => { try { return new Date(d+'T00:00:00').toLocaleDateString(L==='id'?'id-ID':'en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(_){ return d; } };
 
@@ -561,11 +574,11 @@ function applyPrices(rows){
  ADDON=by('nayla','Add-On').map(r=>[ADD_LABEL[r.item]||r.item,clean(r.price).replace(' / nail',' / {nail}')]);
 }
 async function loadPublic(){
- const [site,prices,colors,artists]=await Promise.all([
+ const [site,prices,colors,artists,love]=await Promise.all([
   sb.from('ngd_site').select('key,value'),
   sb.rpc('ngd_public_prices'),
   sb.from('ngd_colors').select('code,name,image_path,thumb_path').order('sort_order').order('created_at'),
-  sb.rpc('ngd_public_artists')]);
+  sb.rpc('ngd_public_artists'), sb.rpc('ngd_public_love_notes')]);
  const get=k=>(((site.data||[]).find(r=>r.key===k))||{}).value||{};
  const w=get('wifi'); if(w.name){$('#wifiName').textContent=w.name;}
  if(w.password){$('#wifiPw').textContent=w.password;$('#wifiCopy').dataset.copy=w.password;}
@@ -573,7 +586,7 @@ async function loadPublic(){
  applyPrices(prices.data);
  const url=p=>sb.storage.from('ngd-colors').getPublicUrl(p).data.publicUrl;
  COLORS=(colors.data||[]).map(c=>({code:c.code,name:c.name,thumb:url(c.thumb_path||c.image_path),full:url(c.image_path)}));
- ARTISTS=artists.data||[];
+ ARTISTS=artists.data||[]; LOVE=love.data||[];
  render();
 }
 
@@ -590,7 +603,13 @@ async function loadAccount(){
 }
 const SUBS=[['card',{id:'Kartu',en:'Card'}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
+function renderLove(){
+ const el=$('#loveWall'); if(!el)return;
+ el.innerHTML=LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
+  :`<p class="note" style="text-align:center;margin-top:20px">${L==='id'?'Segera hadir.':'Coming soon.'}</p>`;
+}
 function renderAcct(){
+ renderLove();
  const ic=$('#introCard'); if(ic)ic.style.display=LOGGED?'none':'';
  const el=$('#acct'); if(!el||!LOGGED||!ME){if(el)el.innerHTML='';return}
  const id=L==='id';
@@ -622,10 +641,13 @@ function renderAcct(){
    <p class="note">${id?'Pesanmu dibaca owner, admin, dan nail artist yang kamu pilih. Mereka bisa membalas dan memberi ♡.':'Your message is read by the owner, admin and the nail artist you choose. They can reply and ♡ it.'}</p>
    <label class="field">${id?'Untuk':'To'}</label><select id="postTo">${tos.map(n=>`<option value="${esc(n)}">${esc(n==='Studio'?(id?'Studio (owner & admin)':'Studio (owner & admin)'):n)}</option>`).join('')}</select>
    <textarea id="postBody" style="margin-top:10px" placeholder="${id?'Tulis sesuatu…':'Write something…'}" maxlength="1000"></textarea>
+   <label class="chk"><input type="checkbox" id="postPublic"> <span>${id?'Boleh ditampilkan di Love Notes wall (hanya nama depan)':'You may show this on the Love Notes wall (first name only)'}</span></label>
    <button class="btn" style="width:100%;margin-top:12px" id="postSend">${id?'Kirim':'Send'}</button></div>`+
   (POSTS.length?POSTS.map(p=>`<div class="chatpost"><div class="tag">${id?'Untuk':'To'} ${esc(p.to)} · ${fmtDate(String(p.created_at).slice(0,10))}</div>
+   ${p.featured?`<div class="tag" style="color:#b0566a;margin-top:4px">★ ${id?'Tampil di Love Notes':'On the Love Notes wall'}</div>`:''}
    <div class="bubble me">${esc(p.body)}${p.liked_by?`<div class="heart on" style="cursor:default">♥ ${esc(p.liked_by)}</div>`:''}</div>
    ${(p.replies||[]).map(r=>r.from_client?`<div class="bubble me"><small>${id?'Kamu':'You'}</small>${esc(r.body)}</div>`:`<div class="bubble them"><small>${esc(r.author)}</small>${esc(r.body)}<br><button class="heart${r.liked?' on':''}" data-likereply="${r.id}">${r.liked?'♥':'♡'}</button></div>`).join('')}
+   <label class="chk" style="font-size:11px"><input type="checkbox" data-pubtoggle="${p.id}" ${p.allow_public?'checked':''}> <span>${id?'Boleh ditampilkan di Love Notes wall':'Allowed on the Love Notes wall'}</span></label>
    ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
  }
  if(SUB==='history'){
@@ -700,7 +722,7 @@ document.addEventListener('click',async e=>{
  }
  if(e.target.id==='postSend'){
   const body=$('#postBody').value.trim(); if(!body)return;
-  const r=await sb.rpc('ngd_client_post',{p_to:$('#postTo').value,p_body:body});
+  const r=await sb.rpc('ngd_client_post',{p_to:$('#postTo').value,p_body:body,p_allow_public:$('#postPublic').checked});
   if(r.error)return toast(r.error.message);
   const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; toast(L==='id'?'Terkirim':'Sent'); renderAcct(); return;
  }
@@ -730,7 +752,8 @@ document.addEventListener('click',async e=>{
    ()=>send(false));
  }
 });
-document.addEventListener('change',e=>{
+document.addEventListener('change',async e=>{
+ if(e.target.dataset&&e.target.dataset.pubtoggle){const r=await sb.rpc('ngd_client_set_public',{p_post_id:e.target.dataset.pubtoggle,p_allow:e.target.checked});if(r.error)return toast(r.error.message);const p=await sb.rpc('ngd_client_posts');POSTS=p.data||[];renderAcct();return}
  if(e.target.id==='fbArtist'){const r=$('#anonRow');r.style.display=e.target.value==='Owner'?'flex':'none';if(e.target.value!=='Owner')$('#anon').checked=false}
 });
 $('#loginBtn').onclick=()=>show(LOGGED?'account':'login');
