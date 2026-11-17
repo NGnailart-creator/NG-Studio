@@ -65,6 +65,8 @@ nav.chips button.on{background:var(--ink);color:var(--cream);border-color:var(--
 .paper{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:26px 22px;margin-top:16px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.05)}
 textarea{width:100%;font:300 14px Montserrat,sans-serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);min-height:110px;resize:vertical}
 select{width:100%;font:400 14px Montserrat,sans-serif;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink)}
+#acct .card input:not([type=checkbox]):not([type=radio]){width:100%;font:300 14px Montserrat,sans-serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink);-webkit-appearance:none;appearance:none;min-height:46px}
+#acct .card input:disabled{opacity:.6}
 .field{display:block;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
 .chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:12px}
 .chk input{margin-top:4px;accent-color:var(--ink)}
@@ -669,8 +671,8 @@ async function loadAccount(){
  if(me.error){ await sb.auth.signOut(); LOGGED=false; toast(L==='id'?'Akun ini bukan akun klien.':'This is not a client account.'); show('login'); return false; }
  ME=me.data; LOGGED=true;
  if(!ME.must_set_pin){
-  const [h,c,m,p,st,bk]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings')]);
-  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[];
+  const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
+  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
  }
  return true;
@@ -702,7 +704,10 @@ function pickMyPhoto(){
   }catch(err){ toast((id?'Gagal: ':'Failed: ')+(err.message||err)); } };
  inp.click(); }
 let BOOKINGS=[], BK={step:0,setup:null,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};
-const SUBS=[['card',{id:'Kartu',en:'Card'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
+let PROFILE={};
+const REFERRALS=[['Instagram','Instagram'],['TikTok','TikTok'],['Friend / family referral','Teman / keluarga'],['Google Maps','Google Maps'],['Walk-in / passing by','Lewat / mampir'],['Event / bazaar','Event / bazaar'],['Other','Lainnya']];
+const profileMissing=()=>!PROFILE.phone||!PROFILE.instagram||!PROFILE.area||!PROFILE.birthday||!PROFILE.referral;
+const SUBS=[['card',{id:'Kartu',en:'Card'}],['profile',{id:'Profil',en:'Profile'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
 const RTHEMES=[['Ivory','#faf8f4','#e7e3de','#e2a6ad','#1b1b1b','#8a8580'],['Blush','#fdf5f4','#efdedb','#c98b93','#3a2a2c','#9b8285'],['Sage','#f7f8f3','#dde3d6','#a3b496','#27302a','#7f8a80'],['Latte','#fbf6ee','#e7dacb','#b8936f','#3b2e24','#8f7d6c'],['Lavender','#faf8fd','#e4dfee','#b4a5d3','#2e2838','#857d94'],['Mist','#f6f8fa','#dbe3ea','#9cb3c6','#24303a','#7b8893'],['Noir','#1f1d1c','#d9d4ce','#e2a6ad','#f4efe9','#a8a19a']];
 const themeVars=i=>{const t=RTHEMES[i];return `--paper:${t[1]};--wall:${t[2]};--pin:${t[3]};--ink2:${t[4]};--faint:${t[5]}`};
@@ -943,7 +948,7 @@ function renderAcct(){
  if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
  let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
- <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
+ <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='profile'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
   const v10=visits%10===0&&visits>0?10:visits%10;
   const next=TIERS.find(t=>t[0]>v10);
@@ -1009,6 +1014,25 @@ function renderAcct(){
    <label class="chk" style="font-size:11px"><input type="checkbox" data-pubtoggle="${p.id}" ${p.allow_public?'checked':''}> <span>${id?'Boleh ditampilkan di Love Notes wall':'Allowed on the Love Notes wall'}</span></label>
    ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
   }
+ }
+ if(SUB==='card'&&profileMissing()) h=h.replace('<div class="card"><div class="tag" style="text-align:center">Loyalty Card</div>',`<div class="setbanner" data-sub="profile"><span style="font-size:20px">✎</span><div><b>${id?'Lengkapi profilmu':'Complete your profile'}</b><small>${id?'WhatsApp, Instagram, ulang tahun & lainnya':'WhatsApp, Instagram, birthday & more'}</small></div></div><div class="card"><div class="tag" style="text-align:center">Loyalty Card</div>`);
+ if(SUB==='profile'){
+  const P=PROFILE, bdLocked=!!P.birthday;
+  h+=`<div class="card"><div class="tag" style="text-align:center">${id?'Profil saya':'My profile'}</div>
+   <div style="display:flex;justify-content:center;margin:14px 0 4px"><button class="avbtn" data-myphoto>${avatar(MYPHOTO,ME.name,84)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button></div>
+   <p class="note" style="text-align:center">${id?'Ketuk foto untuk mengganti':'Tap the photo to change it'}</p>
+   <label class="field">${id?'Nama':'Name'}</label><input value="${esc(ME.name)}" disabled>
+   <label class="field">WhatsApp</label><input id="pfPhone" inputmode="tel" value="${esc(P.phone||'')}" placeholder="08…">
+   <label class="field">Instagram</label><input id="pfIg" value="${esc(P.instagram?'@'+String(P.instagram).replace(/^@/,''):'')}" placeholder="@username" autocapitalize="off">
+   <label class="field">${id?'Area tempat tinggal':'Area you live in'}</label><input id="pfArea" value="${esc(P.area||'')}" placeholder="${id?'mis. Lembang, Setiabudi':'e.g. Lembang, Setiabudi'}">
+   <label class="field">${id?'Tanggal ulang tahun':'Birthday'}</label><input id="pfBday" type="date" value="${esc(P.birthday||'')}" ${bdLocked?'disabled':''}>
+   <p class="note">${bdLocked?(id?'Sudah tersimpan. Untuk mengubah, hubungi studio.':'Saved. To change it, please contact the studio.'):(id?'Untuk hadiah ulang tahun dari kami. Hanya bisa diisi sekali.':'For your birthday gift from us. Can be set once.')}</p>
+   <label class="field">${id?'Dari mana kamu tahu NG Nailart?':'How did you find NG Nailart?'}</label>
+   <select id="pfRef"><option value="">—</option>${REFERRALS.map(([v,l])=>`<option value="${esc(v)}" ${P.referral===v?'selected':''}>${esc(id?l:v)}</option>`).join('')}</select>
+   <input id="pfRefDetail" style="margin-top:8px" value="${esc(P.referral_detail||'')}" placeholder="${id?'Detail (mis. direferensikan oleh siapa)':'Details (e.g. who referred you)'}">
+   <label class="field">${id?'Alergi / kulit sensitif':'Allergies / sensitive skin'}</label><input id="pfAllergy" value="${esc(P.allergy||'')}" placeholder="${id?'Kosongkan kalau tidak ada':'Leave empty if none'}">
+   <p class="note">${id?'Data ini hanya dilihat tim NG Nailart dan membantu kami melayanimu dengan aman.':'Only the NG Nailart team sees this. It helps us take care of you safely.'}</p>
+   <button class="btn" style="width:100%;margin-top:14px" id="pfSave">${id?'Simpan profil':'Save profile'}</button></div>`;
  }
  if(SUB==='book') h+=bookHtml(id);
  if(SUB==='history'){
@@ -1134,9 +1158,15 @@ document.addEventListener('click',async e=>{
   const v=$('#bdayIn').value; if(!v)return;
   const r=await sb.rpc('ngd_client_set_birthday',{p_date:v});
   if(r.error)return toast(r.error.message);
-  ME.birthday=v;toast(L==='id'?'Ulang tahun tersimpan 🎂':'Birthday saved 🎂');renderAcct();return;
+  ME.birthday=v;PROFILE.birthday=v;toast(L==='id'?'Ulang tahun tersimpan 🎂':'Birthday saved 🎂');renderAcct();return;
  }
  if(e.target.closest('[data-myphoto]')){pickMyPhoto();return}
+ if(e.target.id==='pfSave'){ const id=L==='id', g=x=>($('#'+x)||{}).value||'';
+  const bd=g('pfBday'), args={p_phone:g('pfPhone'),p_instagram:g('pfIg').trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?].*$/,''),p_area:g('pfArea'),p_referral:g('pfRef'),p_referral_detail:g('pfRefDetail'),p_allergy:g('pfAllergy'),p_birthday:bd||null};
+  e.target.disabled=true; const r=await sb.rpc('ngd_client_save_profile',args); e.target.disabled=false;
+  if(r.error)return toast(r.error.message);
+  const pf=await sb.rpc('ngd_client_profile'); PROFILE=pf.data||PROFILE; if(PROFILE.birthday)ME.birthday=PROFILE.birthday;
+  toast(id?'Profil tersimpan ♡':'Profile saved ♡'); renderAcct(); return; }
  const cm=e.target.closest('[data-chatmode]'); if(cm){CHATMODE=cm.dataset.chatmode;renderAcct();return}
  if(e.target.closest('[data-writelove]')){ if(!LOGGED){ toast(L==='id'?'Login dulu untuk menulis love note':'Log in first to write a love note'); show('login'); return } SUB='chat'; CHATMODE='love'; show('account'); renderAcct(); window.scrollTo(0,0); return }
  if(e.target.id==='loveSend'){
