@@ -613,7 +613,7 @@ function renderAcct(){
  if(SUB==='note'){
   h+=`<div class="card"><div class="tag">${id?'Catatan Pribadi':'Personal Notes'}</div>
   <div class="info">${id?'Catatan ini juga dibaca oleh nail artist kami, supaya kami bisa mengingat preferensimu dan terus melakukan yang lebih baik.':'Our nail artists can also read these notes, so we can remember your preferences and keep improving.'}</div>
-  <p class="note">${id?'Contoh: warna favorit (mis. NG 03), layanan yang biasa kamu ambil, special request.':'For example: favorite colors (e.g. NG 03), services you usually get, special requests.'}</p>
+  <p class="note">${id?'Contoh: warna favorit (mis. NG 03), layanan yang biasa kamu ambil, special request, dan alergi atau kulit sensitif (penting untuk keamanan treatment-mu).':'For example: favorite colors (e.g. NG 03), services you usually get, special requests, and any allergies or sensitive skin (important for a safe treatment).'}</p>
   <textarea id="myNote" style="margin-top:10px">${esc(ME.client_note)}</textarea><button class="btn" style="width:100%;margin-top:14px" id="saveNote">${id?'Simpan':'Save'}</button></div>`;
  }
  if(SUB==='feedback'){
