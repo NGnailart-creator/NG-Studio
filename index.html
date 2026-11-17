@@ -260,6 +260,7 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .avbtn{position:relative;border:0;background:none;padding:0;cursor:pointer}.avcam{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1px solid var(--line);font-size:12px;line-height:20px;color:var(--ink)}
 .bkopt.bkart{flex-direction:row;align-items:center;gap:14px}.bkopt.bkart span{display:flex;flex-direction:column;gap:3px}
 .lovenote .visits{color:#b0566a}
+.since{text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}.since b{color:var(--ink);font-weight:500}
 .ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
@@ -574,7 +575,8 @@ const $=s=>document.querySelector(s);
 function render(){
  document.documentElement.lang=L;
  document.querySelectorAll('[data-t]').forEach(e=>e.innerHTML=T[e.dataset.t][L]);
- $('#chips').innerHTML=NAV.map(([h,n])=>`<button data-go="${h}" class="${h===VIEW?'on':''}">${n[L]}</button>`).join('');
+ {const ch=$('#chips'); if(ch.children.length===NAV.length){ NAV.forEach(([h,n],k)=>{const b=ch.children[k]; b.dataset.go=h; b.className=h===VIEW?'on':''; if(b.textContent!==n[L])b.textContent=n[L];}); }
+  else ch.innerHTML=NAV.map(([h,n])=>`<button data-go="${h}" class="${h===VIEW?'on':''}">${n[L]}</button>`).join('');}
  $('#loginBtn').textContent=LOGGED?(L==='id'?'Akun Saya':'My Account'):T.login[L];
  renderAcct();
  const lv=TAB==='owner'?'Owner':'Team';
@@ -620,7 +622,7 @@ function show(v){
  try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v)}catch(_){}
  window.scrollTo(0,0);
  render();
- const on=document.querySelector('#chips button.on'); if(on)on.scrollIntoView({inline:'center',block:'nearest'});
+ {const ch=document.querySelector('#chips'),on=ch&&ch.querySelector('button.on'); if(on){const l=on.offsetLeft-ch.offsetLeft,r=l+on.offsetWidth; if(r<ch.scrollLeft||l>ch.scrollLeft+ch.clientWidth) ch.scrollLeft=Math.max(0,l-22);}}
 }
 window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 
@@ -706,7 +708,7 @@ function pickMyPhoto(){
 let BOOKINGS=[], BK={step:0,setup:null,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};
 let PROFILE={};
 const REFERRALS=[['Instagram','Instagram'],['TikTok','TikTok'],['Friend / family referral','Teman / keluarga'],['Google Maps','Google Maps'],['Walk-in / passing by','Lewat / mampir'],['Event / bazaar','Event / bazaar'],['Other','Lainnya']];
-const profileMissing=()=>!PROFILE.phone||!PROFILE.instagram||!PROFILE.area||!PROFILE.birthday||!PROFILE.referral;
+const profileMissing=()=>!PROFILE.phone||!PROFILE.instagram||!PROFILE.area||!PROFILE.birthday||!PROFILE.referral||!PROFILE.since;
 const SUBS=[['card',{id:'Kartu',en:'Card'}],['profile',{id:'Profil',en:'Profile'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
 const RTHEMES=[['Ivory','#faf8f4','#e7e3de','#e2a6ad','#1b1b1b','#8a8580'],['Blush','#fdf5f4','#efdedb','#c98b93','#3a2a2c','#9b8285'],['Sage','#f7f8f3','#dde3d6','#a3b496','#27302a','#7f8a80'],['Latte','#fbf6ee','#e7dacb','#b8936f','#3b2e24','#8f7d6c'],['Lavender','#faf8fd','#e4dfee','#b4a5d3','#2e2838','#857d94'],['Mist','#f6f8fa','#dbe3ea','#9cb3c6','#24303a','#7b8893'],['Noir','#1f1d1c','#d9d4ce','#e2a6ad','#f4efe9','#a8a19a']];
@@ -803,7 +805,7 @@ function renderLove(){
  const lid=L==='id', cta=`<div class="card" style="text-align:center;margin-bottom:16px"><div class="tag">${lid?'Tulis love note':'Write a love note'}</div>
   <p class="note" style="margin:8px 0 12px">${lid?'Ceritakan pengalamanmu di NG Nailart. Love note tampil di sini setelah dicek studio, dengan nama lengkap, nama depan, atau inisial saja.':'Share your NG Nailart experience. Love notes appear here after the studio checks them, with your full name, first name or just your initials.'}</p>
   <button class="btn" data-writelove>${lid?'Tulis love note ♡':'Write a love note ♡'}</button></div>`;
- el.innerHTML=cta+(LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)}${n.visits?` · <span class="visits">♡ ${n.visits}${lid?'× di NG Nailart':' visits at NG Nailart'}</span>`:''} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
+ el.innerHTML=cta+(LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)}${n.visits?` · <span class="visits">♡ ${n.visits}${lid?'× di NG Nailart':' visits at NG Nailart'}</span>`:''}${n.since?` · ${lid?'klien sejak':'client since'} ${new Date(n.since+'T00:00:00').toLocaleDateString(lid?'id-ID':'en-GB',{month:'short',year:'numeric'})}`:''} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
   :`<p class="note" style="text-align:center;margin-top:20px">${L==='id'?'Segera hadir.':'Coming soon.'}</p>`);
 }
 const BST={awaiting_dp:{en:'Waiting for DP',id:'Menunggu DP'},awaiting_approval:{en:'Checking your DP',id:'DP sedang dicek'},confirmed:{en:'Confirmed',id:'Terkonfirmasi'},rejected:{en:'Not approved',id:'Tidak disetujui'},cancelled:{en:'Cancelled',id:'Dibatalkan'},expired:{en:'Expired',id:'Kedaluwarsa'}};
@@ -954,6 +956,7 @@ function renderAcct(){
   const next=TIERS.find(t=>t[0]>v10);
   h+=`<div class="card"><div class="tag" style="text-align:center">Loyalty Card</div>
   ${lcard(ME.name,v10)}
+  <p class="since">${PROFILE.since?`${id?'Klien NG sejak':'NG client since'} <b>${new Date(PROFILE.since+'T00:00:00').toLocaleDateString(id?'id-ID':'en-GB',{month:'long',year:'numeric'})}</b> · `:''}<b>${visits}</b> ${id?'kunjungan':(visits===1?'visit':'visits')}</p>
   <p class="progress">${id?'Total kunjungan: ':'Total visits: '}<b style="font-weight:500">${visits}</b></p>
   ${(ME.saved_rewards||[]).filter(r=>r.use_by>visits).map(r=>{const t=TIERS.find(x=>x[0]===r.cycle);return `<div class="info" style="text-align:center;margin-bottom:10px">🎁 ${id?`Hadiah tersimpan: <b>Kunjungan ${r.cycle}</b>${t?' — '+t[1].id:''}<br><span style="font-size:11px;color:var(--muted)">Bisa dipakai sampai kunjungan ke-${r.use_by}. Satu hadiah per kunjungan.</span>`:`Saved reward: <b>Visit ${r.cycle}</b>${t?' — '+t[1].en:''}<br><span style="font-size:11px;color:var(--muted)">Use it by visit ${r.use_by}. One reward per visit.</span>`}</div>`}).join('')}
   ${next?`<div class="info" style="text-align:center">${id?`${next[0]-v10} kunjungan lagi menuju <b>Kunjungan ${next[0]}</b>: ${next[1].id}`:`${next[0]-v10} more visit(s) to <b>Visit ${next[0]}</b>: ${next[1].en}`}</div>`:''}
@@ -1027,6 +1030,8 @@ function renderAcct(){
    <label class="field">${id?'Area tempat tinggal':'Area you live in'}</label><input id="pfArea" value="${esc(P.area||'')}" placeholder="${id?'mis. Lembang, Setiabudi':'e.g. Lembang, Setiabudi'}">
    <label class="field">${id?'Tanggal ulang tahun':'Birthday'}</label><input id="pfBday" type="date" value="${esc(P.birthday||'')}" ${bdLocked?'disabled':''}>
    <p class="note">${bdLocked?(id?'Sudah tersimpan. Untuk mengubah, hubungi studio.':'Saved. To change it, please contact the studio.'):(id?'Untuk hadiah ulang tahun dari kami. Hanya bisa diisi sekali.':'For your birthday gift from us. Can be set once.')}</p>
+   <label class="field">${id?'Pertama kali ke NG Nailart':'First visit to NG Nailart'}</label><input id="pfFirst" type="month" value="${esc(P.first_visit?String(P.first_visit).slice(0,7):'')}" ${P.first_visit?'disabled':''} max="${new Date().toISOString().slice(0,7)}">
+   <p class="note">${P.first_visit?(id?'Sudah tersimpan. Untuk mengubah, hubungi studio.':'Saved. To change it, please contact the studio.'):(id?'Kira-kira bulan & tahun saja. Akan tampil sebagai "Klien NG sejak …".':'Just the month & year is fine. Shown as "NG client since …".')}</p>
    <label class="field">${id?'Dari mana kamu tahu NG Nailart?':'How did you find NG Nailart?'}</label>
    <select id="pfRef"><option value="">—</option>${REFERRALS.map(([v,l])=>`<option value="${esc(v)}" ${P.referral===v?'selected':''}>${esc(id?l:v)}</option>`).join('')}</select>
    <input id="pfRefDetail" style="margin-top:8px" value="${esc(P.referral_detail||'')}" placeholder="${id?'Detail (mis. direferensikan oleh siapa)':'Details (e.g. who referred you)'}">
@@ -1071,7 +1076,7 @@ function renderAcct(){
   <label class="chk" id="anonRow"><input type="checkbox" id="anon"> <span>${id?'Kirim sebagai anonim':'Send anonymously'}</span></label>
   <button class="btn" style="width:100%;margin-top:18px" id="sendFb">${id?'Kirim':'Send'}</button></div>`;
  }
- const oldSeg=el.querySelector('.seg');
+ const oldSeg=el.querySelector('.seg'), segX=oldSeg?oldSeg.scrollLeft:0;
  el.innerHTML=h;
  {const nw=el.querySelector('.seg');
   if(oldSeg&&nw&&oldSeg.children.length===nw.children.length){
@@ -1079,7 +1084,8 @@ function renderAcct(){
    nw.replaceWith(oldSeg);
   }
   const sg=el.querySelector('.seg');
-  if(sg){const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(l<sg.scrollLeft)sg.scrollLeft=Math.max(0,l-12);else if(r>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=r-sg.clientWidth+12;}}}
+  if(sg&&oldSeg){sg.scrollLeft=segX;requestAnimationFrame(()=>{sg.scrollLeft=segX;});}
+  if(sg){const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(r<sg.scrollLeft||l>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=Math.max(0,l-12);}}}
  if(SUB==='sets'){fitStories(); el.querySelectorAll('.story img').forEach(i=>i.addEventListener('load',fitStories));}
  const fa=$('#fbArtist'); if(fa){ $('#anonRow').style.display=fa.value==='Owner'?'flex':'none'; }
 }
@@ -1163,8 +1169,10 @@ document.addEventListener('click',async e=>{
  if(e.target.closest('[data-myphoto]')){pickMyPhoto();return}
  if(e.target.id==='pfSave'){ const id=L==='id', g=x=>($('#'+x)||{}).value||'';
   const bd=g('pfBday'), args={p_phone:g('pfPhone'),p_instagram:g('pfIg').trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?].*$/,''),p_area:g('pfArea'),p_referral:g('pfRef'),p_referral_detail:g('pfRefDetail'),p_allergy:g('pfAllergy'),p_birthday:bd||null};
-  e.target.disabled=true; const r=await sb.rpc('ngd_client_save_profile',args); e.target.disabled=false;
-  if(r.error)return toast(r.error.message);
+  e.target.disabled=true; const r=await sb.rpc('ngd_client_save_profile',args);
+  const fm=g('pfFirst'); let r2={}; if(fm&&!PROFILE.first_visit) r2=await sb.rpc('ngd_client_set_first_visit',{p_month:fm+'-01'});
+  e.target.disabled=false;
+  if(r.error)return toast(r.error.message); if(r2.error)return toast(r2.error.message);
   const pf=await sb.rpc('ngd_client_profile'); PROFILE=pf.data||PROFILE; if(PROFILE.birthday)ME.birthday=PROFILE.birthday;
   toast(id?'Profil tersimpan ♡':'Profile saved ♡'); renderAcct(); return; }
  const cm=e.target.closest('[data-chatmode]'); if(cm){CHATMODE=cm.dataset.chatmode;renderAcct();return}
