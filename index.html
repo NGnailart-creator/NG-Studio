@@ -35,7 +35,7 @@ nav.chips button.on{background:var(--ink);color:var(--cream);border-color:var(--
 .seg button{flex:none;font:400 10px Montserrat,sans-serif;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;position:relative}
 .seg button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .dot{position:absolute;top:3px;right:5px;width:6px;height:6px;border-radius:50%;background:#b0566a}
-.hello{display:flex;justify-content:space-between;align-items:center}
+.hello{display:flex;justify-content:space-between;align-items:center;gap:10px}.hello .btn{white-space:nowrap;flex:none}
 .hello h2{text-align:left;font-size:14px}
 .st.done{background:var(--ink);color:var(--cream)}
 .st.done.gift{background:#b0566a;border-color:#b0566a}
@@ -254,6 +254,10 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .igref{display:block;text-align:center;border:1px solid var(--ink);border-radius:30px;padding:10px 12px;margin-top:10px;font:500 10.5px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none}
 .bkcard.dim{opacity:.6}.agree{text-align:left;display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:14px;text-transform:none;letter-spacing:0}.agree input{margin-top:3px;accent-color:var(--ink)}
 .chatmode{display:flex;gap:6px;margin-top:18px;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:4px}.chatmode button{flex:1;border:0;background:transparent;border-radius:24px;padding:10px;font:500 11px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer}.chatmode button.on{background:var(--ink);color:var(--cream)}
+.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--ink);color:var(--cream);overflow:hidden;flex:none;font-weight:500;letter-spacing:.04em}.av img{width:100%;height:100%;object-fit:cover;display:block}
+.avbtn{position:relative;border:0;background:none;padding:0;cursor:pointer}.avcam{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1px solid var(--line);font-size:12px;line-height:20px;color:var(--ink)}
+.bkopt.bkart{flex-direction:row;align-items:center;gap:14px}.bkopt.bkart span{display:flex;flex-direction:column;gap:3px}
+.lovenote .visits{color:#b0566a}
 .ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
@@ -671,7 +675,32 @@ async function loadAccount(){
  }
  return true;
 }
-let CHATMODE='chat';
+let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null;
+const teamPhoto=p=>p?sb.storage.from('ngd-team-photos').getPublicUrl(p).data.publicUrl:null;
+const initialsOf=n=>String(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const avatar=(url,name,size)=>`<span class="av" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.36)}px">${url?`<img src="${url}" alt="">`:esc(initialsOf(name))}</span>`;
+async function loadMyPhoto(){ if(!ME||!ME.photo_path){MYPHOTO=null;MYPHOTO_PATH=null;return}
+ if(MYPHOTO_PATH===ME.photo_path&&MYPHOTO)return;
+ const r=await sb.storage.from('ngd-client-photos').createSignedUrl(ME.photo_path,60*60*24*7); MYPHOTO=r.data?r.data.signedUrl:null; MYPHOTO_PATH=ME.photo_path; renderAcct(); }
+async function squareJpeg(file,size){
+ const url=URL.createObjectURL(file);
+ try{const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
+  const m=Math.min(img.naturalWidth,img.naturalHeight), cv=document.createElement('canvas'); cv.width=cv.height=size;
+  const g=cv.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,size,size);
+  g.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,size,size);
+  return await new Promise(res=>cv.toBlob(res,'image/jpeg',0.85));
+ } finally { URL.revokeObjectURL(url); } }
+function pickMyPhoto(){
+ const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+ inp.onchange=async()=>{ const f=inp.files&&inp.files[0]; if(!f)return; const id=L==='id';
+  try{ toast(id?'Mengupload foto…':'Uploading photo…');
+   const blob=await squareJpeg(f,400); const path=`${ME.id}/${Date.now()}.jpg`, old=ME.photo_path;
+   const up=await sb.storage.from('ngd-client-photos').upload(path,blob,{contentType:'image/jpeg'}); if(up.error)throw up.error;
+   const r=await sb.rpc('ngd_client_set_photo',{p_path:path}); if(r.error)throw r.error;
+   if(old) sb.storage.from('ngd-client-photos').remove([old]).then(()=>{});
+   ME.photo_path=path; MYPHOTO=null; await loadMyPhoto(); toast(id?'Foto profil tersimpan ♡':'Profile photo saved ♡');
+  }catch(err){ toast((id?'Gagal: ':'Failed: ')+(err.message||err)); } };
+ inp.click(); }
 let BOOKINGS=[], BK={step:0,setup:null,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};
 const SUBS=[['card',{id:'Kartu',en:'Card'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
 
@@ -767,9 +796,9 @@ async function downloadSet(id){
 function renderLove(){
  const el=$('#loveWall'); if(!el)return;
  const lid=L==='id', cta=`<div class="card" style="text-align:center;margin-bottom:16px"><div class="tag">${lid?'Tulis love note':'Write a love note'}</div>
-  <p class="note" style="margin:8px 0 12px">${lid?'Ceritakan pengalamanmu di NG Nailart. Love note tampil di sini setelah dicek studio, dengan nama depanmu atau sebagai Anonymous.':'Share your NG Nailart experience. Love notes appear here after the studio checks them, with your first name or as Anonymous.'}</p>
+  <p class="note" style="margin:8px 0 12px">${lid?'Ceritakan pengalamanmu di NG Nailart. Love note tampil di sini setelah dicek studio, dengan nama lengkap, nama depan, atau inisial saja.':'Share your NG Nailart experience. Love notes appear here after the studio checks them, with your full name, first name or just your initials.'}</p>
   <button class="btn" data-writelove>${lid?'Tulis love note ♡':'Write a love note ♡'}</button></div>`;
- el.innerHTML=cta+(LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
+ el.innerHTML=cta+(LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">— ${esc(n.name)}${n.visits?` · <span class="visits">♡ ${n.visits}${lid?'× di NG Nailart':' visits at NG Nailart'}</span>`:''} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
   :`<p class="note" style="text-align:center;margin-top:20px">${L==='id'?'Segera hadir.':'Coming soon.'}</p>`);
 }
 const BST={awaiting_dp:{en:'Waiting for DP',id:'Menunggu DP'},awaiting_approval:{en:'Checking your DP',id:'DP sedang dicek'},confirmed:{en:'Confirmed',id:'Terkonfirmasi'},rejected:{en:'Not approved',id:'Tidak disetujui'},cancelled:{en:'Cancelled',id:'Dibatalkan'},expired:{en:'Expired',id:'Kedaluwarsa'}};
@@ -793,7 +822,7 @@ function bookingCard(b,id){
  if(b.status==='confirmed') body=`<p class="note" style="margin-top:10px">${id?'Sampai jumpa di studio ♡ Untuk reschedule, DM Instagram kami (DP hangus sebagai cancellation fee).':'See you at the studio ♡ To reschedule, DM us on Instagram (the DP is kept as a cancellation fee).'}</p>`;
  if((b.status==='rejected'||b.status==='cancelled')&&b.reason) body=`<p class="note" style="margin-top:10px">${esc(b.reason)}</p>`;
  if(b.status==='expired') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP tidak masuk dalam batas waktu, jadi jadwal ini dilepas.':'The DP proof did not arrive in time, so this slot was released.'}</p>`;
- return `<div class="card bkcard${active||b.status==='confirmed'?'':' dim'}"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><div class="tag">${esc(b.artist||'')}</div>
+ return `<div class="card bkcard${active||b.status==='confirmed'?'':' dim'}"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><div class="tag" style="display:flex;align-items:center;gap:8px">${avatar(teamPhoto(b.artist_photo),b.artist,26)}${esc(b.artist||'')}</div>
   <div style="font-size:15px;letter-spacing:.06em;margin-top:4px">${dLong(b.date,id)} · ${b.time}</div>
   <div class="note" style="margin-top:2px">${esc(b.summary||'')} · ±${durTxt(b.duration,id)}${b.est_min!=null?' · '+(id?'perkiraan ':'est. ')+rangeK(b.est_min,b.est_max):''}</div></div><span class="chip ${b.status}">${st[L]}</span></div>
   ${b.note?`<p class="note" style="margin-top:6px">“${esc(b.note)}”</p>`:''}${body}
@@ -816,7 +845,7 @@ function bookHtml(id){
  h+=`<button class="link" data-bkback>← ${id?'Kembali':'Back'}</button>`;
  if(BK.step===1){
   h+=`<div class="card"><div class="tag" style="text-align:center">${id?'1 · Pilih nail artist':'1 · Choose your nail artist'}</div><div class="bkpick">`+
-   S.artists.map(a=>`<button class="bkopt" data-bkartist="${a.id}"><b>${esc(a.tier==='owner'?'Gisel (Owner)':a.name)}</b><small>${a.tier==='owner'?'By NG':a.tier==='senior'?'Senior team':'Junior team'} · DP ${rp(S.dp[a.tier])}</small></button>`).join('')+`</div></div>`;
+   S.artists.map(a=>`<button class="bkopt bkart" data-bkartist="${a.id}">${avatar(teamPhoto(a.photo),a.name,46)}<span><b>${esc(a.tier==='owner'?'Gisel (Owner)':a.name)}</b><small>${a.tier==='owner'?'By NG':a.tier==='senior'?'Senior team':'Junior team'} · DP ${rp(S.dp[a.tier])}</small></span></button>`).join('')+`</div></div>`;
  }
  if(BK.step===2){
   const tier=bkTier(), off=S.services.filter(s=>s.min[tier]!=null);
@@ -862,7 +891,7 @@ function bookHtml(id){
   }
   if(BK.time){
    h+=`<div class="paper" style="margin-top:16px;padding:18px"><div class="tag">${id?'Ringkasan':'Summary'}</div>
-    <div class="kv"><span class="k">${id?'Nail artist':'Nail artist'}</span><span class="v">${esc(BK.artist.tier==='owner'?'Gisel':BK.artist.name)}</span></div>
+    <div class="kv"><span class="k">${id?'Nail artist':'Nail artist'}</span><span class="v" style="display:flex;align-items:center;gap:8px">${avatar(teamPhoto(BK.artist.photo),BK.artist.name,26)}${esc(BK.artist.tier==='owner'?'Gisel':BK.artist.name)}</span></div>
     <div class="kv"><span class="k">${id?'Jadwal':'When'}</span><span class="v">${dLong(BK.date,id)} · ${BK.time}</span></div>
     <div class="kv"><span class="k">${id?'Durasi':'Duration'}</span><span class="v">±${durTxt(A.duration,id)}</span></div>
     <div class="kv"><span class="k">${id?'Perkiraan biaya':'Est. price'}</span><span class="v">${(e=>e?rangeK(e[0],e[1]):'—')(bkEstimate())}</span></div>
@@ -911,7 +940,8 @@ function renderAcct(){
  }
  const unread=MSG.some(x=>!x.read);
  const visits=ME.visits||0;
- let h=`<div class="hello"><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
+ if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
+ let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
  <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
@@ -955,10 +985,13 @@ function renderAcct(){
    h+=`<div class="card"><div class="tag">${id?'Tulis love note':'Write a love note'}</div>
     <p class="note">${id?'Ceritakan pengalamanmu, nail art favoritmu, atau pesan manis untuk tim. Love note tampil di Love Notes wall setelah dicek studio.':'Tell us about your experience, your favorite set, or a sweet message for the team. Love notes appear on the Love Notes wall after the studio checks them.'}</p>
     <textarea id="loveBody" style="margin-top:10px" maxlength="600" placeholder="${id?'Tulis love note-mu…':'Write your love note…'}"></textarea>
-    <label class="chk"><input type="checkbox" id="loveAnon"> <span>${id?'Tampilkan sebagai Anonymous (tanpa nama)':'Show as Anonymous (no name)'}</span></label>
-    <p class="note" style="margin-left:24px">${id?'Kalau tidak dicentang, yang tampil hanya nama depan + inisial.':'If unticked, only your first name + initial is shown.'}</p>
+    <label class="field">${id?'Nama yang ditampilkan':'Show my name as'}</label>
+    ${(()=>{const parts=String(ME.name||'').trim().split(/\s+/),short=parts[0]+(parts[1]?' '+parts[1][0]+'.':''),ini=parts.map(w=>w[0].toUpperCase()+'.').join('');
+      return [['full',id?'Nama lengkap':'Full name',ME.name],['short',id?'Nama depan + inisial':'First name + initial',short],['initials',id?'Inisial saja':'Initials only',ini]]
+      .map(([v,l,ex])=>`<label class="chk"><input type="radio" name="loveMode" value="${v}" ${v==='short'?'checked':''}> <span>${l} <span style="color:var(--muted)">— ${esc(ex)}</span></span></label>`).join('')})()}
+    <p class="note" style="margin-top:6px">${id?'Jumlah kunjunganmu di NG Nailart juga ikut tampil, sebagai tanda terima kasih kami ♡':'Your number of visits at NG Nailart is shown too, as our little thank-you ♡'}</p>
     <button class="btn" style="width:100%;margin-top:12px" id="loveSend">${id?'Kirim love note ♡':'Send love note ♡'}</button></div>`+
-    (mine.length?`<div class="tag" style="text-align:center;margin:18px 0 8px">${id?'Love note-mu':'Your love notes'}</div>`+mine.map(p=>`<div class="chatpost"><div class="tag">${fmtDate(String(p.created_at).slice(0,10))} · ${p.featured?(id?'★ Tampil di wall':'★ On the wall'):(id?'Menunggu dicek studio':'Waiting for the studio to check')}${p.public_anonymous?' · Anonymous':''}</div><div class="bubble me">${esc(p.body)}${p.liked_by?`<div class="heart on" style="cursor:default">♥ ${esc(p.liked_by)}</div>`:''}</div>
+    (mine.length?`<div class="tag" style="text-align:center;margin:18px 0 8px">${id?'Love note-mu':'Your love notes'}</div>`+mine.map(p=>`<div class="chatpost"><div class="tag">${fmtDate(String(p.created_at).slice(0,10))} · ${p.featured?(id?'★ Tampil di wall':'★ On the wall'):(id?'Menunggu dicek studio':'Waiting for the studio to check')}${p.name_mode==='full'?(id?' · nama lengkap':' · full name'):p.name_mode==='initials'?(id?' · inisial':' · initials'):''}</div><div class="bubble me">${esc(p.body)}${p.liked_by?`<div class="heart on" style="cursor:default">♥ ${esc(p.liked_by)}</div>`:''}</div>
      <label class="chk" style="font-size:11px"><input type="checkbox" data-pubtoggle="${p.id}" checked> <span>${id?'Boleh ditampilkan di Love Notes wall (hapus centang untuk menarik)':'Allowed on the Love Notes wall (untick to withdraw)'}</span></label></div>`).join(''):'');
   } else {
   h+=`<div class="card"><div class="tag">${id?'Kirim pesan ke studio':'Say something to the studio'}</div>
@@ -1103,17 +1136,19 @@ document.addEventListener('click',async e=>{
   if(r.error)return toast(r.error.message);
   ME.birthday=v;toast(L==='id'?'Ulang tahun tersimpan 🎂':'Birthday saved 🎂');renderAcct();return;
  }
+ if(e.target.closest('[data-myphoto]')){pickMyPhoto();return}
  const cm=e.target.closest('[data-chatmode]'); if(cm){CHATMODE=cm.dataset.chatmode;renderAcct();return}
  if(e.target.closest('[data-writelove]')){ if(!LOGGED){ toast(L==='id'?'Login dulu untuk menulis love note':'Log in first to write a love note'); show('login'); return } SUB='chat'; CHATMODE='love'; show('account'); renderAcct(); window.scrollTo(0,0); return }
  if(e.target.id==='loveSend'){
   const body=$('#loveBody').value.trim(); if(!body)return toast(L==='id'?'Tulis love note-mu dulu':'Write your love note first');
-  const r=await sb.rpc('ngd_client_post',{p_to:'Studio',p_body:body,p_allow_public:true,p_anonymous:$('#loveAnon').checked});
+  const mode=(document.querySelector('input[name="loveMode"]:checked')||{}).value||'short';
+  const r=await sb.rpc('ngd_client_post',{p_to:'Studio',p_body:body,p_allow_public:true,p_anonymous:mode==='initials',p_name_mode:mode});
   if(r.error)return toast(r.error.message);
   const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; toast(L==='id'?'Terima kasih ♡ Love note-mu akan dicek studio':'Thank you ♡ The studio will check your love note'); renderAcct(); return;
  }
  if(e.target.id==='postSend'){
   const body=$('#postBody').value.trim(); if(!body)return;
-  const r=await sb.rpc('ngd_client_post',{p_to:$('#postTo').value,p_body:body,p_allow_public:$('#postPublic').checked,p_anonymous:$('#postPublic').checked&&$('#postAnon').checked});
+  const r=await sb.rpc('ngd_client_post',{p_to:$('#postTo').value,p_body:body,p_allow_public:$('#postPublic').checked,p_anonymous:$('#postPublic').checked&&$('#postAnon').checked,p_name_mode:$('#postPublic').checked&&$('#postAnon').checked?'initials':'short'});
   if(r.error)return toast(r.error.message);
   const p=await sb.rpc('ngd_client_posts'); POSTS=p.data||[]; toast(L==='id'?'Terkirim':'Sent'); renderAcct(); return;
  }
