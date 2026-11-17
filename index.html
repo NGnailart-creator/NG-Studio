@@ -989,7 +989,9 @@ function renderAcct(){
   <label class="chk" id="anonRow"><input type="checkbox" id="anon"> <span>${id?'Kirim sebagai anonim':'Send anonymously'}</span></label>
   <button class="btn" style="width:100%;margin-top:18px" id="sendFb">${id?'Kirim':'Send'}</button></div>`;
  }
+ const segX=(el.querySelector('.seg')||{}).scrollLeft||0;
  el.innerHTML=h;
+ {const sg=el.querySelector('.seg');if(sg){sg.scrollLeft=segX;const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(l<sg.scrollLeft)sg.scrollLeft=l-12;else if(r>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=r-sg.clientWidth+12;}}}
  if(SUB==='sets'){fitStories(); el.querySelectorAll('.story img').forEach(i=>i.addEventListener('load',fitStories));}
  const fa=$('#fbArtist'); if(fa){ $('#anonRow').style.display=fa.value==='Owner'?'flex':'none'; }
 }
