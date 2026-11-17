@@ -251,7 +251,8 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .bkslots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.bkslot{border:1px solid var(--ink);background:var(--white);border-radius:12px;padding:10px 4px;font:500 14px Montserrat,sans-serif;letter-spacing:.08em;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}.bkslot small{font-size:8.5px;letter-spacing:.06em;font-weight:400;color:var(--muted)}.bkslot.on{background:var(--ink);color:var(--cream)}.bkslot.on small{color:#d9d2cb}.bkslot:disabled{border-color:var(--line);color:#bdb5ae;cursor:default}
 .chip{font:500 8.5px Montserrat,sans-serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);border-radius:20px;padding:5px 9px;white-space:nowrap}.chip.confirmed{background:var(--ink);color:var(--cream)}.chip.rejected,.chip.expired,.chip.cancelled{border-color:var(--line);color:var(--muted)}.chip.awaiting_dp{border-color:#b0566a;color:#b0566a}
 .paper .kv{padding:9px 0}.paper .kv .k{font-size:10px}
-.bkcard.dim{opacity:.6}.agree{display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:14px;text-transform:none;letter-spacing:0}.agree input{margin-top:3px;accent-color:var(--ink)}
+.igref{display:block;text-align:center;border:1px solid var(--ink);border-radius:30px;padding:10px 12px;margin-top:10px;font:500 10.5px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.bkcard.dim{opacity:.6}.agree{text-align:left;display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:14px;text-transform:none;letter-spacing:0}.agree input{margin-top:3px;accent-color:var(--ink)}
 .ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
@@ -770,6 +771,11 @@ const durTxt=(m,id)=>{const h=Math.floor(m/60),r=m%60;return (h?h+(id?' jam ':'h
 const dLong=(d,id)=>new Date(d+'T00:00:00').toLocaleDateString(id?'id-ID':'en-GB',{weekday:'short',day:'numeric',month:'short'});
 const svcName=(s,id)=>id?s.id:s.en;
 function bkTier(){return BK.artist?BK.artist.tier:null}
+const IG_DM='https://ig.me/m/natasyagishelle.nailart';
+const rangeK=(lo,hi)=>lo==null?'':'Rp '+(lo===hi?kfmt(lo):kfmt(lo).replace('K','')+'–'+kfmt(hi));
+function bkEstimate(){const S=BK.setup;let lo=0,hi=0,any=false;if(!S||!BK.artist)return null;
+ BK.svc.forEach(k=>{const s=S.services.find(x=>x.key===k);const p=s&&s.price&&s.price[bkTier()];if(p){lo+=p[0];hi+=p[1];any=true}});return any?[lo,hi]:null}
+const igRef=id=>`<a class="igref" href="${IG_DM}" target="_blank" rel="noopener">📷 ${id?'Kirim foto referensi lewat DM Instagram':'Send reference photos via Instagram DM'}</a><p class="note" style="margin-top:4px">${id?'Supaya file foto tetap tajam, referensi dikirim lewat Instagram @natasyagishelle.nailart, bukan diupload di sini.':'To keep your photos sharp, send references on Instagram @natasyagishelle.nailart instead of uploading them here.'}</p>`;
 function bkDuration(){const S=BK.setup;if(!S||!BK.artist)return 0;return BK.svc.reduce((t,k)=>{const s=S.services.find(x=>x.key===k);return t+((s&&s.min[bkTier()])||0)},0)}
 function bookingCard(b,id){
  const st=BST[b.status]||{en:b.status,id:b.status}, active=b.status==='awaiting_dp'||b.status==='awaiting_approval';
@@ -783,8 +789,9 @@ function bookingCard(b,id){
  if(b.status==='expired') body=`<p class="note" style="margin-top:10px">${id?'Bukti DP tidak masuk dalam batas waktu, jadi jadwal ini dilepas.':'The DP proof did not arrive in time, so this slot was released.'}</p>`;
  return `<div class="card bkcard${active||b.status==='confirmed'?'':' dim'}"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><div class="tag">${esc(b.artist||'')}</div>
   <div style="font-size:15px;letter-spacing:.06em;margin-top:4px">${dLong(b.date,id)} · ${b.time}</div>
-  <div class="note" style="margin-top:2px">${esc(b.summary||'')} · ±${durTxt(b.duration,id)}</div></div><span class="chip ${b.status}">${st[L]}</span></div>
+  <div class="note" style="margin-top:2px">${esc(b.summary||'')} · ±${durTxt(b.duration,id)}${b.est_min!=null?' · '+(id?'perkiraan ':'est. ')+rangeK(b.est_min,b.est_max):''}</div></div><span class="chip ${b.status}">${st[L]}</span></div>
   ${b.note?`<p class="note" style="margin-top:6px">“${esc(b.note)}”</p>`:''}${body}
+  ${active||b.status==='confirmed'?`<a class="igref" href="${IG_DM}" target="_blank" rel="noopener" style="margin-top:12px">📷 ${id?'Kirim foto referensi lewat DM Instagram':'Send reference photos via Instagram DM'}</a>`:''}
   ${active?`<button class="link" style="margin-top:10px" data-bkcancel="${b.id}">${id?'Batalkan booking':'Cancel booking'}</button>`:''}</div>`;
 }
 function bookHtml(id){
@@ -810,17 +817,20 @@ function bookHtml(id){
   const grp=(g,type,title,hint)=>{const list=off.filter(s=>s.group===g);if(!list.length)return '';
    return `<label class="field">${title}</label>${hint?`<p class="note" style="margin:-2px 0 6px">${hint}</p>`:''}<div class="bkpick">`+
     (type==='radio'?`<button class="bkopt sm${!BK.svc.some(k=>list.some(s=>s.key===k))?' on':''}" data-bkradio="${g}" data-key="">${id?'Tidak':'None'}</button>`:'')+
-    list.map(s=>`<button class="bkopt sm${BK.svc.includes(s.key)?' on':''}" ${type==='radio'?`data-bkradio="${g}"`:'data-bkcheck'} data-key="${s.key}">${esc(svcName(s,id))}<small>±${durTxt(s.min[tier],id)}</small></button>`).join('')+`</div>`};
+    list.map(s=>`<button class="bkopt sm${BK.svc.includes(s.key)?' on':''}" ${type==='radio'?`data-bkradio="${g}"`:'data-bkcheck'} data-key="${s.key}">${esc(svcName(s,id))}<small>±${durTxt(s.min[tier],id)}${s.price&&s.price[tier]?' · '+rangeK(s.price[tier][0],s.price[tier][1]):''}</small></button>`).join('')+`</div>`};
   const dur=bkDuration(), hasBase=BK.svc.some(k=>(S.services.find(s=>s.key===k)||{}).group==='base');
   h+=`<div class="card"><div class="tag" style="text-align:center">${id?'2 · Pilih treatment':'2 · Choose your treatment'}</div>
    ${grp('base','check',id?'Treatment (maks. 2)':'Treatment (max 2)','')}
    ${grp('removal','radio',id?'Remove kuku lama':'Remove old nails',id?'Hanya bisa bersama treatment di atas.':'Only together with a treatment above.')}
    ${grp('design','radio',id?'Desain':'Design',id?'Pilih yang paling mendekati, supaya waktunya cukup.':'Pick the closest one so we reserve enough time.')}
    ${grp('extra','check',id?'Tambahan':'Extra','')}
-   <label class="field">${id?'Catatan untuk nail artist (opsional)':'Note for your nail artist (optional)'}</label>
-   <textarea id="bkNote" maxlength="500" placeholder="${id?'Misal warna, bentuk, ide desain. Referensi foto bisa dikirim lewat DM.':'E.g. color, shape, design idea. You can send reference photos via DM.'}">${esc(BK.note)}</textarea>
+   <label class="field">${id?'Catatan untuk nail artist (opsional)':'Notes for your nail artist (optional)'}</label>
+   <textarea id="bkNote" maxlength="500" placeholder="${id?'Misal warna, bentuk, panjang, ide desain, atau permintaan khusus.':'E.g. color, shape, length, design idea or any special request.'}">${esc(BK.note)}</textarea>
+   ${igRef(id)}
    <div class="kv" style="margin-top:14px"><span class="k">${id?'Perkiraan durasi':'Estimated time'}</span><span class="v">${dur?'±'+durTxt(dur,id):'—'}</span></div>
+   <div class="kv"><span class="k">${id?'Perkiraan biaya':'Estimated price'}</span><span class="v">${(e=>e?rangeK(e[0],e[1]):'—')(bkEstimate())}</span></div>
    <div class="kv"><span class="k">DP</span><span class="v">${rp(S.dp[tier])}</span></div>
+   <p class="note" style="margin-top:6px">${id?'Biaya hanya perkiraan. Harga akhir mengikuti desain dan jumlah kuku yang dikerjakan.':'Price is an estimate. The final price follows the design and the number of nails.'}</p>
    <button class="btn" style="width:100%;margin-top:14px" data-bkfind ${hasBase?'':'disabled'}>${id?'Lihat jadwal kosong':'See available times'}</button>
    ${hasBase?'':`<p class="note" style="text-align:center;margin-top:8px">${id?'Pilih minimal satu treatment.':'Choose at least one treatment.'}</p>`}</div>`;
  }
@@ -843,7 +853,10 @@ function bookHtml(id){
     <div class="kv"><span class="k">${id?'Nail artist':'Nail artist'}</span><span class="v">${esc(BK.artist.tier==='owner'?'Gisel':BK.artist.name)}</span></div>
     <div class="kv"><span class="k">${id?'Jadwal':'When'}</span><span class="v">${dLong(BK.date,id)} · ${BK.time}</span></div>
     <div class="kv"><span class="k">${id?'Durasi':'Duration'}</span><span class="v">±${durTxt(A.duration,id)}</span></div>
+    <div class="kv"><span class="k">${id?'Perkiraan biaya':'Est. price'}</span><span class="v">${(e=>e?rangeK(e[0],e[1]):'—')(bkEstimate())}</span></div>
     <div class="kv"><span class="k">DP</span><span class="v">${rp(A.dp)}</span></div>
+    <div style="text-align:left;margin-top:12px"><label class="field">${id?'Catatan':'Notes'}</label>
+    <textarea id="bkNote2" maxlength="500" style="min-height:70px" placeholder="${id?'Tambahkan catatan untuk nail artist (opsional)':'Add notes for your nail artist (optional)'}">${esc(BK.note)}</textarea>${igRef(id)}</div>
     <label class="agree"><input type="checkbox" id="bkAgree" ${BK.agree?'checked':''}> <span>${id?'Saya mengerti DP tidak bisa dikembalikan, dan reschedule/cancel membuat DP hangus sebagai cancellation fee.':'I understand the DP is non-refundable, and rescheduling or cancelling keeps the DP as a cancellation fee.'}</span></label>
     <button class="btn" style="width:100%;margin-top:12px" data-bkconfirm ${BK.busy?'disabled':''}>${id?'Booking sekarang':'Book now'}</button></div>`;
   }
@@ -1004,9 +1017,10 @@ document.addEventListener('click',async e=>{
  if(e.target.closest('[data-bkfind]')){const n=$('#bkNote');if(n)BK.note=n.value;BK.step=3;bkLoadAvail();return}
  const bd=e.target.closest('[data-bkdate]'); if(bd){BK.date=bd.dataset.bkdate;BK.time=null;renderAcct();return}
  const bt=e.target.closest('[data-bktime]'); if(bt){BK.time=bt.dataset.bktime;renderAcct();setTimeout(()=>{const p=document.querySelector('.paper');if(p)p.scrollIntoView({behavior:'smooth',block:'center'})},50);return}
- if(e.target.id==='bkAgree'){BK.agree=e.target.checked;return}
+ if(e.target.id==='bkAgree'){BK.agree=e.target.checked;const n2=$('#bkNote2');if(n2)BK.note=n2.value;return}
  if(e.target.closest('[data-bkconfirm]')){const id=L==='id';
   if(!BK.agree)return toast(id?'Centang dulu persetujuan DP':'Please tick the DP agreement first');
+  {const n2=$('#bkNote2');if(n2)BK.note=n2.value;}
   BK.busy=true;renderAcct();
   const r=await sb.rpc('ngd_client_book',{p_artist:BK.artist.id,p_date:BK.date,p_time:BK.time,p_services:BK.svc,p_note:BK.note||null});
   BK.busy=false;
