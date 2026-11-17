@@ -551,7 +551,8 @@ const DOS=[
 const BOOK=[
 {id:'Jadwal nail art dibuka setiap <b>Selasa terakhir tiap bulan</b> dan diumumkan lewat Instagram Story.',en:'Our schedule opens on the <b>last Tuesday of every month</b> and is announced via Instagram Story.'},
 {id:'Sudah punya akun? Booking langsung di <b>My Account → Book</b>: pilih nail artist, treatment dan jam. Belum punya akun atau mau konsultasi dulu? Kirim DM ke Instagram kami.',en:'Have an account? Book directly under <b>My Account → Book</b>: choose your nail artist, treatment and time. No account yet, or want to consult first? Send us a DM on Instagram.'},
-{id:'Tersedia <b>Selasa–Jumat</b> pukul 08.00 / 09.00 / 12.00 / 13.00 / 16.00. Tidak ada appointment malam.',en:'Available <b>Tuesday–Friday</b> at 08.00 / 09.00 / 12.00 / 13.00 / 16.00. No evening appointments.'},
+  {id:'Booking online paling lambat jam 17.00 sehari sebelumnya. Untuk hari yang sama atau setelah jam itu, konfirmasi lewat DM Instagram.',en:'Online booking closes at 17:00 the day before. For same-day bookings or after that time, please confirm via Instagram DM.'},
+{id:'Owner & senior team: <b>Selasa–Jumat</b>. Junior team: <b>Senin–Sabtu</b>. Jam yang tersedia bisa dilihat saat booking. Tidak ada appointment malam.',en:'Owner & senior team: <b>Tuesday–Friday</b>. Junior team: <b>Monday–Saturday</b>. Available times show when you book. No evening appointments.'},
 {id:'Bayar deposit maksimal <b>12 jam</b> setelah menerima detail booking.',en:'Please pay the deposit within <b>12 hours</b> after receiving your booking details.'},
 {id:'BANK',en:'BANK'},
 {id:'Deposit tidak dapat dikembalikan.',en:'Deposits are non-refundable.'},
@@ -837,13 +838,19 @@ function bookHtml(id){
  if(BK.step===3){
   const A=BK.avail;
   if(!A){h+=`<div class="card"><p class="note" style="text-align:center">${id?'Mencari jadwal…':'Finding times…'}</p></div>`;return h}
-  const days=A.days, okDay=d=>d.slots.some(x=>x.state==='ok');
+  const days=A.days, okDay=d=>!d.late&&d.slots.some(x=>x.state==='ok');
   if(!BK.date){const f=days.find(okDay); BK.date=f?f.date:(days[0]||{}).date||null}
   const day=days.find(d=>d.date===BK.date);
   h+=`<div class="card"><div class="tag" style="text-align:center">${id?'3 · Pilih tanggal & jam':'3 · Choose date & time'}</div>
    <p class="note" style="text-align:center;margin:8px 0 12px">${esc(A.summary)} · ±${durTxt(A.duration,id)}</p>
-   ${days.length?`<div class="bkdays">${days.map(d=>`<button class="bkday${d.date===BK.date?' on':''}${okDay(d)?'':' full'}" data-bkdate="${d.date}">${dLong(d.date,id).replace(',','')}</button>`).join('')}</div>`:`<p class="note" style="text-align:center">${id?'Belum ada jadwal yang dibuka. Jadwal baru dibuka setiap Selasa terakhir tiap bulan.':'No dates are open yet. New dates open on the last Tuesday of each month.'}</p>`}`;
-  if(day){
+   ${days.length?`<div class="bkdays">${days.map(d=>`<button class="bkday${d.date===BK.date?' on':''}${okDay(d)?'':' full'}" data-bkdate="${d.date}">${dLong(d.date,id).replace(',','')}${d.late?'<small style="display:block;font-size:8px;letter-spacing:.1em">DM IG</small>':''}</button>`).join('')}</div>`:`<p class="note" style="text-align:center">${id?'Belum ada jadwal yang dibuka. Jadwal baru dibuka setiap Selasa terakhir tiap bulan.':'No dates are open yet. New dates open on the last Tuesday of each month.'}</p>`}`;
+  if(day&&day.late){
+   const prev=new Date(day.date+'T00:00:00');prev.setDate(prev.getDate()-1);
+   h+=`<div class="bkslots">${day.slots.map(x=>`<button class="bkslot" disabled>${x.time}<small>DM IG</small></button>`).join('')}</div>
+    <div class="info" style="margin-top:12px">${id?`Booking online untuk <b>${dLong(day.date,id)}</b> ditutup jam ${A.cutoff_hour||17}.00 sehari sebelumnya (${prev.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'short'})}). Untuk hari ini atau besok, silakan konfirmasi lewat DM Instagram.`:`Online booking for <b>${dLong(day.date,id)}</b> closes at ${A.cutoff_hour||17}:00 the day before (${prev.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}). For same-day or next-day appointments, please confirm via Instagram DM.`}
+    <a class="igref" href="${IG_DM}" target="_blank" rel="noopener">${id?'Konfirmasi lewat DM Instagram':'Confirm via Instagram DM'}</a></div>`;
+  }
+  if(day&&!day.late){
    const ok=day.slots.filter(x=>x.state==='ok'), tl=day.slots.filter(x=>x.state==='too_long');
    h+=`<div class="bkslots">${day.slots.map(x=>`<button class="bkslot${x.time===BK.time?' on':''}" ${x.state==='ok'?`data-bktime="${x.time}"`:'disabled'}>${x.time}<small>${x.state==='ok'?(id?'Tersedia':'Available'):x.state==='taken'?(id?'Terisi':'Booked'):(id?'Tidak cukup waktu':'Not enough time')}</small></button>`).join('')}</div>`;
    if(tl.length) h+=`<div class="info" style="margin-top:12px">⏱ ${id?`Treatment pilihanmu butuh sekitar <b>${durTxt(A.duration,id)}</b>, jadi tidak cukup di jam ${tl.map(x=>x.time).join(', ')} karena sudah ada klien sesudahnya.${ok.length?` Di hari ini hanya bisa jam <b>${ok.map(x=>x.time).join(', ')}</b>.`:' Coba pilih hari lain atau kurangi desainnya.'}`:`Your treatment needs about <b>${durTxt(A.duration,id)}</b>, so it doesn't fit at ${tl.map(x=>x.time).join(', ')} because another client comes after.${ok.length?` On this day it only fits at <b>${ok.map(x=>x.time).join(', ')}</b>.`:' Try another day or a simpler design.'}`}</div>`;
