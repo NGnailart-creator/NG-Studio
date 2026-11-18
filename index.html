@@ -886,6 +886,8 @@ function bookHtml(id){
   const day=days.find(d=>d.date===BK.date);
   h+=`<div class="card"><div class="tag" style="text-align:center">${id?'3 · Pilih tanggal & jam':'3 · Choose date & time'}</div>
    <p class="note" style="text-align:center;margin:8px 0 12px">${esc(A.summary)} · ±${durTxt(A.duration,id)}</p>
+   ${BK.setup&&BK.setup.next_open?`<p class="note" style="text-align:center;margin:-4px 0 10px">${(()=>{const n=new Date(BK.setup.next_open), mo=new Date(n.getFullYear(),n.getMonth()+1,1);
+      return id?`Jadwal ${mo.toLocaleDateString('id-ID',{month:'long'})} dibuka ${n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'short'})}.`:`${mo.toLocaleDateString('en-GB',{month:'long'})} opens on ${n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}.`})()}</p>`:''}
    ${days.length?`<div class="bkdays">${days.map(d=>`<button class="bkday${d.date===BK.date?' on':''}${okDay(d)?'':' full'}" data-bkdate="${d.date}">${dLong(d.date,id).replace(',','')}${d.late?'<small style="display:block;font-size:8px;letter-spacing:.1em">DM IG</small>':''}</button>`).join('')}</div>`:`<p class="note" style="text-align:center">${id?'Belum ada jadwal yang dibuka. Jadwal baru dibuka setiap Selasa terakhir tiap bulan.':'No dates are open yet. New dates open on the last Tuesday of each month.'}</p>`}`;
   if(day&&day.late){
    const prev=new Date(day.date+'T00:00:00');prev.setDate(prev.getDate()-1);
