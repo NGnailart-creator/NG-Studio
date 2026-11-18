@@ -977,6 +977,9 @@ function renderAcct(){
  const visits=ME.visits||0;
  if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
  let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
+ ${BOOKINGS.some(x=>!x.seen)&&SUB!=='book'?(()=>{const x=BOOKINGS.find(y=>!y.seen), st=x.status;
+   const t=st==='confirmed'?(id?'Booking-mu terkonfirmasi':'Your booking is confirmed'):st==='rejected'?(id?'Booking-mu tidak disetujui':'Your booking was not approved'):st==='cancelled'?(id?'Booking-mu dibatalkan':'Your booking was cancelled'):st==='expired'?(id?'Booking-mu kedaluwarsa':'Your booking expired'):(id?'Ada update booking':'Booking update');
+   return `<div class="setbanner" data-sub="book"><span style="font-size:20px">📅</span><div><b>${t}</b><small>${dLong(x.date,id)} · ${x.time} · ${esc(x.artist||'')}</small></div></div>`})():''}
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
  <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='profile'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
