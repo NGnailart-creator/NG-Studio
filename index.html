@@ -685,9 +685,18 @@ let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null;
 const teamPhoto=p=>p?sb.storage.from('ngd-team-photos').getPublicUrl(p).data.publicUrl:null;
 const initialsOf=n=>String(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const avatar=(url,name,size)=>`<span class="av" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.36)}px">${url?`<img src="${url}" alt="">`:esc(initialsOf(name))}</span>`;
+// Photos are kept on the phone (Cache Storage) so the same picture is downloaded from the server only once.
+const IMGCACHE='ngd-img-v1';
+const ckey=(bucket,path)=>location.origin+'/__ngdimg/'+bucket+'/'+path;
+async function cacheGet(bucket,path){ try{ if(!window.caches)return null; const r=await (await caches.open(IMGCACHE)).match(ckey(bucket,path)); return r?await r.blob():null; }catch(_){return null} }
+async function cachePut(bucket,path,blob){ try{ if(!window.caches)return; await (await caches.open(IMGCACHE)).put(ckey(bucket,path),new Response(blob,{headers:{'Content-Type':blob.type||'image/jpeg'}})); }catch(_){} }
+async function cachedImage(bucket,path,seconds){
+ let b=await cacheGet(bucket,path); if(b)return b;
+ const r=await sb.storage.from(bucket).createSignedUrl(path,seconds||600); if(r.error||!r.data)return null;
+ try{ b=await (await fetch(r.data.signedUrl)).blob(); await cachePut(bucket,path,b); return b; }catch(_){ return null; } }
 async function loadMyPhoto(){ if(!ME||!ME.photo_path){MYPHOTO=null;MYPHOTO_PATH=null;return}
  if(MYPHOTO_PATH===ME.photo_path&&MYPHOTO)return;
- const r=await sb.storage.from('ngd-client-photos').createSignedUrl(ME.photo_path,60*60*24*7); MYPHOTO=r.data?r.data.signedUrl:null; MYPHOTO_PATH=ME.photo_path; renderAcct(); }
+ const b=await cachedImage('ngd-client-photos',ME.photo_path); MYPHOTO=b?URL.createObjectURL(b):null; MYPHOTO_PATH=ME.photo_path; renderAcct(); }
 async function squareJpeg(file,size){
  const url=URL.createObjectURL(file);
  try{const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
@@ -697,6 +706,8 @@ async function squareJpeg(file,size){
   return await new Promise(res=>cv.toBlob(res,'image/jpeg',0.85));
  } finally { URL.revokeObjectURL(url); } }
 function pickMyPhoto(){
+ if((ME&&ME.visits||0)<10){ const id=L==='id'; const left=10-(ME&&ME.visits||0);
+  toast(id?`Foto profil terbuka setelah 10 kunjungan · ${left} kunjungan lagi ♡`:`Profile photos unlock after 10 visits · ${left} more to go ♡`); return; }
  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
  inp.onchange=async()=>{ const f=inp.files&&inp.files[0]; if(!f)return; const id=L==='id';
   try{ toast(id?'Mengupload foto…':'Uploading photo…');
@@ -784,12 +795,18 @@ function openCrop(sid,i){
 function fitStories(){ requestAnimationFrame(()=>document.querySelectorAll('.story').forEach(st=>{const r=st.querySelector('.rcp'); if(!r)return; r.style.transform='rotate(-1deg)'; const k=Math.min(1,(st.clientHeight*0.93)/r.offsetHeight); r.style.transform=`scale(${k}) rotate(-1deg)`;})); }
 async function loadSetImages(){
  const paths=[...new Set(SETS.flatMap(x=>x.photos||[]))].filter(p=>!SETIMG[p]); if(!paths.length)return;
- const r=await sb.storage.from('ngd-sets').createSignedUrls(paths,3600); if(r.error||!r.data)return;
- await Promise.all(r.data.map(async e=>{ if(!e.signedUrl)return; try{const b=await (await fetch(e.signedUrl)).blob(); SETIMG[e.path]=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(b)});}catch(_){} }));
+ const toData=b=>new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(b)});
+ const miss=[];
+ await Promise.all(paths.map(async p=>{ const b=await cacheGet('ngd-sets',p); if(b)SETIMG[p]=await toData(b); else miss.push(p); }));
+ if(miss.length){ const r=await sb.storage.from('ngd-sets').createSignedUrls(miss,3600);
+  if(!r.error&&r.data) await Promise.all(r.data.map(async e=>{ if(!e.signedUrl)return; try{const b=await (await fetch(e.signedUrl)).blob(); await cachePut('ngd-sets',e.path,b); SETIMG[e.path]=await toData(b);}catch(_){} })); }
  if(SUB==='sets')renderAcct();
 }
 async function downloadSet(id){
  const el=document.getElementById('story-'+id); if(!el||!window.htmlToImage)return toast('Download not available');
+ const sx=SETS.find(x=>String(x.id)===String(id)); const isId=L==='id';
+ if(sx&&sx.max_downloads!=null&&(sx.downloads||0)>=sx.max_downloads) return toast(isId?'Batas download untuk set ini sudah habis':'You have used all downloads for this set');
+ const count=async()=>{ if(!sx||sx.max_downloads==null)return; const r=await sb.rpc('ngd_client_set_download',{p_id:sx.id}); if(!r.error&&r.data){sx.downloads=r.data.downloads;} else if(r.error){sx.downloads=sx.max_downloads;} renderAcct(); };
  try{
   el.style.borderRadius='0';
   await Promise.all([...el.querySelectorAll('img')].map(im=>im.decode?im.decode().catch(()=>{}):null));
@@ -798,8 +815,8 @@ async function downloadSet(id){
   for(let k=0;k<2;k++){ await new Promise(r=>setTimeout(r,150)); url=await htmlToImage.toPng(el,opt); }
   el.style.borderRadius='';
   const blob=await (await fetch(url)).blob(); const file=new File([blob],'ng-nailart-todays-set.png',{type:'image/png'});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:"Today's Set"}); return; }
-  const a=document.createElement('a'); a.href=url; a.download='ng-nailart-todays-set.png'; document.body.appendChild(a); a.click(); a.remove();
+  if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:"Today's Set"}); await count(); return; }
+  const a=document.createElement('a'); a.href=url; a.download='ng-nailart-todays-set.png'; document.body.appendChild(a); a.click(); a.remove(); await count();
  }catch(err){ el.style.borderRadius=''; if(err&&err.name==='AbortError')return; toast(L==='id'?'Gagal membuat gambar, coba lagi':'Could not create the image, please try again'); }
 }
 function renderLove(){
@@ -980,7 +997,7 @@ function renderAcct(){
  const unread=MSG.some(x=>!x.read);
  const visits=ME.visits||0;
  if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
- let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
+ let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${(ME.visits||0)<10?'🔒':MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
  ${BOOKINGS.some(x=>!x.seen)&&SUB!=='book'?(()=>{const x=BOOKINGS.find(y=>!y.seen), st=x.status;
    const t=st==='confirmed'?(id?'Booking-mu terkonfirmasi':'Your booking is confirmed'):st==='rejected'?(id?'Booking-mu tidak disetujui':'Your booking was not approved'):st==='cancelled'?(id?'Booking-mu dibatalkan':'Your booking was cancelled'):st==='expired'?(id?'Booking-mu kedaluwarsa':'Your booking expired'):(id?'Ada update booking':'Booking update');
    return `<div class="setbanner" data-sub="book"><span style="font-size:20px">📅</span><div><b>${t}</b><small>${dLong(x.date,id)} · ${x.time} · ${esc(x.artist||'')}</small></div></div>`})():''}
@@ -1017,7 +1034,9 @@ function renderAcct(){
    <label class="field">${id?'Gaya teks':'Text style'}</label><div class="seg" style="margin-top:0">${[['mono','Typewriter'],['sans',id?'Font website':'Website font']].map(([k,n])=>`<button data-setfont="${x.id}" data-v="${k}" class="${o.font===k?'on':''}">${n}</button>`).join('')}</div>
    <label class="field">${id?'Harga':'Prices'}</label><div class="seg" style="margin-top:0"><button data-sethide="${x.id}" data-v="0" class="${o.hide?'':'on'}">${id?'Tampilkan':'Show'}</button><button data-sethide="${x.id}" data-v="1" class="${o.hide?'on':''}">${id?'Sembunyikan (XXX)':'Hide (XXX)'}</button></div>
    <label class="field">${id?'Warna':'Colour'}</label><div class="swx">${RTHEMES.map((t,i)=>`<button data-settheme="${x.id}" data-v="${i}" class="${o.theme===i?'on':''}"><i style="background:linear-gradient(135deg,${t[2]} 50%,${t[1]} 50%);--p:${t[3]}"></i>${t[0]}</button>`).join('')}</div>
-   <button class="btn" style="width:100%;margin-top:18px;padding:13px" data-setdl="${x.id}">${id?'Download gambar':'Download image'}</button>
+   ${(()=>{const mx=x.max_downloads, used=x.downloads||0, left=mx==null?null:Math.max(0,mx-used);
+     return `<button class="btn" style="width:100%;margin-top:18px;padding:13px${left===0?';opacity:.45':''}" data-setdl="${x.id}" ${left===0?'disabled':''}>${left===0?(id?'Batas download habis':'No downloads left'):(id?'Download gambar':'Download image')}</button>`
+     +(mx==null?'':`<p class="note" style="text-align:center;margin-top:6px">${id?`Sisa download: <b>${left} dari ${mx}</b>`:`Downloads left: <b>${left} of ${mx}</b>`}${mx<4?(id?' · Klien dengan 10+ kunjungan bisa download 4x':' · Clients with 10+ visits get 4 downloads'):''}</p>`);})()}
    <p class="note" style="text-align:center">⏳ ${id?'Tersedia sampai':'Available until'} ${new Date(x.expires_at).toLocaleString(id?'id-ID':'en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}. ${id?'Foto hanya disimpan 1 minggu sejak nail artist mengirimnya, jadi download sebelum itu ya.':'Photos are kept for 1 week from when your nail artist sent them, so download before then.'}</p></div>`;});
  }
  if(SUB==='chat'){
@@ -1057,7 +1076,7 @@ function renderAcct(){
  if(SUB==='profile'){
   const P=PROFILE, bdLocked=!!P.birthday;
   h+=`<div class="card"><div class="tag" style="text-align:center">${id?'Profil saya':'My profile'}</div>
-   <div style="display:flex;justify-content:center;margin:14px 0 4px"><button class="avbtn" data-myphoto>${avatar(MYPHOTO,ME.name,84)}<span class="avcam">${MYPHOTO?'✎':'+'}</span></button></div>
+   <div style="display:flex;justify-content:center;margin:14px 0 4px"><button class="avbtn" data-myphoto>${avatar(MYPHOTO,ME.name,84)}<span class="avcam">${(ME.visits||0)<10?'🔒':MYPHOTO?'✎':'+'}</span></button></div>${(ME.visits||0)<10?`<p class="note" style="text-align:center;margin-top:2px">${id?'Foto profil terbuka setelah 10 kunjungan':'Profile photo unlocks after 10 visits'}</p>`:''}
    <p class="note" style="text-align:center">${id?'Ketuk foto untuk mengganti':'Tap the photo to change it'}</p>
    <label class="field">${id?'Nama':'Name'}</label><input value="${esc(ME.name)}" disabled>
    <label class="field">WhatsApp</label><input id="pfPhone" inputmode="tel" value="${esc(P.phone||'')}" placeholder="08…">
