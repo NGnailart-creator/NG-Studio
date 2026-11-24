@@ -606,10 +606,10 @@ document.addEventListener('click',e=>{
  const tb=e.target.closest('[data-tab]'); if(tb){TAB=tb.dataset.tab;render()}
 });
 const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc',{auth:{storageKey:'ngd-client-auth',persistSession:true}});
-// ---- client activity (owner-only view in the dashboard). Anonymous feedback is never tracked. ----
+// ---- client activity (owner-only view in the dashboard). Anonymous feedback is never tracked; named feedback is. ----
 const TRACK_MAP={ngd_client_book:a=>['booked',[a.p_date,a.p_time].join(' ')],ngd_client_booking_proof:()=>['dp_uploaded'],ngd_client_cancel_booking2:a=>['cancelled',a.p_kind],
  ngd_client_set_pin:()=>['pin_set'],ngd_client_save_profile:()=>['profile_saved'],ngd_client_set_photo:a=>a.p_path?['photo']:null,ngd_client_set_download:()=>['set_downloaded'],
- ngd_client_post:a=>[a.p_name_mode&&a.p_to==='Studio'&&a.p_allow_public?'love_note':'message'],ngd_client_save_note:()=>['note_saved'],ngd_client_request_achievement:a=>['tick_requested',a.p_key||''],ngd_client_reply:()=>['chat_reply']};
+ ngd_client_post:a=>[a.p_name_mode&&a.p_to==='Studio'&&a.p_allow_public?'love_note':'message'],ngd_client_save_note:()=>['note_saved'],ngd_client_request_achievement:a=>['tick_requested',a.p_key||''],ngd_client_reply:()=>['chat_reply'],ngd_client_feedback:a=>a.p_anonymous?null:['feedback']};
 function track(kind,detail){ try{ if(typeof LOGGED!=='undefined'&&LOGGED) sb.rpc('ngd_client_track',{p_kind:kind,p_detail:detail||null}).then(()=>{},()=>{}); }catch(_){} }
 { const _rpc=sb.rpc.bind(sb);
   sb.rpc=async function(name,args){ const r=await _rpc(name,args); try{ if(!r.error&&TRACK_MAP[name]){ const t=TRACK_MAP[name](args||{}); if(t)track(t[0],t[1]); } }catch(_){} return r; }; }
