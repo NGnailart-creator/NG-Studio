@@ -684,7 +684,7 @@ async function loadAccount(){
  ME=me.data; LOGGED=true; track('open');
  if(!ME.must_set_pin){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
-  HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
+  HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=String(ME.name||'').trim().split(/\s+/)[0]||''; const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
   setTimeout(showWelcome,600);
  }
