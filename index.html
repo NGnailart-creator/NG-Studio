@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NG Nailart — Studio Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#FFF7EF;--white:#FFFFFF;--ink:#111111;--muted:#6f6a66;--line:#e9e0d6;--soft:#f6ece2}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:110px}
-body{background:var(--cream);color:var(--ink);font-family:'Abhaya Libre',Georgia,serif;font-weight:300;font-size:14px;line-height:1.7;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+body{background:var(--cream);color:var(--ink);font-family:Montserrat,system-ui,sans-serif;font-weight:300;font-size:14px;line-height:1.7;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
 .wrap{max-width:560px;margin:0 auto;padding:0 22px}
 .preview-bar{background:var(--ink);color:var(--cream);text-align:center;font-size:10px;letter-spacing:.25em;padding:6px 10px;text-transform:uppercase}
 header{position:sticky;top:0;z-index:20;background:rgba(255,247,239,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
@@ -18,13 +18,13 @@ header{position:sticky;top:0;z-index:20;background:rgba(255,247,239,.94);backdro
 .top img{height:34px}
 .top-right{display:flex;gap:8px;align-items:center}
 .lang{display:flex;border:1px solid var(--ink);border-radius:999px;overflow:hidden}
-.lang button{background:none;border:0;font:500 10px 'Abhaya Libre',Georgia,serif;letter-spacing:.18em;padding:6px 10px;cursor:pointer;color:var(--ink)}
+.lang button{background:none;border:0;font:500 10px Montserrat,sans-serif;letter-spacing:.18em;padding:6px 10px;cursor:pointer;color:var(--ink)}
 .lang button.on{background:var(--ink);color:var(--cream)}
-.btn{font:500 10px 'Abhaya Libre',Georgia,serif;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:999px;cursor:pointer}
+.btn{font:500 10px Montserrat,sans-serif;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:999px;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink)}
 nav.chips{display:flex;gap:6px;overflow-x:auto;padding:0 22px 10px;max-width:560px;margin:0 auto;scrollbar-width:none}
 nav.chips::-webkit-scrollbar{display:none}
-nav.chips button{flex:none;cursor:pointer;font:400 10px 'Abhaya Libre',Georgia,serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--white);padding:6px 12px;border-radius:999px}
+nav.chips button{flex:none;cursor:pointer;font:400 10px Montserrat,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--white);padding:6px 12px;border-radius:999px}
 section{padding:40px 0 10px;display:none}
 section.on{display:block;animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -32,7 +32,7 @@ nav.chips button.on{background:var(--ink);color:var(--cream);border-color:var(--
 .welcome{font-weight:300;font-style:italic;font-size:22px;letter-spacing:.12em;text-align:center;margin-top:4px}
 .seg{display:flex;gap:6px;overflow-x:auto;margin-top:22px;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
-.seg button{flex:none;font:400 10px 'Abhaya Libre',Georgia,serif;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;position:relative}
+.seg button{flex:none;font:400 10px Montserrat,sans-serif;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;position:relative}
 .seg button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .dot{position:absolute;top:3px;right:5px;width:6px;height:6px;border-radius:50%;background:#b0566a}
 .hello{display:flex;justify-content:space-between;align-items:center;gap:10px}.hello .btn{white-space:nowrap;flex:none}
@@ -63,22 +63,22 @@ nav.chips button.on{background:var(--ink);color:var(--cream);border-color:var(--
 .letter b{font-weight:500;display:block;font-size:12px;letter-spacing:.08em}
 .letter small{color:var(--muted);font-size:11px}
 .paper{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:26px 22px;margin-top:16px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.05)}
-textarea{width:100%;font:300 14px 'Abhaya Libre',Georgia,serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);min-height:110px;resize:vertical}
-select{width:100%;font:400 14px 'Abhaya Libre',Georgia,serif;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink)}
-#acct .card input:not([type=checkbox]):not([type=radio]){width:100%;font:300 14px 'Abhaya Libre',Georgia,serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink);-webkit-appearance:none;appearance:none;min-height:46px}
+textarea{width:100%;font:300 14px Montserrat,sans-serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);min-height:110px;resize:vertical}
+select{width:100%;font:400 14px Montserrat,sans-serif;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink)}
+#acct .card input:not([type=checkbox]):not([type=radio]){width:100%;font:300 14px Montserrat,sans-serif;letter-spacing:.03em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--ink);-webkit-appearance:none;appearance:none;min-height:46px}
 #acct .card input:disabled{opacity:.6}
 .field{display:block;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
 .chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:12px}
 .chk input{margin-top:4px;accent-color:var(--ink)}
 .info{font-size:11px;background:var(--soft);border-radius:12px;padding:10px 12px;margin-top:12px;color:var(--ink)}
 .login-wrap{min-height:60vh;display:flex;flex-direction:column;justify-content:center}
-.login-wrap input{width:100%;font:400 15px 'Abhaya Libre',Georgia,serif;letter-spacing:.1em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
+.login-wrap input{width:100%;font:400 15px Montserrat,sans-serif;letter-spacing:.1em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
 .login-wrap .btn{width:100%;margin-top:22px;padding:13px}
 .linkcard{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink)}
 .linkcard>div{flex:1}
 .linkcard small{display:block;font-size:11px;color:var(--muted)}
 .arr{font-size:18px;font-weight:300}
-.link{background:none;border:0;font:400 11px 'Abhaya Libre',Georgia,serif;letter-spacing:.12em;color:var(--muted);text-decoration:underline;cursor:pointer;margin-top:14px}
+.link{background:none;border:0;font:400 11px Montserrat,sans-serif;letter-spacing:.12em;color:var(--muted);text-decoration:underline;cursor:pointer;margin-top:14px}
 h1{font-weight:300;font-size:26px;letter-spacing:.38em;text-transform:uppercase;text-align:center;line-height:1.4}
 h2{font-weight:400;font-size:17px;letter-spacing:.38em;text-transform:uppercase;text-align:center}
 .sub{text-align:center;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-top:6px}
@@ -92,11 +92,11 @@ h3{font-weight:600;font-size:11px;letter-spacing:.3em;text-transform:uppercase;m
 .kv:last-child{border:0;padding:0}
 .k{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
 .v{font-weight:500;letter-spacing:.08em}
-.copy{font:500 9px 'Abhaya Libre',Georgia,serif;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--ink);background:none;border-radius:999px;padding:5px 10px;cursor:pointer;color:var(--ink)}
+.copy{font:500 9px Montserrat,sans-serif;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--ink);background:none;border-radius:999px;padding:5px 10px;cursor:pointer;color:var(--ink)}
 .announce{border-left:2px solid var(--ink);border-radius:4px 18px 18px 4px}
 .tag{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
 .tabs{display:flex;border:1px solid var(--ink);border-radius:999px;overflow:hidden;margin:24px auto 0;max-width:320px}
-.tabs button{flex:1;background:none;border:0;font:500 10px 'Abhaya Libre',Georgia,serif;letter-spacing:.22em;text-transform:uppercase;padding:10px 6px;cursor:pointer;color:var(--ink)}
+.tabs button{flex:1;background:none;border:0;font:500 10px Montserrat,sans-serif;letter-spacing:.22em;text-transform:uppercase;padding:10px 6px;cursor:pointer;color:var(--ink)}
 .tabs button.on{background:var(--ink);color:var(--cream)}
 .row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px dotted var(--line)}
 .row:last-child{border:0}
@@ -151,12 +151,12 @@ details.svc[open] .plus{transform:rotate(45deg)}
 .lcard{border-radius:16px;overflow:hidden;border:1px solid var(--line);margin-top:18px}
 .lc-l{background:var(--white);padding:20px 18px;text-align:center}
 .lc-l p{font-size:10px;letter-spacing:.24em;text-transform:uppercase;line-height:1.8}
-.lc-name{font-family:'Abhaya Libre',Georgia,serif;font-style:italic;font-size:26px;margin:6px 0 10px;min-height:30px}
+.lc-name{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:26px;margin:6px 0 10px;min-height:30px}
 .lc-l img{width:44px}
 .lc-r{background:#EDE1D8;padding:18px}
 .lc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .lc-c{aspect-ratio:1;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px}
-.lc-c span{font-family:'Abhaya Libre',Georgia,serif;font-size:22px;color:#8a8380}
+.lc-c span{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;color:#8a8380}
 .lc-c small{font-size:8px;letter-spacing:.12em;text-transform:uppercase;line-height:1.5}
 .lc-c b{font-weight:400;font-size:16px}
 .lc-d{background:var(--ink);color:var(--cream)}
@@ -201,7 +201,7 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .modal.on{display:flex}
 .sheet{background:var(--cream);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:30px 24px 34px}
 .sheet label{display:block;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
-.sheet input{width:100%;font:400 15px 'Abhaya Libre',Georgia,serif;letter-spacing:.1em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
+.sheet input{width:100%;font:400 15px Montserrat,sans-serif;letter-spacing:.1em;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
 .sheet .btn{width:100%;margin-top:22px;padding:13px}
 .rulebanner{display:flex;align-items:center;gap:16px;background:var(--ink);color:var(--cream);border-radius:18px;padding:20px;margin-top:22px;text-align:left;cursor:pointer}
 .rulebanner .nofood{width:58px;height:58px;flex:none}
@@ -228,7 +228,7 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .rcp{width:72%;background:var(--paper);color:var(--ink2);font-size:9.5px;letter-spacing:.06em;padding:26px 16px 26px;position:relative;transform:rotate(-1deg);box-shadow:0 1px 1px rgba(0,0,0,.04),6px 14px 24px rgba(0,0,0,.10);
  clip-path:polygon(0 0,100% 0,100% calc(100% - 9px),96% 100%,91% calc(100% - 6px),86% 100%,80% calc(100% - 8px),74% 100%,69% calc(100% - 5px),63% 100%,57% calc(100% - 7px),51% 100%,45% calc(100% - 5px),39% 100%,33% calc(100% - 8px),27% 100%,21% calc(100% - 5px),15% 100%,9% calc(100% - 7px),4% 100%,0 calc(100% - 6px))}
 .rcp.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
-.rcp.sans{font-family:'Abhaya Libre',Georgia,serif;font-weight:300;letter-spacing:.12em;font-size:9px}
+.rcp.sans{font-family:Montserrat,sans-serif;font-weight:300;letter-spacing:.12em;font-size:9px}
 .rcp .pinx{position:absolute;top:7px;left:50%;width:13px;height:13px;margin-left:-6.5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8,var(--pin) 55%);z-index:1}
 .rcp .pinsh{position:absolute;top:9px;left:50%;width:18px;height:18px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.16) 0,rgba(0,0,0,.07) 45%,rgba(0,0,0,0) 70%)}
 .rcp .br{text-align:center;letter-spacing:.32em;font-size:10.5px;margin-top:4px}
@@ -247,29 +247,27 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .rcp [contenteditable]:focus{background:rgba(0,0,0,.05)}
 .swx{display:flex;gap:10px;flex-wrap:wrap}
 .cropov{position:fixed;inset:0;background:rgba(20,18,17,.55);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px}.cropbox{background:var(--white);border-radius:18px;padding:18px;width:100%;max-width:380px}.cropfr{width:100%;overflow:hidden;border-radius:8px;margin:10px auto 0;touch-action:none;cursor:grab;background:#eee;position:relative}.cropfr img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-select:none}.cropz{width:100%;accent-color:var(--ink)}
-.achst{display:block;text-transform:none;letter-spacing:.02em;font-size:10.5px;color:var(--muted);margin-top:3px}.achst u{cursor:pointer}.achf{display:flex;gap:6px;margin-top:8px;text-transform:none;letter-spacing:0}.achf input{flex:1;min-width:0;font:400 12px 'Abhaya Libre',Georgia,serif;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.achf .btn{padding:8px 14px}
-.bkpick{display:flex;flex-direction:column;gap:8px;margin-top:10px}.bkopt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:13px 15px;font:400 13px 'Abhaya Libre',Georgia,serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:3px}.bkopt b{font-weight:500;letter-spacing:.1em;text-transform:uppercase;font-size:12px}.bkopt small{font-size:11px;color:var(--muted)}.bkopt.sm{padding:10px 13px;font-size:12.5px}.bkopt.on{border-color:var(--ink);background:var(--ink);color:var(--cream)}.bkopt.on small{color:#d9d2cb}
-.bkdays{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}.bkday{flex:none;border:1px solid var(--line);background:var(--white);border-radius:12px;padding:9px 12px;font:400 11px 'Abhaya Libre',Georgia,serif;letter-spacing:.06em;cursor:pointer;color:var(--ink)}.bkday.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}.bkday.full{opacity:.45}
-.bkslots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.bkslot{border:1px solid var(--ink);background:var(--white);border-radius:12px;padding:10px 4px;font:500 14px 'Abhaya Libre',Georgia,serif;letter-spacing:.08em;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}.bkslot small{font-size:8.5px;letter-spacing:.06em;font-weight:400;color:var(--muted)}.bkslot.on{background:var(--ink);color:var(--cream)}.bkslot.on small{color:#d9d2cb}.bkslot:disabled{border-color:var(--line);color:#bdb5ae;cursor:default}
-.chip{font:500 8.5px 'Abhaya Libre',Georgia,serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);border-radius:20px;padding:5px 9px;white-space:nowrap}.chip.confirmed{background:var(--ink);color:var(--cream)}.chip.rejected,.chip.expired,.chip.cancelled{border-color:var(--line);color:var(--muted)}.chip.awaiting_dp{border-color:#b0566a;color:#b0566a}
+.achst{display:block;text-transform:none;letter-spacing:.02em;font-size:10.5px;color:var(--muted);margin-top:3px}.achst u{cursor:pointer}.achf{display:flex;gap:6px;margin-top:8px;text-transform:none;letter-spacing:0}.achf input{flex:1;min-width:0;font:400 12px Montserrat,sans-serif;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.achf .btn{padding:8px 14px}
+.bkpick{display:flex;flex-direction:column;gap:8px;margin-top:10px}.bkopt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:13px 15px;font:400 13px Montserrat,sans-serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:3px}.bkopt b{font-weight:500;letter-spacing:.1em;text-transform:uppercase;font-size:12px}.bkopt small{font-size:11px;color:var(--muted)}.bkopt.sm{padding:10px 13px;font-size:12.5px}.bkopt.on{border-color:var(--ink);background:var(--ink);color:var(--cream)}.bkopt.on small{color:#d9d2cb}
+.bkdays{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}.bkday{flex:none;border:1px solid var(--line);background:var(--white);border-radius:12px;padding:9px 12px;font:400 11px Montserrat,sans-serif;letter-spacing:.06em;cursor:pointer;color:var(--ink)}.bkday.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}.bkday.full{opacity:.45}
+.bkslots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.bkslot{border:1px solid var(--ink);background:var(--white);border-radius:12px;padding:10px 4px;font:500 14px Montserrat,sans-serif;letter-spacing:.08em;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}.bkslot small{font-size:8.5px;letter-spacing:.06em;font-weight:400;color:var(--muted)}.bkslot.on{background:var(--ink);color:var(--cream)}.bkslot.on small{color:#d9d2cb}.bkslot:disabled{border-color:var(--line);color:#bdb5ae;cursor:default}
+.chip{font:500 8.5px Montserrat,sans-serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);border-radius:20px;padding:5px 9px;white-space:nowrap}.chip.confirmed{background:var(--ink);color:var(--cream)}.chip.rejected,.chip.expired,.chip.cancelled{border-color:var(--line);color:var(--muted)}.chip.awaiting_dp{border-color:#b0566a;color:#b0566a}
 .paper .kv{padding:9px 0}.paper .kv .k{font-size:10px}
-.igref{display:block;text-align:center;border:1px solid var(--ink);border-radius:30px;padding:10px 12px;margin-top:10px;font:500 10.5px 'Abhaya Libre',Georgia,serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.igref{display:block;text-align:center;border:1px solid var(--ink);border-radius:30px;padding:10px 12px;margin-top:10px;font:500 10.5px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none}
 .bkcard.dim{opacity:.6}.agree{text-align:left;display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:14px;text-transform:none;letter-spacing:0}.agree input{margin-top:3px;accent-color:var(--ink)}
-.chatmode{display:flex;gap:6px;margin-top:18px;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:4px}.chatmode button{flex:1;border:0;background:transparent;border-radius:24px;padding:10px;font:500 11px 'Abhaya Libre',Georgia,serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer}.chatmode button.on{background:var(--ink);color:var(--cream)}
+.chatmode{display:flex;gap:6px;margin-top:18px;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:4px}.chatmode button{flex:1;border:0;background:transparent;border-radius:24px;padding:10px;font:500 11px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer}.chatmode button.on{background:var(--ink);color:var(--cream)}
 .av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--ink);color:var(--cream);overflow:hidden;flex:none;font-weight:500;letter-spacing:.04em}.av img{width:100%;height:100%;object-fit:cover;display:block}
 .avbtn{position:relative;border:0;background:none;padding:0;cursor:pointer}.avcam{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1px solid var(--line);font-size:12px;line-height:20px;color:var(--ink)}
 .bkopt.bkart{flex-direction:row;align-items:center;gap:14px}.bkopt.bkart span{display:flex;flex-direction:column;gap:3px}
 .lovenote .visits{color:#b0566a}
 .since{text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}.since b{color:var(--ink);font-weight:500}
-.ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px 'Abhaya Libre',Georgia,serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
-.swx button{border:0;background:none;cursor:pointer;font:400 8.5px 'Abhaya Libre',Georgia,serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
+.ptrow{display:flex;gap:10px;flex-wrap:wrap}.pt{position:relative}.pti{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:#f4f1ee center/cover no-repeat;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden}.pti span{font:500 8px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);width:100%;padding:4px 0}.pti.add{border-style:dashed;align-items:center}.pti.add span{background:none;color:var(--muted)}.ptx{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:#1b1b1b;color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
+.swx button{border:0;background:none;cursor:pointer;font:400 8.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;text-align:center}
 .swx i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;border:2px solid transparent;position:relative;overflow:hidden}
 .swx i:after{content:"";position:absolute;right:3px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--p)}
 .swx button.on i{border-color:var(--ink)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.15em;padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
 .toast.on{opacity:1}
-*{font-size-adjust:.5!important}
-.mono,.mono *{font-size-adjust:none!important}
 </style>
 </head>
 <body>
@@ -608,6 +606,14 @@ document.addEventListener('click',e=>{
  const tb=e.target.closest('[data-tab]'); if(tb){TAB=tb.dataset.tab;render()}
 });
 const sb = window.supabase.createClient('https://avetybynptepfqmxedfj.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXR5YnlucHRlcGZxbXhlZGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NTA4NjEsImV4cCI6MjEwMzMyNjg2MX0.PPvK1EnSfV0QDE-OkoEpD7WhgU3CM048IL5YLypCtHc',{auth:{storageKey:'ngd-client-auth',persistSession:true}});
+// ---- client activity (owner-only view in the dashboard). Anonymous feedback is never tracked. ----
+const TRACK_MAP={ngd_client_book:a=>['booked',[a.p_date,a.p_time].join(' ')],ngd_client_booking_proof:()=>['dp_uploaded'],ngd_client_cancel_booking2:a=>['cancelled',a.p_kind],
+ ngd_client_set_pin:()=>['pin_set'],ngd_client_save_profile:()=>['profile_saved'],ngd_client_set_photo:a=>a.p_path?['photo']:null,ngd_client_set_download:()=>['set_downloaded'],
+ ngd_client_post:a=>[a.p_name_mode&&a.p_to==='Studio'&&a.p_allow_public?'love_note':'message'],ngd_client_save_note:()=>['note_saved'],ngd_client_request_achievement:a=>['tick_requested',a.p_key||''],ngd_client_reply:()=>['chat_reply']};
+function track(kind,detail){ try{ if(typeof LOGGED!=='undefined'&&LOGGED) sb.rpc('ngd_client_track',{p_kind:kind,p_detail:detail||null}).then(()=>{},()=>{}); }catch(_){} }
+{ const _rpc=sb.rpc.bind(sb);
+  sb.rpc=async function(name,args){ const r=await _rpc(name,args); try{ if(!r.error&&TRACK_MAP[name]){ const t=TRACK_MAP[name](args||{}); if(t)track(t[0],t[1]); } }catch(_){} return r; }; }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') track('open'); });
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
 let LOVE=[];
 let NOJR=false;
@@ -675,7 +681,7 @@ async function loadPublic(){
 async function loadAccount(){
  const me=await sb.rpc('ngd_client_me');
  if(me.error){ await sb.auth.signOut(); LOGGED=false; toast(L==='id'?'Akun ini bukan akun klien.':'This is not a client account.'); show('login'); return false; }
- ME=me.data; LOGGED=true;
+ ME=me.data; LOGGED=true; track('open');
  if(!ME.must_set_pin){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
   HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
@@ -1022,7 +1028,7 @@ function renderAcct(){
   <p class="progress">${id?'Total kunjungan: ':'Total visits: '}<b style="font-weight:500">${visits}</b></p>
   ${(ME.saved_rewards||[]).filter(r=>r.use_by>visits).map(r=>{const t=TIERS.find(x=>x[0]===r.cycle);return `<div class="info" style="text-align:center;margin-bottom:10px">🎁 ${id?`Hadiah tersimpan: <b>Kunjungan ${r.cycle}</b>${t?' — '+t[1].id:''}<br><span style="font-size:11px;color:var(--muted)">Bisa dipakai sampai kunjungan ke-${r.use_by}. Satu hadiah per kunjungan.</span>`:`Saved reward: <b>Visit ${r.cycle}</b>${t?' — '+t[1].en:''}<br><span style="font-size:11px;color:var(--muted)">Use it by visit ${r.use_by}. One reward per visit.</span>`}</div>`}).join('')}
   ${next?`<div class="info" style="text-align:center">${id?`${next[0]-v10} kunjungan lagi menuju <b>Kunjungan ${next[0]}</b>: ${next[1].id}`:`${next[0]-v10} more visit(s) to <b>Visit ${next[0]}</b>: ${next[1].en}`}</div>`:''}
-  ${ME.birthday?'':`<div class="info" style="margin-top:14px">🎂 ${id?'Isi tanggal ulang tahunmu untuk mendapat hadiah ulang tahun dari kami:':'Add your birthday to receive a birthday gift from us:'}<div class="row" style="gap:8px;margin-top:8px;border:0;padding:0"><input type="date" id="bdayIn" style="flex:1;font:400 13px 'Abhaya Libre',Georgia,serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--white)"><button class="btn" id="bdaySave">${id?'Simpan':'Save'}</button></div><p class="note" style="margin-top:6px">${id?'Hanya bisa diisi sekali.':'This can only be set once.'}</p></div>`}
+  ${ME.birthday?'':`<div class="info" style="margin-top:14px">🎂 ${id?'Isi tanggal ulang tahunmu untuk mendapat hadiah ulang tahun dari kami:':'Add your birthday to receive a birthday gift from us:'}<div class="row" style="gap:8px;margin-top:8px;border:0;padding:0"><input type="date" id="bdayIn" style="flex:1;font:400 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--white)"><button class="btn" id="bdaySave">${id?'Simpan':'Save'}</button></div><p class="note" style="margin-top:6px">${id?'Hanya bisa diisi sekali.':'This can only be set once.'}</p></div>`}
   <div class="tiers">${TIERS.map(([n,d])=>`<div class="row"><span class="n"><b>${id?'Kunjungan':'Visit'} ${n}</b>${n<=v10?`<br><i style="font-size:10px;color:var(--muted)">${id?'sudah tercapai':'reached'}</i>`:''}</span><span class="p" style="white-space:normal;max-width:58%">${d[L]}</span></div>`).join('')}</div></div>`;
   const ACH=[['ig_follow',{id:'Follow & tag kami di Instagram',en:'Following and tagging us on Instagram'}],['share_look',{id:'Membagikan nail look & pengalamanmu',en:'Sharing your nail looks and experience with us'}],['google_review',{id:'Review dengan foto di Google',en:'Leaving a thoughtful review with photos on Google'}],['referral',{id:'Mereferensikan kami ke teman',en:'Referring us to a friend who would love our work'}],['new_design',{id:'Mencoba desain atau koleksi baru kami',en:'Trying our new designs or collections'}]];
   const A=ME.achievements||{};
@@ -1079,7 +1085,7 @@ function renderAcct(){
    <div class="bubble me">${esc(p.body)}${p.liked_by?`<div class="heart on" style="cursor:default">♥ ${esc(p.liked_by)}</div>`:''}</div>
    ${(p.replies||[]).map(r=>r.from_client?`<div class="bubble me"><small>${id?'Kamu':'You'}</small>${esc(r.body)}</div>`:`<div class="bubble them"><small>${esc(r.author)}</small>${esc(r.body)}<br><button class="heart${r.liked?' on':''}" data-likereply="${r.id}">${r.liked?'♥':'♡'}</button></div>`).join('')}
    <label class="chk" style="font-size:11px"><input type="checkbox" data-pubtoggle="${p.id}" ${p.allow_public?'checked':''}> <span>${id?'Boleh ditampilkan di Love Notes wall':'Allowed on the Love Notes wall'}</span></label>
-   ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px 'Abhaya Libre',Georgia,serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
+   ${(p.replies||[]).length?`<div class="row" style="gap:6px;border:0;margin-top:8px"><input id="rep-${p.id}" placeholder="${id?'Balas…':'Reply…'}" style="flex:1;font:300 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn ghost" data-replypost="${p.id}">${id?'Balas':'Reply'}</button></div>`:''}</div>`).join(''):`<p class="note" style="text-align:center;margin-top:14px">${id?'Belum ada percakapan.':'No conversations yet.'}</p>`);
   }
  }
  if(SUB==='card'&&profileMissing()) h=h.replace('<div class="card"><div class="tag" style="text-align:center">Loyalty Card</div>',`<div class="setbanner" data-sub="profile"><span style="font-size:20px">✎</span><div><b>${id?'Lengkapi profilmu':'Complete your profile'}</b><small>${id?'WhatsApp, Instagram, ulang tahun & lainnya':'WhatsApp, Instagram, birthday & more'}</small></div></div><div class="card"><div class="tag" style="text-align:center">Loyalty Card</div>`);
@@ -1164,7 +1170,7 @@ function confirmSheet(title,body,yes,no,onYes,onNo){
 
 document.addEventListener('click',async e=>{
  const g=e.target.closest('[data-go]'); if(g){show(g.dataset.go);return}
- const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;
+ const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;track('tab',SUB);
   if(SUB==='book'&&BOOKINGS.some(x=>!x.seen)){sb.rpc('ngd_client_seen_bookings').then(()=>{});setTimeout(()=>{BOOKINGS.forEach(x=>x.seen=true)},1500)}
   renderAcct();return}
  if(e.target.closest('[data-bkstart]')){BK={step:1,setup:BK.setup,artist:null,svc:[],note:'',avail:null,date:null,time:null,agree:false,busy:false};renderAcct();
@@ -1193,9 +1199,9 @@ document.addEventListener('click',async e=>{
   if(!confirm(id?'Batalkan booking ini? Kalau DP sudah ditransfer, DP tidak bisa dikembalikan.':'Cancel this booking? If you already paid the DP, it is non-refundable.'))return;
   const r=await sb.rpc('ngd_client_cancel_booking',{p_id:bx.dataset.bkcancel}); if(r.error)return toast(r.error.message);
   const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[]; renderAcct(); return}
- const lt=e.target.closest('[data-letter]'); if(lt){OPEN=lt.dataset.letter;const [mid,occ]=OPEN.split('|');const m=MSG.find(x=>x.id===mid&&x.occurrence===occ);if(m&&!m.read){m.read=true;sb.rpc('ngd_client_read_message',{p_message_id:mid,p_occurrence:occ});}renderAcct();return}
+ const lt=e.target.closest('[data-letter]'); if(lt){OPEN=lt.dataset.letter;const [mid,occ]=OPEN.split('|');const m=MSG.find(x=>x.id===mid&&x.occurrence===occ);if(m&&!m.read){m.read=true;sb.rpc('ngd_client_read_message',{p_message_id:mid,p_occurrence:occ});track('letter_opened',m.subject_en||m.subject_id||'');}renderAcct();return}
  if(e.target.closest('[data-close-letter]')){OPEN=null;renderAcct();return}
- if(e.target.id==='logout'){await sb.auth.signOut();LOGGED=false;ME=null;SUB='card';show('wifi');return}
+ if(e.target.id==='logout'){await sb.rpc('ngd_client_track',{p_kind:'logout'}).catch(()=>{});await sb.auth.signOut();LOGGED=false;ME=null;SUB='card';show('wifi');return}
  if(e.target.id==='setPin'){
   const a=$('#pin1').value,b=$('#pin2').value;
   if(!/^\d{6}$/.test(a))return toast(L==='id'?'PIN harus 6 angka':'PIN must be 6 digits');
