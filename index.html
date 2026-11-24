@@ -705,6 +705,12 @@ async function squareJpeg(file,size){
   g.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,size,size);
   return await new Promise(res=>cv.toBlob(res,'image/jpeg',0.85));
  } finally { URL.revokeObjectURL(url); } }
+function bdayWin(bday){
+ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(bday||''); if(!m)return null; const d=new Date(); d.setHours(0,0,0,0);
+ for(const y of [d.getFullYear()-1,d.getFullYear(),d.getFullYear()+1]){ const b=new Date(y,+m[2]-1,+m[3]); if(b.getMonth()!==+m[2]-1)b.setDate(0);
+  const from=new Date(b); from.setDate(from.getDate()-20); const to=new Date(b); to.setDate(to.getDate()+10);
+  if(d>=from&&d<=to){const iso=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`; return {from:iso(from),to:iso(to)};} }
+ return null; }
 function pickMyPhoto(){
  if((ME&&ME.visits||0)<10){ const id=L==='id'; const left=10-(ME&&ME.visits||0);
   toast(id?`Foto profil terbuka setelah 10 kunjungan · ${left} kunjungan lagi ♡`:`Profile photos unlock after 10 visits · ${left} more to go ♡`); return; }
@@ -1001,6 +1007,8 @@ function renderAcct(){
  ${BOOKINGS.some(x=>!x.seen)&&SUB!=='book'?(()=>{const x=BOOKINGS.find(y=>!y.seen), st=x.status;
    const t=st==='confirmed'?(id?'Booking-mu terkonfirmasi':'Your booking is confirmed'):st==='rejected'?(id?'Booking-mu tidak disetujui':'Your booking was not approved'):st==='cancelled'?(id?'Booking-mu dibatalkan':'Your booking was cancelled'):st==='expired'?(id?'Booking-mu kedaluwarsa':'Your booking expired'):(id?'Ada update booking':'Booking update');
    return `<div class="setbanner" data-sub="book"><span style="font-size:20px">📅</span><div><b>${t}</b><small>${dLong(x.date,id)} · ${x.time} · ${esc(x.artist||'')}</small></div></div>`})():''}
+ ${(()=>{const w=bdayWin(ME&&ME.birthday); if(!w)return ''; const f=d=>new Date(d+'T00:00:00').toLocaleDateString(id?'id-ID':'en-GB',{day:'numeric',month:'short'});
+   return `<div class="setbanner" style="cursor:default"><span style="font-size:20px">🎂</span><div><b>${id?'Hadiah ulang tahun: diskon 10%':'Birthday treat: 10% off'}</b><br><span style="font-size:12px">${id?`Untuk satu kunjungan antara ${f(w.from)} – ${f(w.to)}. Tidak bisa digabung dengan hadiah loyalty.`:`For one visit between ${f(w.from)} – ${f(w.to)}. Can't be combined with a loyalty reward.`}</span></div></div>`;})()}
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
  <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='profile'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
