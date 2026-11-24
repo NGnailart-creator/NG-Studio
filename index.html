@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NG Nailart — Studio Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Abhaya+Libre:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#FFF7EF;--white:#FFFFFF;--ink:#111111;--muted:#6f6a66;--line:#e9e0d6;--soft:#f6ece2}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -268,6 +268,49 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .swx button.on i{border-color:var(--ink)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.15em;padding:9px 16px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
 .toast.on{opacity:1}
+
+/* pick-a-gift */
+.gft-ov{position:fixed;inset:0;z-index:9998;background:var(--cream);overflow:auto;opacity:0;transition:opacity .45s}
+.gft-ov.on{opacity:1}
+.gft{max-width:420px;margin:0 auto;min-height:100%;box-sizing:border-box;padding:26px 26px 30px;display:flex;flex-direction:column;text-align:center}
+.gft-top{display:flex;justify-content:space-between;align-items:center}
+.gft-top b{font-family:'Abhaya Libre',Georgia,serif;font-weight:400;font-size:22px;letter-spacing:.06em}
+.gft-x{border:0;background:none;font-size:22px;line-height:1;padding:6px;cursor:pointer;color:var(--ink)}
+.gft-eye{font-size:10px;letter-spacing:.3em;color:#7a7470}
+.gft h1,.gft h2{font-family:'Abhaya Libre',Georgia,serif;font-weight:400;margin:12px 0 0;line-height:1.15;text-transform:none;letter-spacing:0}
+.gft h1{font-size:46px}.gft h2{font-size:30px}
+.gft p{font-size:13px;line-height:1.7;color:#4a4542;margin:12px 0 0}
+.gft-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 14px;margin-top:40px}
+.gft-b{border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;font-family:inherit;transition:transform .25s,opacity .4s}
+.gft-b:hover{transform:translateY(-4px)}
+.gft-b span{font-size:10px;letter-spacing:.24em;color:#7a7470}
+.gft-grid.busy .gft-b{opacity:.35;pointer-events:none}.gft-grid.busy .gft-b.sel{opacity:1;transform:translateY(-6px)}
+.gbox{position:relative;width:84px;height:88px}
+.gbox i{position:absolute;display:block;box-sizing:border-box}
+.gbox .bd{left:2px;right:2px;bottom:0;height:62px;border-radius:6px}
+.gbox .rv{left:37px;width:10px;bottom:0;height:62px}
+.gbox .ld{left:0;right:0;top:12px;height:18px;border-radius:5px}
+.gbox .rl{left:37px;width:10px;top:12px;height:18px}
+.gbox .bw1,.gbox .bw2{top:0;width:18px;height:14px;border:2px solid;background:none!important}
+.gbox .bw1{left:22px;border-radius:50% 50% 0 50%;transform:rotate(-12deg)}.gbox .bw2{left:44px;border-radius:50% 50% 50% 0;transform:rotate(12deg)}
+.gft-stage{position:relative;width:200px;height:150px;margin:44px auto 0}
+.gft-glow{position:absolute;left:10px;top:-10px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(255,255,255,.75) 35%,rgba(255,247,239,0) 70%);animation:gGlow 1.6s ease-out 1.8s both}
+.gft-stage .gbox{position:absolute;left:40px;top:10px;width:120px;height:140px;animation:gSettle .6s ease both,gWiggle 1s ease-in-out .55s both;transform-origin:50% 100%}
+.gft-stage .bd{left:4px;right:4px;height:80px;border-radius:8px}.gft-stage .rv{left:54px;width:12px;height:80px}
+.gft-lid{position:absolute;left:0;right:0;top:36px;height:24px;animation:gLid 1.4s cubic-bezier(.25,.8,.25,1) 1.55s both;transform-origin:20% 100%}
+.gft-lid .ld{top:0;height:24px;border-radius:6px}.gft-lid .rl{left:54px;width:12px;top:0;height:24px}
+.gft-bow{position:absolute;left:30px;top:-18px;width:60px;height:20px;animation:gBow .7s ease-in 1.4s both}
+.gft-bow .bw1{left:4px;width:24px;height:18px}.gft-bow .bw2{left:32px;width:24px;height:18px}
+.gr{animation:gRise .9s cubic-bezier(.2,.7,.2,1) both}
+.gcode{margin:24px auto 0;background:#fff;border:1px solid #E6D9CC;border-radius:16px;padding:16px 26px}
+.gcode b{display:block;font-weight:400;font-size:22px;letter-spacing:.2em;margin-top:4px}
+.gft .btn{margin-top:0}.gft-sp{flex:1;min-height:26px}
+@keyframes gRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes gSettle{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+@keyframes gWiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-2.5deg)}40%{transform:rotate(2deg)}60%{transform:rotate(-1.2deg)}80%{transform:rotate(.6deg)}}
+@keyframes gBow{to{transform:translateY(-22px) scale(.9);opacity:0}}
+@keyframes gLid{35%{transform:translate(0,-6px) rotate(-2deg)}100%{transform:translate(-14px,-46px) rotate(-18deg)}}
+@keyframes gGlow{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1.15)}}
 </style>
 </head>
 <body>
@@ -686,6 +729,7 @@ async function loadAccount(){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
   HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=callName(); const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
+  sb.rpc('ngd_client_gift_status').then(r=>{ GIFT=r.data||null; renderAcct(); if(GIFT&&GIFT.available&&!MSG.some(x=>x.kind==='welcome'&&!x.read)) maybeAutoGift(); });
   setTimeout(showWelcome,600);
  }
  return true;
@@ -702,10 +746,43 @@ function showWelcome(){
   <div style="font-size:13.5px;line-height:1.75;white-space:pre-line;color:var(--ink)">${esc(body)}</div>
   <button class="btn" id="welcomeGo" style="width:100%;margin-top:24px;padding:13px">Open my page</button></div>`;
  document.body.appendChild(ov); requestAnimationFrame(()=>{ov.style.opacity='1';ov.firstElementChild.style.transform='none';});
- const done=()=>{ m.read=true; sb.rpc('ngd_client_read_message',{p_message_id:m.id,p_occurrence:m.occurrence}); track('letter_opened',m.subject_en||m.subject_id||''); ov.style.opacity='0'; setTimeout(()=>ov.remove(),350); renderAcct(); };
+ const done=()=>{ m.read=true; sb.rpc('ngd_client_read_message',{p_message_id:m.id,p_occurrence:m.occurrence}); track('letter_opened',m.subject_en||m.subject_id||''); ov.style.opacity='0'; setTimeout(()=>ov.remove(),350); renderAcct(); if(GIFT&&GIFT.available) maybeAutoGift(); };
  ov.addEventListener('click',e=>{ if(e.target===ov||e.target.id==='welcomeGo') done(); });
 }
-let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null;
+let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null, GIFT=null;
+// ---------- Pick a gift ----------
+const GLOOK=[['#141414','#141414','#FFF7EF','#141414'],['#FFFFFF','#E6D9CC','#141414','#141414'],['#E9DCCF','#E9DCCF','#FFFFFF','#CDB7A8'],['#F2E2DF','#F2E2DF','#141414','#141414'],['#FFF7EF','#D9C8B8','#C9A9A6','#C9A9A6'],['#CDB7A8','#CDB7A8','#FFF7EF','#A88F80']];
+const gboxHtml=([b,e,r,w],big)=>big
+ ?`<div class="gbox"><i class="bd" style="background:${b};border:1px solid ${e}"></i><i class="rv" style="background:${r}"></i><div class="gft-lid"><i class="ld" style="background:${b};border:1px solid ${e}"></i><i class="rl" style="background:${r}"></i><div class="gft-bow"><i class="bw1" style="border-color:${w}"></i><i class="bw2" style="border-color:${w}"></i></div></div></div>`
+ :`<div class="gbox"><i class="bd" style="background:${b};border:1px solid ${e}"></i><i class="rv" style="background:${r}"></i><i class="ld" style="background:${b};border:1px solid ${e}"></i><i class="rl" style="background:${r}"></i><i class="bw1" style="border-color:${w}"></i><i class="bw2" style="border-color:${w}"></i></div>`;
+function maybeAutoGift(){ try{ const k='ngGiftShown-'+(ME&&ME.id); if(localStorage.getItem(k))return; localStorage.setItem(k,'1'); }catch(_){} setTimeout(openGift,500); }
+function openGift(){
+ if(!GIFT||!GIFT.available||document.getElementById('gftOv'))return;
+ const ov=document.createElement('div'); ov.id='gftOv'; ov.className='gft-ov';
+ const pickHtml=`<div class="gft"><div class="gft-top"><b>NG</b><button class="gft-x" data-gx aria-label="Close">×</button></div>
+  <div style="margin-top:48px"><div class="gft-eye">A LITTLE SOMETHING</div><h1>Pick one.</h1><p>Six gifts. One is yours.<br>You can only open one.</p></div>
+  <div class="gft-grid">${GLOOK.map((l,i)=>`<button class="gft-b" data-gbox="${i}" aria-label="Open gift ${i+1}">${gboxHtml(l)}<span>0${i+1}</span></button>`).join('')}</div>
+  <p style="margin-top:auto;padding-top:28px;font-size:11px;color:#7a7470">One gift per client. It goes straight to your Coupons.</p></div>`;
+ ov.innerHTML=pickHtml; document.body.appendChild(ov); requestAnimationFrame(()=>ov.classList.add('on'));
+ const close=()=>{ ov.classList.remove('on'); setTimeout(()=>ov.remove(),450); };
+ ov.addEventListener('click',async e=>{
+  if(e.target.closest('[data-gx]'))return close();
+  if(e.target.closest('[data-gcoupons]')){ close(); SUB='coupons'; const c=await sb.rpc('ngd_client_coupons'); CPN=c.data||CPN; renderAcct(); window.scrollTo(0,0); return; }
+  const b=e.target.closest('[data-gbox]'); if(!b)return;
+  const grid=ov.querySelector('.gft-grid'); if(grid.classList.contains('busy'))return;
+  grid.classList.add('busy'); b.classList.add('sel');
+  const i=+b.dataset.gbox; const r=await sb.rpc('ngd_client_open_gift',{p_box:i});
+  if(r.error){ grid.classList.remove('busy'); b.classList.remove('sel'); toast(r.error.message); GIFT={available:false}; renderAcct(); return; }
+  GIFT=r.data; const d=new Date(String(r.data.expires_on)+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  setTimeout(()=>{ ov.innerHTML=`<div class="gft"><div class="gft-top"><b>NG</b><span></span></div>
+   <div class="gft-stage"><div class="gft-glow"></div>${gboxHtml(GLOOK[i],true)}</div>
+   <div class="gft-eye gr" style="margin-top:22px;animation-delay:2.6s">YOUR GIFT</div>
+   <h2 class="gr" style="animation-delay:2.85s">${esc(r.data.title)}</h2>
+   <p class="gr" style="animation-delay:3.1s">Saved to your Coupons.<br>Show the code at your next visit.</p>
+   <div class="gcode gr" style="animation-delay:3.35s"><div class="gft-eye">CODE</div><b>${esc(r.data.code)}</b><div style="font-size:11px;color:#7a7470;margin-top:4px">Valid until ${d}</div></div>
+   <div class="gft-sp"></div><button class="btn gr" data-gcoupons style="width:100%;padding:15px;animation-delay:3.7s">See my coupons</button></div>`; renderAcct(); },450);
+ });
+}
 // the name the client wants us to use (falls back to her first name)
 const callName=()=>String((ME&&ME.call_name)||String((ME&&ME.name)||'').trim().split(/\s+/)[0]||'').trim();
 const teamPhoto=p=>p?sb.storage.from('ngd-team-photos').getPublicUrl(p).data.publicUrl:null;
@@ -1035,6 +1112,7 @@ function renderAcct(){
    return `<div class="setbanner" data-sub="book"><span style="font-size:20px">📅</span><div><b>${t}</b><small>${dLong(x.date,id)} · ${x.time} · ${esc(x.artist||'')}</small></div></div>`})():''}
  ${(()=>{const w=bdayWin(ME&&ME.birthday); if(!w)return ''; const f=d=>new Date(d+'T00:00:00').toLocaleDateString(id?'id-ID':'en-GB',{day:'numeric',month:'short'});
    return `<div class="setbanner" style="cursor:default"><span style="font-size:20px">🎂</span><div><b>${id?'Hadiah ulang tahun: diskon 10%':'Birthday treat: 10% off'}</b><br><span style="font-size:12px">${id?`Untuk satu kunjungan antara ${f(w.from)} – ${f(w.to)}. Tidak bisa digabung dengan hadiah loyalty.`:`For one visit between ${f(w.from)} – ${f(w.to)}. Can't be combined with a loyalty reward.`}</span></div></div>`;})()}
+ ${GIFT&&GIFT.available?`<div class="setbanner" data-giftopen style="cursor:pointer"><span style="font-size:18px">🎁</span><div><b>A little something is waiting.</b><br><span style="font-size:12px">Tap to pick your gift.</span></div></div>`:''}
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
  <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='profile'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
  if(SUB==='card'){
@@ -1256,6 +1334,7 @@ document.addEventListener('click',async e=>{
   if(r.error)return toast(r.error.message);
   ME.birthday=v;PROFILE.birthday=v;toast(L==='id'?'Ulang tahun tersimpan 🎂':'Birthday saved 🎂');renderAcct();return;
  }
+ if(e.target.closest('[data-giftopen]')){openGift();return}
  if(e.target.closest('[data-myphoto]')){pickMyPhoto();return}
  if(e.target.id==='pfSave'){ const id=L==='id', g=x=>($('#'+x)||{}).value||'';
   const bd=g('pfBday'), args={p_phone:g('pfPhone'),p_instagram:g('pfIg').trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?].*$/,''),p_area:g('pfArea'),p_referral:g('pfRef'),p_referral_detail:g('pfRefDetail'),p_allergy:g('pfAllergy'),p_birthday:bd||null};
