@@ -686,8 +686,24 @@ async function loadAccount(){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
   HIST=h.data||[]; CPN=c.data||[]; MSG=m.data||[]; POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
+  setTimeout(showWelcome,600);
  }
  return true;
+}
+// First visit: show the welcome letter once, as a quiet overlay
+function showWelcome(){
+ const m=MSG.find(x=>x.kind==='welcome'&&!x.read); if(!m||document.getElementById('welcomeOv'))return;
+ const id=L==='id', subj=(id?m.subject_id:m.subject_en)||m.subject_en||m.subject_id||'', body=(id?m.body_id:m.body_en)||m.body_en||m.body_id||'';
+ const ov=document.createElement('div'); ov.id='welcomeOv';
+ ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(20,20,20,.35);display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;transition:opacity .4s';
+ ov.innerHTML=`<div style="background:var(--cream);max-width:380px;width:100%;border-radius:22px;padding:34px 28px 26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);transform:translateY(12px);transition:transform .5s">
+  <div style="font-size:10px;letter-spacing:.32em;color:#8a8380">NG NAILART</div>
+  <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:34px;line-height:1.2;margin:14px 0 14px">${esc(subj)}</div>
+  <div style="font-size:13.5px;line-height:1.75;white-space:pre-line;color:var(--ink)">${esc(body)}</div>
+  <button class="btn" id="welcomeGo" style="width:100%;margin-top:24px;padding:13px">Open my page</button></div>`;
+ document.body.appendChild(ov); requestAnimationFrame(()=>{ov.style.opacity='1';ov.firstElementChild.style.transform='none';});
+ const done=()=>{ m.read=true; sb.rpc('ngd_client_read_message',{p_message_id:m.id,p_occurrence:m.occurrence}); track('letter_opened',m.subject_en||m.subject_id||''); ov.style.opacity='0'; setTimeout(()=>ov.remove(),350); renderAcct(); };
+ ov.addEventListener('click',e=>{ if(e.target===ov||e.target.id==='welcomeGo') done(); });
 }
 let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null;
 const teamPhoto=p=>p?sb.storage.from('ngd-team-photos').getPublicUrl(p).data.publicUrl:null;
