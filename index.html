@@ -684,7 +684,7 @@ async function loadAccount(){
  ME=me.data; LOGGED=true; track('open');
  if(!ME.must_set_pin){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
-  HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=String(ME.name||'').trim().split(/\s+/)[0]||''; const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
+  HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=callName(); const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
   setTimeout(showWelcome,600);
  }
@@ -706,6 +706,8 @@ function showWelcome(){
  ov.addEventListener('click',e=>{ if(e.target===ov||e.target.id==='welcomeGo') done(); });
 }
 let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null;
+// the name the client wants us to use (falls back to her first name)
+const callName=()=>String((ME&&ME.call_name)||String((ME&&ME.name)||'').trim().split(/\s+/)[0]||'').trim();
 const teamPhoto=p=>p?sb.storage.from('ngd-team-photos').getPublicUrl(p).data.publicUrl:null;
 const initialsOf=n=>String(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const avatar=(url,name,size)=>`<span class="av" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.36)}px">${url?`<img src="${url}" alt="">`:esc(initialsOf(name))}</span>`;
@@ -1018,7 +1020,7 @@ function renderAcct(){
  const id=L==='id';
  if(ME.must_set_pin){
   el.innerHTML=`<div class="login-wrap"><h2>${id?'Buat PIN':'Create your PIN'}</h2>
-   <p class="lead" style="font-size:12px">${id?'Halo '+esc(ME.name)+'! Buat PIN 6 angka milikmu sendiri. Kode dari nail artist tidak bisa dipakai lagi setelah ini.':'Hi '+esc(ME.name)+'! Create your own 6-digit PIN. The code from your nail artist will stop working after this.'}</p>
+   <p class="lead" style="font-size:12px">${id?'Halo '+esc(callName())+'! Buat PIN 6 angka milikmu sendiri. Kode dari nail artist tidak bisa dipakai lagi setelah ini.':'Hi '+esc(callName())+'! Create your own 6-digit PIN. The code from your nail artist will stop working after this.'}</p>
    <label class="field">PIN</label><input id="pin1" inputmode="numeric" maxlength="6" type="password" placeholder="••••••">
    <label class="field">${id?'Ulangi PIN':'Repeat PIN'}</label><input id="pin2" inputmode="numeric" maxlength="6" type="password" placeholder="••••••">
    <button class="btn" id="setPin">${id?'Simpan PIN':'Save PIN'}</button></div>`;
@@ -1027,7 +1029,7 @@ function renderAcct(){
  const unread=MSG.some(x=>!x.read);
  const visits=ME.visits||0;
  if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
- let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${(ME.visits||0)<10?'🔒':MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(ME.name)}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
+ let h=`<div class="hello"><div style="display:flex;align-items:center;gap:14px"><button class="avbtn" data-myphoto title="${id?'Ganti foto profil':'Change profile photo'}">${avatar(MYPHOTO,ME.name,58)}<span class="avcam">${(ME.visits||0)<10?'🔒':MYPHOTO?'✎':'+'}</span></button><div><div class="tag">${id?'Halo':'Hello'}</div><h2>${esc(callName())}</h2></div></div><button class="btn ghost" id="logout">${T.logout[L]}</button></div>
  ${BOOKINGS.some(x=>!x.seen)&&SUB!=='book'?(()=>{const x=BOOKINGS.find(y=>!y.seen), st=x.status;
    const t=st==='confirmed'?(id?'Booking-mu terkonfirmasi':'Your booking is confirmed'):st==='rejected'?(id?'Booking-mu tidak disetujui':'Your booking was not approved'):st==='cancelled'?(id?'Booking-mu dibatalkan':'Your booking was cancelled'):st==='expired'?(id?'Booking-mu kedaluwarsa':'Your booking expired'):(id?'Ada update booking':'Booking update');
    return `<div class="setbanner" data-sub="book"><span style="font-size:20px">📅</span><div><b>${t}</b><small>${dLong(x.date,id)} · ${x.time} · ${esc(x.artist||'')}</small></div></div>`})():''}
@@ -1111,6 +1113,7 @@ function renderAcct(){
    <div style="display:flex;justify-content:center;margin:14px 0 4px"><button class="avbtn" data-myphoto>${avatar(MYPHOTO,ME.name,84)}<span class="avcam">${(ME.visits||0)<10?'🔒':MYPHOTO?'✎':'+'}</span></button></div>${(ME.visits||0)<10?`<p class="note" style="text-align:center;margin-top:2px">${id?'Foto profil terbuka setelah 10 kunjungan':'Profile photo unlocks after 10 visits'}</p>`:''}
    <p class="note" style="text-align:center">${id?'Ketuk foto untuk mengganti':'Tap the photo to change it'}</p>
    <label class="field">${id?'Nama':'Name'}</label><input value="${esc(ME.name)}" disabled>
+   <label class="field">${id?'Mau dipanggil apa?':'What should we call you?'}</label><input id="pfCall" value="${esc(ME.call_name||'')}" placeholder="${esc(String(ME.name||'').trim().split(/\s+/)[0]||'')}" maxlength="30">
    <label class="field">WhatsApp</label><input id="pfPhone" inputmode="tel" value="${esc(P.phone||'')}" placeholder="08…">
    <label class="field">Instagram</label><input id="pfIg" value="${esc(P.instagram?'@'+String(P.instagram).replace(/^@/,''):'')}" placeholder="@username" autocapitalize="off">
    <label class="field">${id?'Area tempat tinggal':'Area you live in'}</label><input id="pfArea" value="${esc(P.area||'')}" placeholder="${id?'mis. Lembang, Setiabudi':'e.g. Lembang, Setiabudi'}">
@@ -1257,6 +1260,7 @@ document.addEventListener('click',async e=>{
  if(e.target.id==='pfSave'){ const id=L==='id', g=x=>($('#'+x)||{}).value||'';
   const bd=g('pfBday'), args={p_phone:g('pfPhone'),p_instagram:g('pfIg').trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?].*$/,''),p_area:g('pfArea'),p_referral:g('pfRef'),p_referral_detail:g('pfRefDetail'),p_allergy:g('pfAllergy'),p_birthday:bd||null};
   e.target.disabled=true; const r=await sb.rpc('ngd_client_save_profile',args);
+  const cn=(g('pfCall')||'').trim(); if(!r.error&&cn!==(ME.call_name||'')){ const r3=await sb.rpc('ngd_client_set_call_name',{p_name:cn}); if(!r3.error){ ME.call_name=cn||null; MSG=MSG.map(x=>x); } }
   const fm=g('pfFirst'); let r2={}; if(fm&&!PROFILE.first_visit) r2=await sb.rpc('ngd_client_set_first_visit',{p_month:fm+'-01'});
   e.target.disabled=false;
   if(r.error)return toast(r.error.message); if(r2.error)return toast(r2.error.message);
