@@ -904,13 +904,13 @@ function phCtl(x,o){ const id=L==='id', imgs=setImgs(x,o);
 function refreshPh(sid){ const x=SETS.find(y=>String(y.id)===String(sid)), o=SETOPT[sid]; if(!x||!o)return;
  const st=document.getElementById('story-'+sid); if(st){const ph=st.querySelector('.ph'); const imgs=setImgs(x,o); ph.className='ph g'+(imgs.length||1); ph.innerHTML=phInner(imgs,o);}
  const c=document.getElementById('phctl-'+sid); if(c)c.innerHTML=phCtl(x,o); fitStories(); }
-async function shrinkLocal(file){
+async function shrinkLocal(file,max=1600,q=0.88){
  const url=URL.createObjectURL(file);
  try{ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
-  const k=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight)); const cv=document.createElement('canvas');
+  const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)); const cv=document.createElement('canvas');
   cv.width=Math.round(img.naturalWidth*k); cv.height=Math.round(img.naturalHeight*k);
   const g=cv.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,cv.width,cv.height); g.drawImage(img,0,0,cv.width,cv.height);
-  return cv.toDataURL('image/jpeg',0.88);
+  return cv.toDataURL('image/jpeg',q);
  } finally { URL.revokeObjectURL(url); } }
 function pickSetPhoto(sid,i,after){
  const x=SETS.find(y=>String(y.id)===String(sid)), o=SETOPT[sid]; if(!x||!o)return;
@@ -1126,7 +1126,7 @@ async function bkUploadProof(bid){
  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
  inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;const id=L==='id';
   try{toast(id?'Mengupload…':'Uploading…');
-   const d=await shrinkLocal(f); const blob=await (await fetch(d)).blob();
+   const d=await shrinkLocal(f,1400,0.78); const blob=await (await fetch(d)).blob(); // DP proof: smaller file, text stays readable
    const path=`${ME.id}/${bid}/${Date.now()}.jpg`;
    const up=await sb.storage.from('ngd-dp').upload(path,blob,{contentType:'image/jpeg'});
    if(up.error)throw up.error;
