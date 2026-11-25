@@ -894,10 +894,11 @@ function receiptHtml(x,o){
  const pr=v=>`<span class="pv" data-v="${kfmt(v)}">${o.hide?'XXX':kfmt(v)}</span>`;
  const D='============================', d='----------------------------';
  const items=(rc.items||[]).map(i=>`<div class="it"><span contenteditable>${esc(String(i.label||'').toUpperCase())}${i.qty>1?' × '+i.qty:''}</span><span>${pr(i.amount)}</span></div>`).join('');
- const disc=rc.discount_amount?`<div class="it"><span contenteditable>${esc(String(rc.discount_label||'DISCOUNT').toUpperCase())}</span><span class="pv" data-v="-${kfmt(rc.discount_amount)}">${o.hide?'XXX':'-'+kfmt(rc.discount_amount)}</span></div>`:'';
+ const disc=rc.discount_amount?`<div class="it"><span contenteditable>${esc(String(rc.discount_label||'DISCOUNT').toUpperCase())}</span><span class="pv" data-v="-${kfmt(rc.discount_amount)}">${o.hide?'XXX':'-'+kfmt(rc.discount_amount)}</span></div>`:''
+ const vdisc=rc.voucher_amount?`<div class="it"><span contenteditable>${esc(String(rc.voucher_label||'VOUCHER').toUpperCase())}</span><span class="pv" data-v="-${kfmt(rc.voucher_amount)}">${o.hide?'XXX':'-'+kfmt(rc.voucher_amount)}</span></div>`:'';
  return `<div class="rcp ${o.font}"><div class="pinsh"></div><div class="pinx"></div><div class="br">NG NAILART</div><div class="ds">${D}</div><div class="tt" contenteditable>TODAY'S SET</div><div class="ds">${D}</div>
  <div class="ph g${imgs.length||1}">${phInner(imgs,o)}</div>
- <div class="ds">${d}</div>${x.title&&!(rc.items||[]).some(i=>String(i.label||'').trim().toUpperCase()===x.title.trim().toUpperCase())?`<div class="it"><span contenteditable>${esc(x.title.toUpperCase())}</span><span></span></div>`:''}${items}${disc}
+ <div class="ds">${d}</div>${x.title&&!(rc.items||[]).some(i=>String(i.label||'').trim().toUpperCase()===x.title.trim().toUpperCase())?`<div class="it"><span contenteditable>${esc(x.title.toUpperCase())}</span><span></span></div>`:''}${items}${disc}${vdisc}
  <div class="ds">${d}</div><div class="it bg"><span>TOTAL</span><span>${pr(rc.total)}</span></div><div class="ds">${d}</div>
  <div class="it"><span>NAIL ARTIST: ${esc(String(rc.artist||'').toUpperCase())}</span><span></span></div>
  <div class="it"><span>${esc(fmtDate(rc.date).toUpperCase())}</span><span>VISIT ${rc.visit||''}</span></div>
@@ -1288,6 +1289,7 @@ function acctPart(SUB,id,unread,visits){
   h+=HIST.length?`<div class="card">${HIST.map(a=>`<div class="appt"><div class="hd"><span>${fmtDate(a.date)}</span><span>${id?'Kunjungan':'Visit'} ${a.visit}</span></div><div class="tag" style="margin:4px 0 8px">${esc(a.artist||'')}${a.artist_role?' · '+esc(a.artist_role.replace(' artist','')):''}</div>
   ${(a.items||[]).map(i=>`<div class="row"><span class="n">${esc(i.label)}${i.qty>1?' × '+i.qty:''}</span><span class="p">${rp(i.amount)}</span></div>`).join('')}
   ${a.discount_amount?`<div class="row disc"><span class="n">${esc(a.discount_label||(id?'Diskon':'Discount'))}</span><span class="p">−${rp(a.discount_amount)}</span></div>`:''}
+  ${a.voucher_amount?`<div class="row disc"><span class="n">🎁 ${esc(a.voucher_label||'Voucher')}</span><span class="p">−${rp(a.voucher_amount)}</span></div>`:''}
   ${a.coupon?`<div class="row disc"><span class="n">🏷 ${esc(a.coupon)}</span><span class="p"></span></div>`:''}
   <div class="row tot"><span class="n">Total</span><span class="p">${rp(a.total)}</span></div>
   ${a.note?`<p class="note">${id?'Catatan':'Note'}: ${esc(a.note)}</p>`:''}</div>`).join('')}</div>`
