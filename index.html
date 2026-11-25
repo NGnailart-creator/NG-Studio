@@ -347,6 +347,20 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 .igg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px;border-radius:14px;overflow:hidden}
 .igg span{aspect-ratio:4/5;background:var(--line) center/cover no-repeat}
 .igm{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:9.5px;letter-spacing:.2em;color:var(--muted)}
+
+/* welcome gate */
+.gate{position:fixed;inset:0;z-index:9997;background:var(--cream);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .5s}
+.gate.on{opacity:1}
+.gate .in{max-width:340px;width:100%;padding:28px;text-align:center}
+.gate img{width:86px;margin:0 auto 26px;display:block}
+.gate .eye{font-size:10px;letter-spacing:.3em;color:var(--muted)}
+.gate h1{font:400 40px 'Abhaya Libre',Georgia,serif;margin:10px 0 0;text-transform:none;letter-spacing:0;line-height:1.1}
+.gate p{font-size:13px;line-height:1.7;color:#4a4542;margin:12px 0 30px}
+.gate .btn{width:100%;padding:15px;margin-top:10px}
+.wifilink{display:none;text-align:center;font-size:11.5px;color:var(--muted);margin-top:14px;cursor:pointer}
+body.away .card.wifi,body.away .rulebanner{display:none}
+body.away .wifilink{display:block}
+body.away .igfold{margin-top:18px}
 </style>
 </head>
 <body>
@@ -375,6 +389,7 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
       <p style="margin-top:6px;white-space:pre-wrap" id="annText"></p>
     </div>
     <div class="rulebanner" data-go="rules"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><div><b data-t="noFoodTitle"></b><span data-t="noFoodSub"></span></div></div>
+    <p class="wifilink"><u data-mode="studio" data-t="atStudio"></u></p>
     <div class="fold igfold" id="igFold" style="text-align:left"><button class="frow" id="igRow"><span class="igic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></span><span class="ft"><b>@natasyagishelle.nailart</b><i data-t="igHint"></i></span><span class="fa">›</span></button><div class="foldb" id="igBody"></div></div>
     <div class="intro" id="introCard"><div class="tag" data-t="introTitle"></div><p style="margin-top:8px" data-t="introLead"></p><ul>
       <li><span>✦</span><b data-t="introA"></b></li><li><span>✦</span><b data-t="introB"></b></li><li><span>✦</span><b data-t="introC"></b></li><li><span>✦</span><b data-t="introD"></b></li><li><span>✦</span><b data-t="introE"></b></li></ul>
@@ -696,15 +711,33 @@ Object.assign(T,{
 });
 Object.assign(T,{igHint:{id:'Lihat set terbaru kami. Tag kami di set-mu.',en:'See our latest sets. Tag us in yours.'}});
 const IG_URL='https://instagram.com/natasyagishelle.nailart'; let IGP=null;
-async function loadIg(){ if(IGP)return IGP; const r=await sb.from('ngd_ig_photos').select('path').order('sort').order('created_at',{ascending:false}).limit(6); IGP=(r.data||[]).map(x=>sb.storage.from('ngd-ig').getPublicUrl(x.path).data.publicUrl); return IGP; }
-document.addEventListener('click',async e=>{ const row=e.target.closest('#igRow'); if(!row)return;
- const f=document.getElementById('igFold'); if(f.classList.contains('open')){ f.classList.remove('open'); return; }
- const ph=await loadIg(); if(!ph.length){ window.open(IG_URL,'_blank','noopener'); return; }
- const id=L==='id';
+Object.assign(T,{atStudio:{id:'Lagi di studio? Tampilkan WiFi',en:'At the studio? Show the WiFi'}});
+let MODE=null;
+async function openIg(scroll){ const f=document.getElementById('igFold'); const ph=await loadIg(); if(!ph.length) return false; const id=L==='id';
  document.getElementById('igBody').innerHTML=`<a class="igc" href="${IG_URL}" target="_blank" rel="noopener"><div class="igh"><div class="iga"><span>NG</span></div><div><b>natasyagishelle.nailart</b><i>Nail art studio · Bandung</i></div><span class="igf">FOLLOW</span></div>
   <div class="igg">${ph.map(u=>`<span style="background-image:url('${u}')"></span>`).join('')}</div>
   <div class="igm"><span>${id?'SET TERBARU':'OUR LATEST SETS'}</span><span>${id?'BUKA INSTAGRAM ›':'VIEW ON INSTAGRAM ›'}</span></div></a>`;
- openFold(f,true); });
+ if(scroll) openFold(f,true); else f.classList.add('open'); return true; }
+function setMode(m,remember){ MODE=m; document.body.classList.toggle('away',m==='away');
+ if(remember){ try{ localStorage.setItem('ngMode',JSON.stringify({m,d:new Date().toDateString()})); }catch(_){} }
+ const f=document.getElementById('igFold'); if(m==='away') openIg(false); else if(f) f.classList.remove('open'); }
+function initMode(){
+ const q=new URLSearchParams(location.search).get('at');
+ if(q==='studio'||q==='home'){ setMode(q==='studio'?'studio':'away',true); return; }
+ try{ const s=JSON.parse(localStorage.getItem('ngMode')||'null'); if(s&&s.d===new Date().toDateString()){ setMode(s.m,false); return; } }catch(_){}
+ const h=location.hash.slice(1); if(h&&h!=='studio'&&h!=='wifi'){ setMode('studio',false); return; }
+ const id=L==='id', logo=(document.querySelector('.hero img')||{}).src||'';
+ const g=document.createElement('div'); g.className='gate'; g.innerHTML=`<div class="in">${logo?`<img src="${logo}" alt="">`:''}<h1>${id?'Hai, selamat datang.':'Hi, welcome.'}</h1><p>${id?'Kamu sedang di studio sekarang?':'Are you at the studio right now?'}</p>
+  <button class="btn" data-gm="studio">${id?'Ya, aku di studio':"Yes, I'm here"}</button><button class="btn ghost" data-gm="away">${id?'Tidak, cuma lihat-lihat':'Not right now'}</button></div>`;
+ document.body.appendChild(g); requestAnimationFrame(()=>g.classList.add('on'));
+ g.addEventListener('click',e=>{ const b=e.target.closest('[data-gm]'); if(!b)return; setMode(b.dataset.gm,true); g.classList.remove('on'); setTimeout(()=>g.remove(),500); window.scrollTo(0,0); });
+}
+setTimeout(initMode,0);
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-mode]'); if(!b)return; setMode(b.dataset.mode,true); window.scrollTo({top:0,behavior:'smooth'}); });
+async function loadIg(){ if(IGP)return IGP; const r=await sb.from('ngd_ig_photos').select('path').order('sort').order('created_at',{ascending:false}).limit(6); IGP=(r.data||[]).map(x=>sb.storage.from('ngd-ig').getPublicUrl(x.path).data.publicUrl); return IGP; }
+document.addEventListener('click',async e=>{ const row=e.target.closest('#igRow'); if(!row)return;
+ const f=document.getElementById('igFold'); if(f.classList.contains('open')){ f.classList.remove('open'); return; }
+ if(!(await openIg(true))) window.open(IG_URL,'_blank','noopener'); });
 const PAGE_OF={wifi:'studio',rules:'studio',ask:'studio',dos:'studio',contact:'studio',prices:'menu',services:'menu',loyalty:'menu'};
 function openFold(f,scroll){ if(!f)return; f.classList.add('open'); if(scroll) setTimeout(()=>{ const hd=document.querySelector('header'); const y=f.getBoundingClientRect().top+window.scrollY-(hd?hd.offsetHeight:0)-10; window.scrollTo({top:Math.max(0,y),behavior:'smooth'}); },60); }
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-fold]'); if(!b)return; const f=b.closest('.fold'); const was=f.classList.contains('open'); f.classList.toggle('open'); if(!was) openFold(f,true); });
