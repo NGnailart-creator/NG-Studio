@@ -1289,7 +1289,7 @@ function acctPart(SUB,id,unread,visits){
   h+=HIST.length?`<div class="card">${HIST.map(a=>`<div class="appt"><div class="hd"><span>${fmtDate(a.date)}</span><span>${id?'Kunjungan':'Visit'} ${a.visit}</span></div><div class="tag" style="margin:4px 0 8px">${esc(a.artist||'')}${a.artist_role?' · '+esc(a.artist_role.replace(' artist','')):''}</div>
   ${(a.items||[]).map(i=>`<div class="row"><span class="n">${esc(i.label)}${i.qty>1?' × '+i.qty:''}</span><span class="p">${rp(i.amount)}</span></div>`).join('')}
   ${a.discount_amount?`<div class="row disc"><span class="n">${esc(a.discount_label||(id?'Diskon':'Discount'))}</span><span class="p">−${rp(a.discount_amount)}</span></div>`:''}
-  ${a.voucher_amount?`<div class="row disc"><span class="n">🎁 ${esc(a.voucher_label||'Voucher')}</span><span class="p">−${rp(a.voucher_amount)}</span></div>`:''}
+  ${a.voucher_amount?`<div class="row disc"><span class="n">${esc(a.voucher_label||'Voucher')}</span><span class="p">−${rp(a.voucher_amount)}</span></div>`:''}
   ${a.coupon?`<div class="row disc"><span class="n">🏷 ${esc(a.coupon)}</span><span class="p"></span></div>`:''}
   <div class="row tot"><span class="n">Total</span><span class="p">${rp(a.total)}</span></div>
   ${a.note?`<p class="note">${id?'Catatan':'Note'}: ${esc(a.note)}</p>`:''}</div>`).join('')}</div>`
