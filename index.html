@@ -755,7 +755,7 @@ const GLOOK=[['#141414','#141414','#FFF7EF','#141414'],['#FFFFFF','#E6D9CC','#14
 const gboxHtml=([b,e,r,w],big)=>big
  ?`<div class="gbox"><i class="bd" style="background:${b};border:1px solid ${e}"></i><i class="rv" style="background:${r}"></i><div class="gft-lid"><i class="ld" style="background:${b};border:1px solid ${e}"></i><i class="rl" style="background:${r}"></i><div class="gft-bow"><i class="bw1" style="border-color:${w}"></i><i class="bw2" style="border-color:${w}"></i></div></div></div>`
  :`<div class="gbox"><i class="bd" style="background:${b};border:1px solid ${e}"></i><i class="rv" style="background:${r}"></i><i class="ld" style="background:${b};border:1px solid ${e}"></i><i class="rl" style="background:${r}"></i><i class="bw1" style="border-color:${w}"></i><i class="bw2" style="border-color:${w}"></i></div>`;
-function maybeAutoGift(){ try{ const k='ngGiftShown-'+(ME&&ME.id); if(localStorage.getItem(k))return; localStorage.setItem(k,'1'); }catch(_){} setTimeout(openGift,500); }
+function maybeAutoGift(){ try{ const k='ngGiftSess-'+(ME&&ME.id); if(sessionStorage.getItem(k))return; sessionStorage.setItem(k,'1'); }catch(_){} setTimeout(openGift,500); }
 function openGift(){
  if(!GIFT||!GIFT.available||document.getElementById('gftOv'))return;
  const ov=document.createElement('div'); ov.id='gftOv'; ov.className='gft-ov';
