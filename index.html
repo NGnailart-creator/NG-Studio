@@ -313,6 +313,9 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 @keyframes gLid{35%{transform:translate(0,-6px) rotate(-2deg)}100%{transform:translate(-14px,-46px) rotate(-18deg)}}
 @keyframes gGlow{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1.15)}}
 
+/* next set */
+.redotop{display:flex;align-items:center;gap:16px}
+.redobig{font:400 22px 'Abhaya Libre',Georgia,serif;margin-top:4px;line-height:1.2}
 /* folds */
 .folds{margin-top:26px}
 .fold{margin-top:12px}
@@ -749,6 +752,7 @@ async function loadAccount(){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
   HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=callName(); const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
+  sb.rpc('ngd_client_redo_status').then(r=>{ REDO=r.data||null; if(VIEW==='account') renderAcct(); });
   sb.rpc('ngd_client_gift_status').then(r=>{ GIFT=r.data||null; renderAcct(); if(GIFT&&GIFT.available&&!MSG.some(x=>x.kind==='welcome'&&!x.read)) maybeAutoGift(); });
   setTimeout(showWelcome,600);
  }
@@ -769,7 +773,26 @@ function showWelcome(){
  const done=()=>{ m.read=true; sb.rpc('ngd_client_read_message',{p_message_id:m.id,p_occurrence:m.occurrence}); track('letter_opened',m.subject_en||m.subject_id||''); ov.style.opacity='0'; setTimeout(()=>ov.remove(),350); renderAcct(); if(GIFT&&GIFT.available) maybeAutoGift(); };
  ov.addEventListener('click',e=>{ if(e.target===ov||e.target.id==='welcomeGo') done(); });
 }
-let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null, GIFT=null;
+let CHATMODE='chat', MYPHOTO=null, MYPHOTO_PATH=null, GIFT=null, REDO=null;
+// ---------- Next set (redo) ----------
+function redoCard(id,compact){
+ const R=REDO; if(!R||!R.last) return '';
+ const d0=s=>new Date(s+'T00:00:00'), today=d0(new Date(Date.now()+7*3600e3).toISOString().slice(0,10));
+ const days=Math.round((today-d0(R.last))/864e5), left=Math.round((d0(R.ideal)-today)/864e5);
+ const f=s=>d0(s).toLocaleDateString(id?'id-ID':'en-GB',{day:'numeric',month:'short'});
+ const mon=d0(R.month).toLocaleDateString(id?'id-ID':'en-GB',{month:'long'});
+ const pct=Math.max(0,Math.min(1,days/28)), C=2*Math.PI*26;
+ let big,line;
+ if(days<21){ const w=Math.ceil(left/7); big=left<7?(id?`${left} hari lagi`:`${left} day${left===1?'':'s'} to go`):(id?`${w} minggu lagi`:`${w} week${w===1?'':'s'} to go`); line=id?`Waktu terbaik untuk set berikutnya: 3–5 minggu setelah set terakhir, sekitar <b>${f(R.from)} – ${f(R.to)}</b>.`:`The best time for your next set is 3–5 weeks after your last one — around <b>${f(R.from)} – ${f(R.to)}</b>.`; }
+ else if(days<=35){ big=id?'Saatnya set baru':'It\'s time for a fresh set'; line=id?`Kukumu siap untuk set baru, idealnya sebelum <b>${f(R.to)}</b>.`:`Your nails are ready for a new set — ideally before <b>${f(R.to)}</b>.`; }
+ else { big=id?'Waktunya refresh':'Time for a refresh'; line=id?'Sudah lebih dari 5 minggu sejak set terakhirmu.':'It has been over 5 weeks since your last set.'; }
+ const rm=R.reminder&&!R.reminder.done;
+ return `<div class="card redo"><div class="redotop"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="32" cy="32" r="26" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-dasharray="${(C*pct).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/><text x="32" y="26" text-anchor="middle" font-size="6.5" letter-spacing="1.5" fill="#8a8380">${id?'HARI KE':'DAY'}</text><text x="32" y="42" text-anchor="middle" font-size="17" font-family="Abhaya Libre,Georgia,serif" fill="var(--ink)">${Math.min(days,99)}</text></svg>
+  <div style="flex:1;min-width:0"><div class="tag" style="margin:0">${id?'Set berikutnya':'Your next set'}</div><div class="redobig">${big}</div></div></div>
+  <p class="note" style="margin-top:10px">${line}</p>
+  ${compact?'':rm?`<div class="info" style="margin-top:12px">✓ ${id?`Kami akan tag kamu di Instagram saat slot ${mon} dibuka.`:`We'll tag you on Instagram when the ${mon} slots open.`} <u data-redo="off" style="cursor:pointer;margin-left:4px">${id?'batalkan':'cancel'}</u></div>`
+   :`<button class="btn" data-redo="on" style="width:100%;margin-top:14px">${id?`Ingatkan untuk slot ${mon}`:`Remind me for ${mon} slots`}</button><button class="btn ghost" data-sub="book" style="width:100%;margin-top:8px">${id?'Booking sekarang':'Book now'}</button>`}</div>`;
+}
 // ---------- Pick a gift ----------
 const GLOOK=[['#141414','#141414','#FFF7EF','#141414'],['#FFFFFF','#E6D9CC','#141414','#141414'],['#E9DCCF','#E9DCCF','#FFFFFF','#CDB7A8'],['#F2E2DF','#F2E2DF','#141414','#141414'],['#FFF7EF','#D9C8B8','#C9A9A6','#C9A9A6'],['#CDB7A8','#CDB7A8','#FFF7EF','#A88F80']];
 const gboxHtml=([b,e,r,w],big)=>big
@@ -1303,13 +1326,13 @@ const noChatSwitch=s=>s.replace(/<div class="chatmode">[\s\S]*?<\/div>/,'');
 function acctBody(id,unread,visits){
  const P=k=>acctPart(k,id,unread,visits);
  if(SUB==='book') return P('book');
- if(SUB==='sets') return P('sets');
+ if(SUB==='sets') return P('sets')+redoCard(id);
  if(SUB==='card'){
   const act=CPN.filter(x=>x.status==='active').length;
   const ch=P('card'), i1=ch.indexOf('<!--TIERS-->'), i2=ch.indexOf('<!--ACH-->');
   const main=ch.slice(0,i1)+'</div>', tiers=ch.slice(i1,i2).replace(/<\/div>\s*$/,''), ach=ch.slice(i2);
   const A=ME.achievements||{}, nA=Object.keys(A).filter(k=>A[k]).length;
-  return main+`<div class="folds" style="margin-top:22px">`
+  return main+redoCard(id)+`<div class="folds" style="margin-top:22px">`
    +afold('coupons',id?'Kuponku':'My coupons',id?'Hadiah, voucher & kode diskon.':'Gifts, vouchers and discount codes.',act?act+(id?' aktif':' ready'):'',act>0,()=>P('coupons'))
    +afold('history',id?'Riwayat kunjungan':'My visits',id?'Setiap set yang pernah kita buat.':'Every set we have made together.',HIST.length||'',false,()=>P('history'))
    +afold('rewards',id?'Hadiah loyalty':'Loyalty rewards',id?'Apa yang kamu dapat di setiap kunjungan.':'What you get at every visit.','',false,()=>`<div class="card">${tiers}</div>`)
@@ -1344,6 +1367,7 @@ function confirmSheet(title,body,yes,no,onYes,onNo){
 
 document.addEventListener('click',async e=>{
  const g=e.target.closest('[data-go]'); if(g){show(g.dataset.go);return}
+ const rdb=e.target.closest('[data-redo]'); if(rdb){ const on=rdb.dataset.redo==='on'; const r=await sb.rpc('ngd_client_redo_remind',{p_on:on}); if(r.error)return toast(r.error.message); REDO=r.data; renderAcct(); if(on) toast(L==='id'?'Siap! Kami akan tag kamu di Instagram.':"Done. We'll tag you on Instagram."); return }
  const afb=e.target.closest('[data-afold]'); if(afb){const k=afb.dataset.afold; if(ACCFOLD.has(k)){ACCFOLD.delete(k);renderAcct();} else {ACCFOLD.add(k); ACCSCROLL=k; renderAcct(); if(k==='letters'&&OPEN)OPEN=null;} return}
  const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;track('tab',SUB);
   if(SUB==='book'&&BOOKINGS.some(x=>!x.seen)){sb.rpc('ngd_client_seen_bookings').then(()=>{});setTimeout(()=>{BOOKINGS.forEach(x=>x.seen=true)},1500)}
