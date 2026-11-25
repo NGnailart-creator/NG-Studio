@@ -32,7 +32,7 @@ nav.chips button.on{background:var(--ink);color:var(--cream);border-color:var(--
 .welcome{font-weight:300;font-style:italic;font-size:22px;letter-spacing:.12em;text-align:center;margin-top:4px}
 .seg{display:flex;gap:6px;overflow-x:auto;margin-top:22px;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
-.seg button{flex:none;font:400 10px Montserrat,sans-serif;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;position:relative}
+.seg button{flex:none;font:400 10px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);background:var(--white);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;position:relative}
 .seg button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .dot{position:absolute;top:3px;right:5px;width:6px;height:6px;border-radius:50%;background:#b0566a}
 .hello{display:flex;justify-content:space-between;align-items:center;gap:10px}.hello .btn{white-space:nowrap;flex:none}
@@ -312,6 +312,25 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 @keyframes gBow{to{transform:translateY(-22px) scale(.9);opacity:0}}
 @keyframes gLid{35%{transform:translate(0,-6px) rotate(-2deg)}100%{transform:translate(-14px,-46px) rotate(-18deg)}}
 @keyframes gGlow{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1.15)}}
+
+/* folds */
+.folds{margin-top:26px}
+.fold{margin-top:12px}
+.frow{display:flex;align-items:center;gap:14px;width:100%;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:15px 16px 15px 20px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);transition:border-color .25s,box-shadow .25s}
+.frow:hover{box-shadow:0 6px 20px rgba(0,0,0,.04)}
+.frow .ft{flex:1;min-width:0}
+.frow b{display:block;font:400 19px 'Abhaya Libre',Georgia,serif;letter-spacing:.01em;line-height:1.2}
+.frow i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:3px;letter-spacing:.02em;line-height:1.45}
+.frow .fc{flex:none;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:4px 9px;color:var(--muted)}
+.frow .fc.hot{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.frow .fa{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;transition:transform .35s ease,background .25s,color .25s}
+.fold.open>.frow{border-color:var(--ink)}
+.fold.open>.frow .fa{transform:rotate(90deg);background:var(--ink);color:var(--white);border-color:var(--ink)}
+.foldb{display:none;padding:0 2px 10px}
+.fold.open>.foldb{display:block;animation:fade .35s ease}
+.foldb>.card:first-child,.foldb>.tabs:first-child,.foldb>.bigrule:first-child,.foldb>div:first-child{margin-top:14px}
+.ghead{text-align:center;margin:26px 0 4px}
+.ghead p{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -327,7 +346,8 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
 </header>
 
 <main class="wrap" style="padding-bottom:60px">
-  <section class="hero" id="wifi">
+  <section id="studio">
+  <div class="hero">
     <img src="data:image/png;base64,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" alt="">
     <p class="welcome" data-t="welcome"></p>
     <div class="card wifi">
@@ -342,12 +362,9 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
     <div class="intro" id="introCard"><div class="tag" data-t="introTitle"></div><p style="margin-top:8px" data-t="introLead"></p><ul>
       <li><span>✦</span><b data-t="introA"></b></li><li><span>✦</span><b data-t="introB"></b></li><li><span>✦</span><b data-t="introC"></b></li><li><span>✦</span><b data-t="introD"></b></li><li><span>✦</span><b data-t="introE"></b></li></ul>
       <button class="btn" style="width:100%;padding:12px" data-go="login" data-t="introBtn"></button></div>
-  </section>
-
-  <section id="rules">
-    <h2 data-t="rulesTitle"></h2>
-    <div class="sub" data-t="rulesSub"></div>
-    <div class="bigrule"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><h3 data-t="noFoodTitle"></h3><p class="note" style="margin:0" data-t="noFoodWhy"></p></div>
+  </div>
+    <div class="folds">
+<div class="fold" id="rules"><button class="frow" data-fold><span class="ft"><b data-t="f_rules"></b><i data-t="f_rules_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="bigrule"><svg class="nofood" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><path d="M24 17v13a4 4 0 0 0 8 0V17M28 17v30M40 17c-3 2-4 6-4 10s1 6 4 6v14"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg><h3 data-t="noFoodTitle"></h3><p class="note" style="margin:0" data-t="noFoodWhy"></p></div>
     <div class="card"><div class="tag" data-t="notAllowed"></div><ul class="rlist" style="margin-top:6px">
       <li><span class="ic no">✕</span><span data-t="ruleFood"></span></li>
       <li><span class="ic no" style="border:0"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="28"/><ellipse cx="32" cy="40" rx="8" ry="6.5"/><circle cx="21" cy="29" r="3.5"/><circle cx="27.5" cy="22" r="3.5"/><circle cx="36.5" cy="22" r="3.5"/><circle cx="43" cy="29" r="3.5"/><path d="M12.5 12.5l39 39" stroke-width="3"/></svg></span><span data-t="rulePets"></span></li>
@@ -356,16 +373,31 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
       <li><span class="ic yes">☕</span><span data-t="ruleDrinks"></span></li>
       <li><span class="ic yes">✓</span><span data-t="ruleSnacks"></span></li>
     </ul></div>
+  </div></div>
+<div class="fold" id="ask"><button class="frow" data-fold><span class="ft"><b data-t="f_ask"></b><i data-t="f_ask_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="card"><ul class="list" id="askList"></ul></div>
+  </div></div>
+<div class="fold" id="dos"><button class="frow" data-fold><span class="ft"><b data-t="f_dos"></b><i data-t="f_dos_h"></i></span><span class="fa">›</span></button><div class="foldb"><div style="margin-top:26px" id="dosList"></div>
+  </div></div>
+<div class="fold" id="contact"><button class="frow" data-fold><span class="ft"><b data-t="f_contact"></b><i data-t="f_contact_h"></i></span><span class="fa">›</span></button><div class="foldb"><a class="card linkcard" href="https://instagram.com/natasyagishelle.nailart" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M15.5 12a3.5 3.5 0 1 1-1.2-2.6M15.5 12v1.2a1.8 1.8 0 0 0 3.6 0V12"/></svg>
+      <div><div class="tag">Instagram</div><div class="v">@natasyagishelle.nailart</div><small data-t="igNote"></small></div><span class="arr">→</span>
+    </a>
+    <a class="card linkcard" href="https://maps.app.goo.gl/stbt8p5nuJvAo73T9" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+      <div><div class="tag">Google Maps</div><div class="v" data-t="mapName"></div><small data-t="mapNote"></small></div><span class="arr">→</span>
+    </a>
+  </div></div>
+    </div>
   </section>
-
-  <section id="prices">
-    <h2 data-t="priceTitle"></h2>
-    <div class="sub">NG Nailart</div>
-    <div class="tabs"><button class="on" data-tab="owner">By NG</button><button data-tab="team">By Team</button></div>
+  <section id="menu">
+    <h2 data-t="menuTitle"></h2>
+    <div class="sub" data-t="menuSub"></div>
+    <div class="folds">
+<div class="fold" id="prices"><button class="frow" data-fold><span class="ft"><b data-t="f_base"></b><i data-t="f_base_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="tabs"><button class="on" data-tab="owner">By NG</button><button data-tab="team">By Team</button></div>
     <div class="card" id="priceBase"></div>
 
-    <h3 style="text-align:center;margin-top:40px" data-t="designTitle"></h3>
-    <div class="card">
+    </div></div>
+<div class="fold" id="f-design"><button class="frow" data-fold><span class="ft"><b data-t="f_design"></b><i data-t="f_design_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="card">
       <div class="tag" data-t="designSame"></div>
       <div id="designSame" style="margin-top:8px"></div>
       <div class="unit" data-t="perNail"></div>
@@ -376,44 +408,25 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
       <div class="unit" data-t="perNail"></div>
     </div>
 
-    <h3 style="text-align:center;margin-top:40px">Omakase Design</h3>
-    <div class="card">
+    </div></div>
+<div class="fold" id="f-omakase"><button class="frow" data-fold><span class="ft"><b data-t="f_omakase"></b><i data-t="f_omakase_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="card">
       <p data-t="omakaseText" style="text-align:center"></p>
       <div id="omakase" style="margin-top:14px"></div>
     </div>
 
-    <h3 style="text-align:center;margin-top:40px">Add-On</h3>
-    <div class="card" id="addon"></div>
-  </section>
-
-  <section id="services">
-    <h2 data-t="svcTitle"></h2>
-    <div class="sub" data-t="svcSub"></div>
-    <div id="svcList"></div>
-  </section>
-
-  <section id="loyalty">
-    <h2>Loyalty Card</h2>
-    <div class="sub" data-t="loyaltySub"></div>
-    <div class="card">
+    </div></div>
+<div class="fold" id="f-addon"><button class="frow" data-fold><span class="ft"><b data-t="f_addon"></b><i data-t="f_addon_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="card" id="addon"></div>
+  </div></div>
+<div class="fold" id="services"><button class="frow" data-fold><span class="ft"><b data-t="f_services"></b><i data-t="f_services_h"></i></span><span class="fa">›</span></button><div class="foldb"><div id="svcList"></div>
+  </div></div>
+<div class="fold" id="loyalty"><button class="frow" data-fold><span class="ft"><b data-t="f_loyalty"></b><i data-t="f_loyalty_h"></i></span><span class="fa">›</span></button><div class="foldb"><div class="card">
       <div id="lcPublic"></div>
       <div class="tiers" id="tiers"></div>
       <p class="note" data-t="loyaltyNote"></p>
     </div>
+  </div></div>
+    </div>
   </section>
-
-  <section id="ask">
-    <h2 data-t="askTitle"></h2>
-    <div class="sub" data-t="askSub"></div>
-    <div class="card"><ul class="list" id="askList"></ul></div>
-  </section>
-
-  <section id="dos">
-    <h2>Do's &amp; Don'ts</h2>
-    <div class="sub" data-t="dosSub"></div>
-    <div style="margin-top:26px" id="dosList"></div>
-  </section>
-
   <section id="book">
     <h2>How to Book</h2>
     <div class="sub">NG Nailart</div>
@@ -430,18 +443,6 @@ footer a{color:var(--ink);font-size:11px;letter-spacing:.3em;text-decoration:non
     <h2>Love Notes</h2>
     <div class="sub" data-t="loveSub"></div>
     <div id="loveWall"></div>
-  </section>
-  <section id="contact">
-    <h2 data-t="contactTitle"></h2>
-    <div class="sub" data-t="contactSub"></div>
-    <a class="card linkcard" href="https://instagram.com/natasyagishelle.nailart" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M15.5 12a3.5 3.5 0 1 1-1.2-2.6M15.5 12v1.2a1.8 1.8 0 0 0 3.6 0V12"/></svg>
-      <div><div class="tag">Instagram</div><div class="v">@natasyagishelle.nailart</div><small data-t="igNote"></small></div><span class="arr">→</span>
-    </a>
-    <a class="card linkcard" href="https://maps.app.goo.gl/stbt8p5nuJvAo73T9" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
-      <div><div class="tag">Google Maps</div><div class="v" data-t="mapName"></div><small data-t="mapNote"></small></div><span class="arr">→</span>
-    </a>
   </section>
   <section id="login">
     <div class="login-wrap">
@@ -505,7 +506,7 @@ loginLead:{id:'Masuk untuk melihat loyalty card, riwayat treatment, kupon, dan p
 copied:{id:'Disalin',en:'Copied'},
 previewOnly:{id:'Login belum aktif di preview',en:'Login is not active in this preview'}
 };
-const NAV=[['wifi',{id:'WiFi',en:'WiFi'}],['rules',{id:'Aturan',en:'Rules'}],['prices',{id:'Harga',en:'Prices'}],['services',{id:'Layanan',en:'Services'}],['loyalty',{id:'Loyalty',en:'Loyalty'}],['ask',{id:'Boleh Diminta',en:'Just Ask'}],['dos',{id:"Do's & Don'ts",en:"Do's & Don'ts"}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['love',{id:'Love Notes',en:'Love Notes'}],['contact',{id:'Kontak',en:'Contact'}]];
+const NAV=[['studio',{id:'Studio',en:'Studio'}],['menu',{id:'Menu',en:'Menu'}],['book',{id:'Booking',en:'Booking'}],['colors',{id:'Warna',en:'Colors'}],['love',{id:'Love Notes',en:'Love Notes'}]];
 
 const F='FAV';
 let PRICE={
@@ -661,20 +662,38 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 const CLIENT_EMAIL = u => `${u.trim().toLowerCase()}@client.ng-nailart.example`;
 let LOVE=[];
 let NOJR=false;
-let VIEW='wifi', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[], POSTS=[], SETS=[], SETIMG={}, SETOPT={}, ACHOPEN=null;
-const SECTIONS=['wifi','rules','prices','services','loyalty','ask','dos','book','colors','love','contact','login','account'];
+let VIEW='studio', LOGGED=false, SUB='card', OPEN=null, ME=null, HIST=[], CPN=[], MSG=[], ARTISTS=[], POSTS=[], SETS=[], SETIMG={}, SETOPT={}, ACHOPEN=null;
+const SECTIONS=['studio','menu','book','colors','love','login','account'];
+Object.assign(T,{
+ menuTitle:{id:'Menu',en:'Menu'}, menuSub:{id:'Harga, layanan & loyalty',en:'Prices, services & loyalty'},
+ f_rules:{id:'Aturan studio',en:'Studio rules'}, f_rules_h:{id:'Tanpa makanan dan hewan. Minuman boleh.',en:'No food, no pets. Drinks are welcome.'},
+ f_ask:{id:'Boleh diminta',en:'Just ask'}, f_ask_h:{id:'Hal kecil yang dengan senang hati kami bantu.',en:'Little things we are happy to help with.'},
+ f_dos:{id:"Do's & Don'ts",en:"Do's & Don'ts"}, f_dos_h:{id:'Supaya set-mu awet lebih lama.',en:'How to make your set last.'},
+ f_contact:{id:'Kontak',en:'Contact'}, f_contact_h:{id:'Instagram dan Google Maps.',en:'Instagram and Google Maps.'},
+ f_base:{id:'Base, remove & press-on',en:'Base, removal & press-on'}, f_base_h:{id:'Harga dasar per nail artist.',en:'Starting prices by nail artist.'},
+ f_design:{id:'Design',en:'Design'}, f_design_h:{id:'Harga per kuku, sesuai level.',en:'Per nail, by level.'},
+ f_omakase:{id:'Omakase design',en:'Omakase design'}, f_omakase_h:{id:'Serahkan desainnya pada kami.',en:'Leave the design to us.'},
+ f_addon:{id:'Add-on',en:'Add-on'}, f_addon_h:{id:'Sentuhan ekstra.',en:'Little extras.'},
+ f_services:{id:'Layanan',en:'Services'}, f_services_h:{id:'Apa saja yang termasuk, dan berapa lama.',en:'What each includes, and how long it takes.'},
+ f_loyalty:{id:'Loyalty card',en:'Loyalty card'}, f_loyalty_h:{id:'Semakin sering datang, semakin banyak bonusnya.',en:'The more you visit, the more you get.'}
+});
+const PAGE_OF={wifi:'studio',rules:'studio',ask:'studio',dos:'studio',contact:'studio',prices:'menu',services:'menu',loyalty:'menu'};
+function openFold(f,scroll){ if(!f)return; f.classList.add('open'); if(scroll) setTimeout(()=>{ const hd=document.querySelector('header'); const y=f.getBoundingClientRect().top+window.scrollY-(hd?hd.offsetHeight:0)-10; window.scrollTo({top:Math.max(0,y),behavior:'smooth'}); },60); }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-fold]'); if(!b)return; const f=b.closest('.fold'); const was=f.classList.contains('open'); f.classList.toggle('open'); if(!was) openFold(f,true); });
+
 const rp = n => 'Rp ' + (Math.round(+n||0)).toLocaleString('id-ID');
 const fmtDate = d => { try { return new Date(d+'T00:00:00').toLocaleDateString(L==='id'?'id-ID':'en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(_){ return d; } };
 
 function show(v){
- if(!SECTIONS.includes(v))v='wifi';
+ let fold=null; if(PAGE_OF[v]){ fold=v==='wifi'?null:document.getElementById(v); v=PAGE_OF[v]; }
+ if(!SECTIONS.includes(v))v='studio';
  if(v==='account'&&!LOGGED)v='login';
  if(v==='login'&&LOGGED)v='account';
  VIEW=v;
  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('on',s.id===v));
  try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v)}catch(_){}
  window.scrollTo(0,0);
- render();
+ render(); if(fold) openFold(fold,true);
  {const ch=document.querySelector('#chips'),on=ch&&ch.querySelector('button.on'); if(on){const l=on.offsetLeft-ch.offsetLeft,r=l+on.offsetWidth; if(r<ch.scrollLeft||l>ch.scrollLeft+ch.clientWidth) ch.scrollLeft=Math.max(0,l-22);}}
 }
 window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
@@ -832,7 +851,7 @@ let BOOKINGS=[], BK={step:0,setup:null,artist:null,svc:[],note:'',avail:null,dat
 let PROFILE={};
 const REFERRALS=[['Instagram','Instagram'],['TikTok','TikTok'],['Friend / family referral','Teman / keluarga'],['Google Maps','Google Maps'],['Walk-in / passing by','Lewat / mampir'],['Event / bazaar','Event / bazaar'],['Other','Lainnya']];
 const profileMissing=()=>!PROFILE.phone||!PROFILE.instagram||!PROFILE.area||!PROFILE.birthday||!PROFILE.referral||!PROFILE.since;
-const SUBS=[['card',{id:'Kartu',en:'Card'}],['profile',{id:'Profil',en:'Profile'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['chat',{id:'Chat',en:'Chat'}],['history',{id:'Riwayat',en:'History'}],['coupons',{id:'Kupon',en:'Coupons'}],['letters',{id:'Surat',en:'Letters'}],['note',{id:'Catatan',en:'My Notes'}],['feedback',{id:'Masukan',en:'Feedback'}]];
+const SUBS=[['card',{id:'My Card',en:'My Card'}],['book',{id:'Booking',en:'Book'}],['sets',{id:"Today's Set",en:"Today's Set"}],['girl',{id:'Girl Talk',en:'Girl Talk'}],['dear',{id:'Dear NG',en:'Dear NG'}]];
 
 const RTHEMES=[['Ivory','#faf8f4','#e7e3de','#e2a6ad','#1b1b1b','#8a8580'],['Blush','#fdf5f4','#efdedb','#c98b93','#3a2a2c','#9b8285'],['Sage','#f7f8f3','#dde3d6','#a3b496','#27302a','#7f8a80'],['Latte','#fbf6ee','#e7dacb','#b8936f','#3b2e24','#8f7d6c'],['Lavender','#faf8fd','#e4dfee','#b4a5d3','#2e2838','#857d94'],['Mist','#f6f8fa','#dbe3ea','#9cb3c6','#24303a','#7b8893'],['Noir','#1f1d1c','#d9d4ce','#e2a6ad','#f4efe9','#a8a19a']];
 const themeVars=i=>{const t=RTHEMES[i];return `--paper:${t[1]};--wall:${t[2]};--pin:${t[3]};--ink2:${t[4]};--faint:${t[5]}`};
@@ -929,6 +948,7 @@ async function downloadSet(id){
   const a=document.createElement('a'); a.href=url; a.download='ng-nailart-todays-set.png'; document.body.appendChild(a); a.click(); a.remove(); await count();
  }catch(err){ el.style.borderRadius=''; if(err&&err.name==='AbortError')return; toast(L==='id'?'Gagal membuat gambar, coba lagi':'Could not create the image, please try again'); }
 }
+function loveItemsHtml(){ const lid=L==='id'; const r=LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">${n.photo?`<span class="lvav" data-lvph="${esc(n.photo)}"></span>`:''}— ${esc(n.name)}${n.visits?` · <span class="visits">♡ ${n.visits}${lid?'× di NG Nailart':' visits at NG Nailart'}</span>`:''}${n.since?` · ${lid?'klien sejak':'client since'} ${new Date(n.since+'T00:00:00').toLocaleDateString(lid?'id-ID':'en-GB',{month:'short',year:'numeric'})}`:''} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join(''); setTimeout(fillLoveAvatars,0); return r; }
 async function reloadLove(){ const r=await sb.rpc('ngd_public_love_notes'); LOVE=r.data||[]; renderLove(); }
 function fillLoveAvatars(){ document.querySelectorAll('[data-lvph]').forEach(async s=>{ if(s.dataset.done)return; s.dataset.done='1'; const b=await cachedImage('ngd-client-photos',s.dataset.lvph); if(b) s.style.backgroundImage=`url(${URL.createObjectURL(b)})`; else s.remove(); }); }
 function renderLove(){
@@ -936,7 +956,7 @@ function renderLove(){
  const lid=L==='id', cta=`<div class="card" style="text-align:center;margin-bottom:16px"><div class="tag">${lid?'Tulis love note':'Write a love note'}</div>
   <p class="note" style="margin:8px 0 12px">${lid?'Ceritakan pengalamanmu di NG Nailart. Love note tampil di sini setelah dicek studio, dengan nama lengkap, nama depan, atau inisial saja.':'Share your NG Nailart experience. Love notes appear here after the studio checks them, with your full name, first name or just your initials.'}</p>
   <button class="btn" data-writelove>${lid?'Tulis love note ♡':'Write a love note ♡'}</button></div>`;
- el.innerHTML=cta+(LOVE.length?LOVE.map(n=>`<div class="lovenote"><div class="body">${esc(n.body)}</div><div class="who">${n.photo?`<span class="lvav" data-lvph="${esc(n.photo)}"></span>`:''}— ${esc(n.name)}${n.visits?` · <span class="visits">♡ ${n.visits}${lid?'× di NG Nailart':' visits at NG Nailart'}</span>`:''}${n.since?` · ${lid?'klien sejak':'client since'} ${new Date(n.since+'T00:00:00').toLocaleDateString(lid?'id-ID':'en-GB',{month:'short',year:'numeric'})}`:''} · ${fmtDate(n.date)}${n.liked_by?` · <span style="color:#b0566a">♥ ${esc(n.liked_by)}</span>`:''}</div>${n.reply?`<div class="rep"><b>${esc(n.reply.author)}:</b> ${esc(n.reply.body)}</div>`:''}</div>`).join('')
+ el.innerHTML=cta+(LOVE.length?loveItemsHtml()
   :`<p class="note" style="text-align:center;margin-top:20px">${L==='id'?'Segera hadir.':'Coming soon.'}</p>`);
 }
 const BST={awaiting_dp:{en:'Waiting for DP',id:'Menunggu DP'},awaiting_approval:{en:'Checking your DP',id:'DP sedang dicek'},confirmed:{en:'Confirmed',id:'Terkonfirmasi'},rejected:{en:'Not approved',id:'Tidak disetujui'},cancelled:{en:'Cancelled',id:'Dibatalkan'},expired:{en:'Expired',id:'Kedaluwarsa'}};
@@ -1106,6 +1126,7 @@ function renderAcct(){
    <button class="btn" id="setPin">${id?'Simpan PIN':'Save PIN'}</button></div>`;
   return;
  }
+ normSub();
  const unread=MSG.some(x=>!x.read);
  const visits=ME.visits||0;
  if(ME.photo_path&&MYPHOTO_PATH!==ME.photo_path) loadMyPhoto();
@@ -1117,7 +1138,25 @@ function renderAcct(){
    return `<div class="setbanner" style="cursor:default"><span style="font-size:20px">🎂</span><div><b>${id?'Hadiah ulang tahun: diskon 10%':'Birthday treat: 10% off'}</b><br><span style="font-size:12px">${id?`Untuk satu kunjungan antara ${f(w.from)} – ${f(w.to)}. Tidak bisa digabung dengan hadiah loyalty.`:`For one visit between ${f(w.from)} – ${f(w.to)}. Can't be combined with a loyalty reward.`}</span></div></div>`;})()}
  ${GIFT&&GIFT.available?`<div class="setbanner" data-giftopen style="cursor:pointer"><span style="font-size:18px">🎁</span><div><b>A little something is waiting.</b><br><span style="font-size:12px">Tap to pick your gift.</span></div></div>`:''}
  ${SETS.some(x=>!x.seen)&&SUB!=='sets'?(()=>{const x=SETS.find(y=>!y.seen);return `<div class="setbanner" data-sub="sets"><span style="font-size:20px">♡</span><div><b>${esc(x.from||'Your nail artist')} ${id?'membuatkan Today\'s Set untukmu':'made your Today\'s Set'}</b><small>${id?'Ketuk untuk melihat & download':'Tap to view & download'}</small></div></div>`})():''}
- <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='letters'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='profile'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
+ <div class="seg">${SUBS.map(([k,n])=>`<button data-sub="${k}" class="${k===SUB?'on':''}">${n[L]}${(k==='dear'&&unread)||(k==='sets'&&SETS.some(x=>!x.seen))||(k==='book'&&BOOKINGS.some(x=>!x.seen))||(k==='card'&&profileMissing())?'<span class="dot"></span>':''}</button>`).join('')}</div>`;
+ h+=acctBody(id,unread,visits);
+ const oldSeg=el.querySelector('.seg'), segX=oldSeg?oldSeg.scrollLeft:0;
+ el.innerHTML=h;
+ {const nw=el.querySelector('.seg');
+  if(oldSeg&&nw&&oldSeg.children.length===nw.children.length){
+   [...nw.children].forEach((b,k)=>{const o=oldSeg.children[k];o.className=b.className;o.dataset.sub=b.dataset.sub;if(o.innerHTML!==b.innerHTML)o.innerHTML=b.innerHTML;});
+   nw.replaceWith(oldSeg);
+  }
+  const sg=el.querySelector('.seg');
+  if(sg&&oldSeg){sg.scrollLeft=segX;requestAnimationFrame(()=>{sg.scrollLeft=segX;});}
+  if(sg){const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(r<sg.scrollLeft||l>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=Math.max(0,l-12);}}}
+ if(ACCSCROLL){ const f=el.querySelector(`[data-afk="${ACCSCROLL}"]`); ACCSCROLL=null; if(f) openFold(f,true); }
+ if(SUB==='sets'){fitStories(); el.querySelectorAll('.story img').forEach(i=>i.addEventListener('load',fitStories));}
+ const fa=$('#fbArtist'); if(fa){ $('#anonRow').style.display=fa.value==='Owner'?'flex':'none'; }
+}
+
+function acctPart(SUB,id,unread,visits){
+ let h='';
  if(SUB==='card'){
   const v10=visits%10===0&&visits>0?10:visits%10;
   const next=TIERS.find(t=>t[0]>v10);
@@ -1128,10 +1167,10 @@ function renderAcct(){
   ${(ME.saved_rewards||[]).filter(r=>r.use_by>visits).map(r=>{const t=TIERS.find(x=>x[0]===r.cycle);return `<div class="info" style="text-align:center;margin-bottom:10px">🎁 ${id?`Hadiah tersimpan: <b>Kunjungan ${r.cycle}</b>${t?' — '+t[1].id:''}<br><span style="font-size:11px;color:var(--muted)">Bisa dipakai sampai kunjungan ke-${r.use_by}. Satu hadiah per kunjungan.</span>`:`Saved reward: <b>Visit ${r.cycle}</b>${t?' — '+t[1].en:''}<br><span style="font-size:11px;color:var(--muted)">Use it by visit ${r.use_by}. One reward per visit.</span>`}</div>`}).join('')}
   ${next?`<div class="info" style="text-align:center">${id?`${next[0]-v10} kunjungan lagi menuju <b>Kunjungan ${next[0]}</b>: ${next[1].id}`:`${next[0]-v10} more visit(s) to <b>Visit ${next[0]}</b>: ${next[1].en}`}</div>`:''}
   ${ME.birthday?'':`<div class="info" style="margin-top:14px">🎂 ${id?'Isi tanggal ulang tahunmu untuk mendapat hadiah ulang tahun dari kami:':'Add your birthday to receive a birthday gift from us:'}<div class="row" style="gap:8px;margin-top:8px;border:0;padding:0"><input type="date" id="bdayIn" style="flex:1;font:400 13px Montserrat,sans-serif;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--white)"><button class="btn" id="bdaySave">${id?'Simpan':'Save'}</button></div><p class="note" style="margin-top:6px">${id?'Hanya bisa diisi sekali.':'This can only be set once.'}</p></div>`}
-  <div class="tiers">${TIERS.map(([n,d])=>`<div class="row"><span class="n"><b>${id?'Kunjungan':'Visit'} ${n}</b>${n<=v10?`<br><i style="font-size:10px;color:var(--muted)">${id?'sudah tercapai':'reached'}</i>`:''}</span><span class="p" style="white-space:normal;max-width:58%">${d[L]}</span></div>`).join('')}</div></div>`;
+  <!--TIERS--><div class="tiers">${TIERS.map(([n,d])=>`<div class="row"><span class="n"><b>${id?'Kunjungan':'Visit'} ${n}</b>${n<=v10?`<br><i style="font-size:10px;color:var(--muted)">${id?'sudah tercapai':'reached'}</i>`:''}</span><span class="p" style="white-space:normal;max-width:58%">${d[L]}</span></div>`).join('')}</div></div>`;
   const ACH=[['ig_follow',{id:'Follow & tag kami di Instagram',en:'Following and tagging us on Instagram'}],['share_look',{id:'Membagikan nail look & pengalamanmu',en:'Sharing your nail looks and experience with us'}],['google_review',{id:'Review dengan foto di Google',en:'Leaving a thoughtful review with photos on Google'}],['referral',{id:'Mereferensikan kami ke teman',en:'Referring us to a friend who would love our work'}],['new_design',{id:'Mencoba desain atau koleksi baru kami',en:'Trying our new designs or collections'}]];
   const A=ME.achievements||{};
-  h+=`<div class="card"><div class="tag" style="text-align:center">${id?'Dukung perjalanan kami':'Support our growth'}</div>
+  h+=`<!--ACH--><div class="card"><div class="tag" style="text-align:center">${id?'Dukung perjalanan kami':'Support our growth'}</div>
    <p class="note" style="text-align:center">${id?'Kami mengundangmu menikmati lebih banyak sambil mendukung perkembangan kami dengan:':'We invite you to enjoy more as you support our growth by:'}</p>
    <ul class="ach" style="margin-top:6px">${ACH.map(([k,t])=>{const rq=(ME.ach_requests||{})[k];
      return `<li><span class="bx${A[k]?' on':''}">${A[k]?'✓':''}</span><span style="flex:1">${t[L]}${A[k]?'':rq?`<span class="achst">${id?'Menunggu dicek tim':'Waiting for our team to check'} · <u data-achcancel="${k}">${id?'batalkan':'cancel'}</u></span>`:`<span class="achst"><u data-achreq="${k}">${id?'Sudah? Minta dicentang':'Done this? Ask us to tick it'}</u></span>`}
@@ -1248,18 +1287,51 @@ function renderAcct(){
   <label class="chk" id="anonRow"><input type="checkbox" id="anon"> <span>${id?'Kirim sebagai anonim':'Send anonymously'}</span></label>
   <button class="btn" style="width:100%;margin-top:18px" id="sendFb">${id?'Kirim':'Send'}</button></div>`;
  }
- const oldSeg=el.querySelector('.seg'), segX=oldSeg?oldSeg.scrollLeft:0;
- el.innerHTML=h;
- {const nw=el.querySelector('.seg');
-  if(oldSeg&&nw&&oldSeg.children.length===nw.children.length){
-   [...nw.children].forEach((b,k)=>{const o=oldSeg.children[k];o.className=b.className;o.dataset.sub=b.dataset.sub;if(o.innerHTML!==b.innerHTML)o.innerHTML=b.innerHTML;});
-   nw.replaceWith(oldSeg);
-  }
-  const sg=el.querySelector('.seg');
-  if(sg&&oldSeg){sg.scrollLeft=segX;requestAnimationFrame(()=>{sg.scrollLeft=segX;});}
-  if(sg){const on=sg.querySelector('.on');if(on){const l=on.offsetLeft-sg.offsetLeft,r=l+on.offsetWidth;if(r<sg.scrollLeft||l>sg.scrollLeft+sg.clientWidth)sg.scrollLeft=Math.max(0,l-12);}}}
- if(SUB==='sets'){fitStories(); el.querySelectorAll('.story img').forEach(i=>i.addEventListener('load',fitStories));}
- const fa=$('#fbArtist'); if(fa){ $('#anonRow').style.display=fa.value==='Owner'?'flex':'none'; }
+ return h;
+}
+const ACCFOLD=new Set(); let ACCSCROLL=null;
+const OLDSUB={profile:['card','profile'],history:['card','history'],coupons:['card','coupons'],letters:['dear','letters'],note:['dear','note'],feedback:['dear','feedback']};
+function normSub(){
+ if(SUB==='chat'){ const m=CHATMODE==='love'?['girl','write']:['dear','message']; SUB=m[0]; ACCFOLD.add(m[1]); ACCSCROLL=m[1]; }
+ else if(OLDSUB[SUB]){ const m=OLDSUB[SUB]; SUB=m[0]; ACCFOLD.add(m[1]); ACCSCROLL=m[1]; }
+ if(!['card','book','sets','girl','dear'].includes(SUB)) SUB='card';
+}
+function afold(k,title,hint,count,hot,content){ const open=ACCFOLD.has(k);
+ return `<div class="fold${open?' open':''}" data-afk="${k}"><button class="frow" data-afold="${k}"><span class="ft"><b>${title}</b><i>${hint}</i></span>${count!=null&&count!==''?`<span class="fc${hot?' hot':''}">${count}</span>`:''}<span class="fa">›</span></button>${open?`<div class="foldb">${content()}</div>`:''}</div>`; }
+function withMode(m,fn){ const o=CHATMODE; CHATMODE=m; try{ return fn(); } finally{ CHATMODE=o; } }
+const noChatSwitch=s=>s.replace(/<div class="chatmode">[\s\S]*?<\/div>/,'');
+function acctBody(id,unread,visits){
+ const P=k=>acctPart(k,id,unread,visits);
+ if(SUB==='book') return P('book');
+ if(SUB==='sets') return P('sets');
+ if(SUB==='card'){
+  const act=CPN.filter(x=>x.status==='active').length;
+  const ch=P('card'), i1=ch.indexOf('<!--TIERS-->'), i2=ch.indexOf('<!--ACH-->');
+  const main=ch.slice(0,i1)+'</div>', tiers=ch.slice(i1,i2).replace(/<\/div>\s*$/,''), ach=ch.slice(i2);
+  const A=ME.achievements||{}, nA=Object.keys(A).filter(k=>A[k]).length;
+  return main+`<div class="folds" style="margin-top:22px">`
+   +afold('coupons',id?'Kuponku':'My coupons',id?'Hadiah, voucher & kode diskon.':'Gifts, vouchers and discount codes.',act?act+(id?' aktif':' ready'):'',act>0,()=>P('coupons'))
+   +afold('history',id?'Riwayat kunjungan':'My visits',id?'Setiap set yang pernah kita buat.':'Every set we have made together.',HIST.length||'',false,()=>P('history'))
+   +afold('rewards',id?'Hadiah loyalty':'Loyalty rewards',id?'Apa yang kamu dapat di setiap kunjungan.':'What you get at every visit.','',false,()=>`<div class="card">${tiers}</div>`)
+   +afold('support',id?'Dukung perjalanan kami':'Support our growth',id?'Follow, share & review, dapat lebih banyak.':'Follow, share and review to enjoy more.',nA?nA+'/'+5:'',false,()=>ach.replace('<!--ACH-->',''))
+   +afold('profile',id?'Profilku':'My profile',id?'Kontak, ulang tahun & nama panggilan.':'Contact, birthday and what we call you.',profileMissing()?(id?'lengkapi':'complete'):'',profileMissing(),()=>P('profile'))
+   +`</div>`;
+ }
+ if(SUB==='girl'){
+  return `<div class="ghead"><h2>Girl Talk</h2><p>${id?'Love notes dari klien NG. Baca, dan bagikan ceritamu.':'Love notes from the NG girls. Read them, and share yours.'}</p></div><div class="folds">`
+   +afold('write',id?'Tulis love note':'Write a love note',id?'Tampil di sini setelah dicek studio.':'It appears here once the studio has checked it.','',false,()=>noChatSwitch(withMode('love',()=>P('chat'))))
+   +`</div>`+(LOVE.length?loveItemsHtml():`<p class="note" style="text-align:center;margin-top:26px">${id?'Belum ada love note. Jadilah yang pertama.':'No love notes yet. Be the first.'}</p>`);
+ }
+ if(SUB==='dear'){
+  const un=MSG.filter(x=>!x.read).length;
+  return `<div class="ghead"><h2>Dear NG</h2><p>${id?'Semua untuk studio, di satu tempat.':'Everything for the studio, in one place.'}</p></div><div class="folds">`
+   +afold('letters',id?'Surat untukmu':'Letters for you',id?'Pesan dari Gisel & tim.':'Notes from Gisel and the team.',un?un+(id?' baru':' new'):(MSG.length||''),un>0,()=>P('letters'))
+   +afold('message',id?'Kirim pesan':'Send a message',id?'Ngobrol langsung dengan studio atau nail artist-mu.':'Talk to the studio or your nail artist.','',false,()=>noChatSwitch(withMode('chat',()=>P('chat'))))
+   +afold('feedback',id?'Masukan':'Share feedback',id?'Hanya dibaca Owner. Bisa anonim.':'Read by the Owner only. Can be anonymous.','',false,()=>P('feedback'))
+   +afold('note',id?'Catatan untuk nail artist':'Note for my nail artist',id?'Warna favorit, request & alergi.':'Favourite colours, requests and allergies.',ME&&ME.client_note?'✓':'',false,()=>P('note'))
+   +`</div>`;
+ }
+ return '';
 }
 
 function confirmSheet(title,body,yes,no,onYes,onNo){
@@ -1272,6 +1344,7 @@ function confirmSheet(title,body,yes,no,onYes,onNo){
 
 document.addEventListener('click',async e=>{
  const g=e.target.closest('[data-go]'); if(g){show(g.dataset.go);return}
+ const afb=e.target.closest('[data-afold]'); if(afb){const k=afb.dataset.afold; if(ACCFOLD.has(k)){ACCFOLD.delete(k);renderAcct();} else {ACCFOLD.add(k); ACCSCROLL=k; renderAcct(); if(k==='letters'&&OPEN)OPEN=null;} return}
  const sbtn=e.target.closest('[data-sub]'); if(sbtn){SUB=sbtn.dataset.sub;OPEN=null;track('tab',SUB);
   if(SUB==='book'&&BOOKINGS.some(x=>!x.seen)){sb.rpc('ngd_client_seen_bookings').then(()=>{});setTimeout(()=>{BOOKINGS.forEach(x=>x.seen=true)},1500)}
   renderAcct();return}
@@ -1303,7 +1376,7 @@ document.addEventListener('click',async e=>{
   const bk=await sb.rpc('ngd_client_bookings'); BOOKINGS=bk.data||[]; renderAcct(); return}
  const lt=e.target.closest('[data-letter]'); if(lt){OPEN=lt.dataset.letter;const [mid,occ]=OPEN.split('|');const m=MSG.find(x=>x.id===mid&&x.occurrence===occ);if(m&&!m.read){m.read=true;sb.rpc('ngd_client_read_message',{p_message_id:mid,p_occurrence:occ});track('letter_opened',m.subject_en||m.subject_id||'');}renderAcct();return}
  if(e.target.closest('[data-close-letter]')){OPEN=null;renderAcct();return}
- if(e.target.id==='logout'){await sb.rpc('ngd_client_track',{p_kind:'logout'}).catch(()=>{});await sb.auth.signOut();LOGGED=false;ME=null;SUB='card';try{await caches.delete('ngd-img-v1')}catch(_){};reloadLove();show('wifi');return}
+ if(e.target.id==='logout'){await sb.rpc('ngd_client_track',{p_kind:'logout'}).catch(()=>{});await sb.auth.signOut();LOGGED=false;ME=null;SUB='card';try{await caches.delete('ngd-img-v1')}catch(_){};reloadLove();show('studio');return}
  if(e.target.id==='setPin'){
   const a=$('#pin1').value,b=$('#pin2').value;
   if(!/^\d{6}$/.test(a))return toast(L==='id'?'PIN harus 6 angka':'PIN must be 6 digits');
@@ -1414,7 +1487,7 @@ sb.auth.getSession().then(async({data})=>{ if(data.session&&await loadAccount())
 loadPublic();
 
 try{const s=localStorage.getItem('ng-lang');if(s)L=s}catch(_){}
-render();show(location.hash.slice(1)||'wifi');
+render();show(location.hash.slice(1)||'studio');
 </script>
 </body>
 </html>
