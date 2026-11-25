@@ -692,6 +692,7 @@ function show(v){
  if(!SECTIONS.includes(v))v='studio';
  if(v==='account'&&!LOGGED)v='login';
  if(v==='login'&&LOGGED)v='account';
+ if(v==='account'&&LOGGED&&VIEW!=='account')refreshAccount();
  VIEW=v;
  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('on',s.id===v));
  try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v)}catch(_){}
@@ -744,17 +745,26 @@ async function loadPublic(){
 }
 
 // ---------- client account ----------
-async function loadAccount(){
+// Fresh loyalty card / history whenever the client comes back to the page (tab reopened, app switched back, opened My page)
+let ACCT_AT=0, ACCT_BUSY=false;
+async function refreshAccount(force){
+ if(!LOGGED||ACCT_BUSY)return; if(!force&&Date.now()-ACCT_AT<20000)return;
+ ACCT_BUSY=true; try{ if(await loadAccount(true)&&VIEW==='account')renderAcct(); }catch(_){} finally{ ACCT_BUSY=false; }
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') refreshAccount(); });
+window.addEventListener('pageshow',e=>{ if(e.persisted) refreshAccount(true); });
+async function loadAccount(quiet){
+ ACCT_AT=Date.now();
  const me=await sb.rpc('ngd_client_me');
  if(me.error){ await sb.auth.signOut(); LOGGED=false; toast(L==='id'?'Akun ini bukan akun klien.':'This is not a client account.'); show('login'); return false; }
- ME=me.data; LOGGED=true; track('open'); reloadLove();
+ ME=me.data; LOGGED=true; if(!quiet)track('open'); reloadLove();
  if(!ME.must_set_pin){
   const [h,c,m,p,st,bk,pf]=await Promise.all([sb.rpc('ngd_client_history'),sb.rpc('ngd_client_coupons'),sb.rpc('ngd_client_messages'),sb.rpc('ngd_client_posts'),sb.rpc('ngd_client_sets'),sb.rpc('ngd_client_bookings'),sb.rpc('ngd_client_profile')]);
   HIST=h.data||[]; CPN=c.data||[]; MSG=(m.data||[]).map(x=>{ const fn=callName(); const f=v=>v==null?v:String(v).replace(/\{name\}/g,fn); return {...x,subject_en:f(x.subject_en),subject_id:f(x.subject_id),body_en:f(x.body_en),body_id:f(x.body_id)}; }); POSTS=p.data||[]; SETS=st.data||[]; BOOKINGS=bk.data||[]; PROFILE=pf.data||{};
   loadSetImages();
   sb.rpc('ngd_client_redo_status').then(r=>{ REDO=r.data||null; if(VIEW==='account') renderAcct(); });
   sb.rpc('ngd_client_gift_status').then(r=>{ GIFT=r.data||null; renderAcct(); if(GIFT&&GIFT.available&&!MSG.some(x=>x.kind==='welcome'&&!x.read)) maybeAutoGift(); });
-  setTimeout(showWelcome,600);
+  if(!quiet)setTimeout(showWelcome,600);
  }
  return true;
 }
