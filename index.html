@@ -957,7 +957,7 @@ function receiptHtml(x,o){
  return `<div class="rcp ${o.font}"><div class="pinsh"></div><div class="pinx"></div><div class="br">NG NAILART</div><div class="ds">${D}</div><div class="tt" contenteditable>TODAY'S SET</div><div class="ds">${D}</div>
  <div class="ph g${imgs.length||1}">${phInner(imgs,o)}</div>
  <div class="ds">${d}</div>${x.title&&!(rc.items||[]).some(i=>String(i.label||'').trim().toUpperCase()===x.title.trim().toUpperCase())?`<div class="it"><span contenteditable>${esc(x.title.toUpperCase())}</span><span></span></div>`:''}${items}${disc}${vdisc}
- <div class="ds">${d}</div><div class="it bg"><span>TOTAL</span><span>${pr(rc.total)}</span></div><div class="ds">${d}</div>
+ <div class="ds">${d}</div><div class="it bg"><span>TOTAL</span><span>${pr(rc.total)}</span></div>${rc.dp_amount?`<div class="it"><span>DP</span><span>-${pr(rc.dp_amount)}</span></div><div class="it bg"><span>SISA BAYAR</span><span>${pr(Math.max(0,(rc.total||0)-rc.dp_amount))}</span></div>`:''}<div class="ds">${d}</div>
  <div class="it"><span>NAIL ARTIST: ${esc(String(rc.artist||'').toUpperCase())}</span><span></span></div>
  <div class="it"><span>${esc(fmtDate(rc.date).toUpperCase())}</span><span>VISIT ${rc.visit||''}</span></div>
  <div class="it"><span>LOYALTY STAMP</span><span>${rc.stamp||''} / 10 ♡</span></div>
