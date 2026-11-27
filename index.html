@@ -889,8 +889,8 @@ function openGift(){
    <div class="gft-stage"><div class="gft-glow"></div>${gboxHtml(GLOOK[i],true)}</div>
    <div class="gft-eye gr" style="margin-top:22px;animation-delay:2.6s">YOUR GIFT</div>
    <h2 class="gr" style="animation-delay:2.85s">${esc(r.data.title)}</h2>
-   <p class="gr" style="animation-delay:3.1s">Saved to your Coupons.<br>Just mention it at your next visit.</p>
-   <div class="gcode gr" style="animation-delay:3.35s"><div style="font-size:12px;color:#4a4542">No code needed.</div><div style="font-size:11px;color:#7a7470;margin-top:4px">Valid until ${d}</div></div>
+   <p class="gr" style="animation-delay:3.1s">Saved to your Coupons.<br>${/cuticle oil|hand care/i.test(r.data.title||'')?'Just mention it at your next visit.':'Show the code at your next visit.'}</p>
+   <div class="gcode gr" style="animation-delay:3.35s">${/cuticle oil|hand care/i.test(r.data.title||'')?'<div style="font-size:12px;color:#4a4542">No code needed.</div>':`<div class="gft-eye">CODE</div><b>${esc(r.data.code)}</b>`}<div style="font-size:11px;color:#7a7470;margin-top:4px">Valid until ${d}</div></div>
    <div class="gft-sp"></div><button class="btn gr" data-gcoupons style="width:100%;padding:15px;animation-delay:3.7s">See my coupons</button></div>`; renderAcct(); },450);
  });
 }
@@ -1356,7 +1356,7 @@ function acctPart(SUB,id,unread,visits){
  if(SUB==='coupons'){
   h+=`<p class="lead" style="font-size:12px">${id?'Tunjukkan kode ke nail artist setelah treatment selesai. Kupon baru terpakai setelah kodenya dimasukkan oleh nail artist.':'Show the code to your nail artist after your treatment. A coupon is only used once your nail artist enters the code.'}</p>`+
   (CPN.length?CPN.map(c=>{const st=c.status;const lbl={active:id?'Aktif':'Active',used:id?'Terpakai':'Used',expired:id?'Kedaluwarsa':'Expired'}[st]||st;
-   return `<div class="coupon${st!=='active'?' used':''}"><span class="status">${lbl}</span><div class="tag">${esc((id?c.title_id:(c.title_en||c.title_id))||'')}${c.kind==='gift_card'?' · Gift Card':''}</div><div class="big">${esc(c.value||'')}</div><p style="text-align:center;font-size:12px">${esc((id?c.desc_id:(c.desc_en||c.desc_id))||'')}</p>${/^pick a gift/i.test(c.title_en||'')?`<p class="note" style="text-align:center;margin-top:10px">${id?'Tanpa kode. Cukup bilang ke tim di kunjungan berikutnya.':'No code needed. Just mention it at your next visit.'}</p>`:`<div class="code">${esc(c.code)}</div>`}${c.expires_on?`<p class="note" style="text-align:center">${id?'Berlaku sampai':'Valid until'} ${fmtDate(c.expires_on)}</p>`:''}</div>`}).join('')
+   return `<div class="coupon${st!=='active'?' used':''}"><span class="status">${lbl}</span><div class="tag">${esc((id?c.title_id:(c.title_en||c.title_id))||'')}${c.kind==='gift_card'?' · Gift Card':''}</div><div class="big">${esc(c.value||'')}</div><p style="text-align:center;font-size:12px">${esc((id?c.desc_id:(c.desc_en||c.desc_id))||'')}</p>${/cuticle oil|hand care/i.test(c.title_en||'')?`<p class="note" style="text-align:center;margin-top:10px">${id?'Tanpa kode. Cukup bilang ke tim di kunjungan berikutnya.':'No code needed. Just mention it at your next visit.'}</p>`:`<div class="code">${esc(c.code)}</div>`}${c.expires_on?`<p class="note" style="text-align:center">${id?'Berlaku sampai':'Valid until'} ${fmtDate(c.expires_on)}</p>`:''}</div>`}).join('')
   :`<div class="card"><p class="note" style="text-align:center">${id?'Belum ada kupon.':'No coupons yet.'}</p></div>`);
  }
  if(SUB==='letters'){
